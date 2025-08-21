@@ -115,7 +115,7 @@ export default function Dashboard({ children }) {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="h-16 bg-white border-b border-[#6A6D57]/10 shadow-sm backdrop-blur-sm">
+        <header className="h-20 bg-white border-b border-[#6A6D57]/10 shadow-sm backdrop-blur-sm">
           <div className="h-full px-6 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button
