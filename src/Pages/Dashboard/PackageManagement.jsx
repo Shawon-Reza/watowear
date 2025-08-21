@@ -1,7 +1,5 @@
-"use client";
-
 import { useState } from "react";
-import { Trash2, Edit, Plus, Search } from "lucide-react";
+import { Trash2, Edit, Plus } from "lucide-react";
 
 export default function PackageManagement() {
   const [subscriptions, setSubscriptions] = useState([
@@ -108,6 +106,19 @@ export default function PackageManagement() {
     setIsDialogOpen(false);
   };
 
+  const handleAddSubscription = () => {
+    setEditingSubscription(null);
+    setFormData({
+      name: "",
+      price: "",
+      duration: "monthly",
+      features: "",
+      status: "active",
+      description: "",
+    });
+    setIsDialogOpen(true);
+  };
+
   const handleEdit = (subscription) => {
     setEditingSubscription(subscription);
     setFormData({
@@ -145,7 +156,7 @@ export default function PackageManagement() {
         {/* Actions Bar */}
         <div className="flex flex-col sm:flex-row items-center justify-end gap-4 mb-6">
           <button
-            onClick={() => resetForm()}
+            onClick={handleAddSubscription}
             className="inline-flex items-center px-4 py-2 bg-[#6A6D57] text-white rounded-lg hover:bg-[#585a48] transition-colors"
           >
             <Plus className="h-4 w-4 mr-2" />
@@ -190,7 +201,7 @@ export default function PackageManagement() {
                         }
                         placeholder="e.g., Basic Plan"
                         required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg "
                       />
                     </div>
 
@@ -214,7 +225,7 @@ export default function PackageManagement() {
                         }
                         placeholder="9.99"
                         required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold"
                       />
                     </div>
                   </div>
@@ -236,7 +247,7 @@ export default function PackageManagement() {
                             duration: e.target.value,
                           }))
                         }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold"
                       >
                         <option value="monthly">Monthly</option>
                         <option value="yearly">Yearly</option>
@@ -260,7 +271,7 @@ export default function PackageManagement() {
                             status: e.target.value,
                           }))
                         }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold"
                       >
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
@@ -286,7 +297,7 @@ export default function PackageManagement() {
                       }
                       placeholder="Brief description of the plan..."
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold"
                     />
                   </div>
 
@@ -309,7 +320,7 @@ export default function PackageManagement() {
                       placeholder="5 Projects, Basic Support, 10GB Storage"
                       rows={3}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold"
                     />
                   </div>
 
@@ -384,7 +395,7 @@ export default function PackageManagement() {
                         key={index}
                         className="text-sm text-gray-600 flex items-center"
                       >
-                        <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-3 flex-shrink-0"></span>
+                        <span className="w-1.5 h-1.5 bg-[#6A6D57] rounded-full mr-3 flex-shrink-0"></span>
                         {feature}
                       </li>
                     ))}

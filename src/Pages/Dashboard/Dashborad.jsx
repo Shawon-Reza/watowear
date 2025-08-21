@@ -7,6 +7,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
   BadgeDollarSign,
+  LogOut,
 } from "lucide-react";
 
 export default function Dashboard({ children }) {
@@ -48,7 +49,7 @@ export default function Dashboard({ children }) {
         } bg-[#6A6D57] shadow-xl transition-all duration-500 ease-in-out relative flex flex-col`}
       >
         {/* Logo Section */}
-        <div className="flex items-center justify-center pt-6 pb-6 border-b border-[#F4F1EB]/20 relative overflow-hidden">
+        <div className="flex items-center justify-center pt-6 pb-2.5 border-b border-[#F4F1EB]/20 relative overflow-hidden">
           <div className="flex items-center gap-3 relative z-10">
             <div className="relative flex-shrink-0">
               <img
@@ -72,51 +73,76 @@ export default function Dashboard({ children }) {
         </div>
 
         {/* Nav Section */}
-        <nav className="p-4 space-y-2 flex-1">
-          {menuItems.map((section, idx) => (
-            <div key={idx} className="space-y-1">
-              <ul className="space-y-2">
-                {section.items.map((item, itemIdx) => (
-                  <li key={itemIdx} className="relative group">
-                    <Link
-                      to={item.path}
-                      className={`flex items-center px-4 py-3 rounded-xl group/item relative transition-all duration-300 ${
-                        pathname === item.path
-                          ? "bg-[#F4F1EB] text-[#6A6D57] shadow-lg shadow-[#F4F1EB]/20"
-                          : "text-[#F4F1EB]/90 hover:bg-[#F4F1EB]/15 hover:text-[#F4F1EB] hover:shadow-md"
-                      }`}
-                    >
-                      {/* Icon */}
-                      <span
-                        className={`transition-all duration-300 ${
+        <div className="flex flex-col h-full">
+          {/* Menu Items */}
+          <nav className="p-4 space-y-2 flex-1">
+            {menuItems.map((section, idx) => (
+              <div key={idx} className="space-y-1">
+                <ul className="space-y-2">
+                  {section.items.map((item, itemIdx) => (
+                    <li key={itemIdx} className="relative group">
+                      <Link
+                        to={item.path}
+                        className={`flex items-center px-4 py-3 rounded-xl group/item relative transition-all duration-300 ${
                           pathname === item.path
-                            ? "text-[#6A6D57]"
-                            : "text-[#F4F1EB]/80 group-hover/item:text-[#F4F1EB]"
+                            ? "bg-[#F4F1EB] text-[#6A6D57] shadow-lg shadow-[#F4F1EB]/20"
+                            : "text-[#F4F1EB]/90 hover:bg-[#F4F1EB]/15 hover:text-[#F4F1EB] hover:shadow-md"
                         }`}
                       >
-                        {item.icon}
-                      </span>
+                        {/* Icon */}
+                        <span
+                          className={`transition-all duration-300 ${
+                            pathname === item.path
+                              ? "text-[#6A6D57]"
+                              : "text-[#F4F1EB]/80 group-hover/item:text-[#F4F1EB]"
+                          }`}
+                        >
+                          {item.icon}
+                        </span>
 
-                      {/* Label */}
-                      <span
-                        className={`ml-3 transition-all duration-500 font-medium tracking-wide whitespace-nowrap ${
-                          isCollapsed
-                            ? "opacity-0 invisible w-0"
-                            : "opacity-100 visible"
-                        } ${pathname === item.path ? "font-semibold" : ""}`}
-                      >
-                        {item.name}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </nav>
+                        {/* Label */}
+                        <span
+                          className={`ml-3 transition-all duration-500 font-medium tracking-wide whitespace-nowrap ${
+                            isCollapsed
+                              ? "opacity-0 invisible w-0"
+                              : "opacity-100 visible"
+                          } ${pathname === item.path ? "font-semibold" : ""}`}
+                        >
+                          {item.name}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </nav>
+
+          {/* Logout Button */}
+          <div className="p-4 border-t border-white/10 ">
+            <button
+              className={`flex items-center w-full px-4 py-3 rounded-xl group/item relative transition-all duration-300 text-[#F4F1EB]/90 hover:bg-[#F4F1EB]/20 hover:text-[#F4F1EB] hover:shadow-md`}
+            >
+              <span
+                className={`transition-all duration-300 text-[#F4F1EB]/80 group-hover/item:text-[#F4F1EB]`}
+              >
+                <LogOut size={20} />
+              </span>
+
+              <span
+                className={`ml-3 transition-all duration-500 font-medium tracking-wide whitespace-nowrap ${
+                  isCollapsed
+                    ? "opacity-0 invisible w-0"
+                    : "opacity-100 visible"
+                }`}
+              >
+                Logout
+              </span>
+            </button>
+          </div>
+        </div>
 
         {/* Bottom Fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#6A6D57] to-transparent pointer-events-none"></div>
       </aside>
 
       {/* Main Content */}

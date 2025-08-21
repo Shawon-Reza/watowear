@@ -95,7 +95,7 @@ export default function UserManagement() {
             <h1 className="text-3xl font-bold bg-gradient-to-r from-[#6A6D57] via-[#5A5D4A] to-[#4A4D3A] bg-clip-text text-transparent">
               User Management
             </h1>
-            <p className="text-[#6A6D57]/80 pt-3">
+            <p className="text-[#6A6D57]/80 ">
               Manage and monitor your application users with ease
             </p>
           </div>
