@@ -4,6 +4,7 @@ import Dashborad from "../Pages/Dashboard/Dashborad";
 import Login from "../Pages/Authentication/Login";
 import AdminHome from "../Pages/Dashboard/AdminHome";
 import UserManagement from "../Pages/Dashboard/UserManagement";
+import PackageManagement from "../Pages/Dashboard/PackageManagement";
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
       {
         path: "user_management",
         element: <UserManagement />,
+      },
+      {
+        path: "package_management",
+        element: <PackageManagement />,
       },
     ],
   },

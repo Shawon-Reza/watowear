@@ -6,6 +6,7 @@ import {
   Settings,
   ChevronsLeft,
   ChevronsRight,
+  BadgeDollarSign,
 } from "lucide-react";
 
 export default function Dashboard({ children }) {
@@ -26,6 +27,12 @@ export default function Dashboard({ children }) {
           name: "User Management",
           icon: <Users size={20} />,
           path: "/admin/user_management",
+          badge: "12",
+        },
+        {
+          name: "Subcriptions",
+          icon: <BadgeDollarSign size={20} />,
+          path: "/admin/package_management",
           badge: "12",
         },
       ],
@@ -151,7 +158,7 @@ export default function Dashboard({ children }) {
           </div>
         </header>
 
-        <main className="flex-1 overflow-auto p-6 bg-gradient-to-br from-[#F4F1EB]/50 via-white to-[#F4F1EB]/30">
+        <main className="flex-1 overflow-auto p-8 bg-gradient-to-br from-[#F4F1EB]/50 via-white to-[#F4F1EB]/30">
           <Outlet />
           {children}
         </main>

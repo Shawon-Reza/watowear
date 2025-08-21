@@ -87,15 +87,15 @@ export default function UserManagement() {
   };
 
   return (
-    <div className="min-h-screen pb-6">
+    <div className="min-h-screen">
       <div className=" mx-auto space-y-4">
         {/* Header */}
-        <div className="flex items-center justify-between py-5">
-          <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <div className="mb-8">
             <h1 className="text-3xl font-bold bg-gradient-to-r from-[#6A6D57] via-[#5A5D4A] to-[#4A4D3A] bg-clip-text text-transparent">
               User Management
             </h1>
-            <p className="text-[#6A6D57]/80 text-lg">
+            <p className="text-[#6A6D57]/80 pt-3">
               Manage and monitor your application users with ease
             </p>
           </div>
