@@ -9,6 +9,9 @@ import {
   BadgeDollarSign,
   LogOut,
 } from "lucide-react";
+import { LuBrain } from "react-icons/lu";
+import { BsChatSquareText } from "react-icons/bs";
+import { PiNotepad } from "react-icons/pi";
 
 export default function Dashboard({ children }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -34,6 +37,24 @@ export default function Dashboard({ children }) {
           name: "Subcriptions",
           icon: <BadgeDollarSign size={20} />,
           path: "/admin/package_management",
+          badge: "12",
+        },
+        {
+          name: "AI Performence",
+          icon: <LuBrain size={20} />,
+          path: "/admin/ai_performence",
+          badge: "12",
+        },
+        {
+          name: "Billing",
+          icon: <PiNotepad size={20} />,
+          path: "/admin/billing",
+          badge: "12",
+        },
+        {
+          name: "Support",
+          icon: <BsChatSquareText size={20} />,
+          path: "/admin/support",
           badge: "12",
         },
       ],

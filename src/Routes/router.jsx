@@ -5,6 +5,9 @@ import Login from "../Pages/Authentication/Login";
 import AdminHome from "../Pages/Dashboard/AdminHome";
 import UserManagement from "../Pages/Dashboard/UserManagement";
 import PackageManagement from "../Pages/Dashboard/PackageManagement";
+import AI_Performence from "../Pages/Dashboard/AI_Performence";
+import Billing from "../Pages/Dashboard/Billing";
+import Support from "../Pages/Dashboard/Support";
 
 export const router = createBrowserRouter([
   {
@@ -37,6 +40,18 @@ export const router = createBrowserRouter([
       {
         path: "package_management",
         element: <PackageManagement />,
+      },
+      {
+        path: "ai_performence",
+        element: <AI_Performence />,
+      },
+      {
+        path: "billing",
+        element: <Billing />,
+      },
+      {
+        path: "support",
+        element: <Support />,
       },
     ],
   },

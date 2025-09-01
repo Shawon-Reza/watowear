@@ -195,8 +195,8 @@ export default function UserManagement() {
           {/* Enhanced Table */}
           <div className="overflow-x-auto cursor-pointer">
             <table className="w-full">
-              <thead>
-                <tr className="bg-gradient-to-r from-[#F4F1EB] to-[#6A6D57]/5 border-b border-[#6A6D57]/10">
+              <thead className="bg-gradient-to-r from-[#F4F1EB] to-white">
+                <tr className=" border-b border-[#6A6D57]/10">
                   <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
                     User Information
                   </th>
