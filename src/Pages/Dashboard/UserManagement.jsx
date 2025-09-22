@@ -17,46 +17,46 @@ export default function UserManagement() {
       id: 1,
       name: "John Doe",
       email: "john.doe@example.com",
-      plan: "Pro",
+      signup_method: "Email",
       status: "Active",
-      role: "User",
-      avatar: "JD",
+      closet_amount: 50,
+      last_active: "5h ago",
     },
     {
       id: 2,
       name: "Jane Smith",
       email: "jane.smith@example.com",
-      plan: "Free",
+      signup_method: "Google",
       status: "Inactive",
-      role: "User",
-      avatar: "JS",
+      closet_amount: 25,
+      last_active: "1h ago",
     },
     {
       id: 3,
       name: "Michael Johnson",
       email: "michael.johnson@example.com",
-      plan: "Enterprise",
+      signup_method: "Apple",
       status: "Active",
-      role: "Admin",
-      avatar: "MJ",
+      closet_amount: 3,
+      last_active: "30 min ago",
     },
     {
       id: 4,
       name: "Emily Brown",
       email: "emily.brown@example.com",
-      plan: "Pro",
+      signup_method: "Google",
       status: "Active",
-      role: "User",
-      avatar: "EB",
+      closet_amount: 103,
+      last_active: "5h ago",
     },
     {
       id: 5,
       name: "David Wilson",
       email: "david.wilson@example.com",
-      plan: "Free",
+      signup_method: "Apple",
       status: "Inactive",
-      role: "User",
-      avatar: "DW",
+      closet_amount: 36,
+      last_active: "18h ago",
     },
   ]);
 
@@ -77,7 +77,9 @@ export default function UserManagement() {
   // Make Admin
   const makeAdmin = (id) => {
     setUsers((prev) =>
-      prev.map((user) => (user.id === id ? { ...user, role: "Admin" } : user))
+      prev.map((user) =>
+        user.id === id ? { ...user, closet_amount: "Admin" } : user
+      )
     );
   };
 
@@ -136,7 +138,7 @@ export default function UserManagement() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-[#6A6D57]">
-                  {users.filter((u) => u.role === "Admin").length}
+                  {users.filter((u) => u.closet_amount === "Admin").length}
                 </p>
                 <p className="text-[#6A6D57]/70 text-sm">Administrators</p>
               </div>
@@ -201,14 +203,24 @@ export default function UserManagement() {
                     User Information
                   </th>
                   <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
-                    Subscription
+                    Signup Method
                   </th>
+                  <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
+                    Closet Items
+                  </th>
+
+                  <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
+                    Engagement
+                  </th>
+
+                  <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
+                    Last Login
+                  </th>
+
                   <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
-                    Role
-                  </th>
+
                   <th className="px-8 py-6 text-center font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
                     Actions
                   </th>
@@ -225,7 +237,7 @@ export default function UserManagement() {
                       <div className="flex items-center gap-4">
                         <div className="relative">
                           <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#6A6D57] to-[#5A5D4A] flex items-center justify-center text-white font-bold text-lg shadow-lg">
-                            {user.avatar}
+                            {user.last_active}
                           </div>
                           {user.status === "Active" && (
                             <div className="absolute -bottom-1 -right-1 h-4 w-4 bg-green-500 rounded-full border-2 border-white shadow-sm"></div>
@@ -243,25 +255,18 @@ export default function UserManagement() {
                       </div>
                     </td>
 
-                    {/* Plan */}
-                    <td className="px-8 py-6">
-                      <span
-                        className={`inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold shadow-sm ${
-                          user.plan === "Free"
-                            ? "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700"
-                            : user.plan === "Pro"
-                            ? "bg-gradient-to-r from-[#6A6D57]/10 to-[#6A6D57]/20 text-[#6A6D57]"
-                            : "bg-gradient-to-r from-purple-100 to-purple-200 text-purple-700"
-                        }`}
-                      >
-                        {user.plan === "Enterprise" && (
-                          <Crown size={16} className="mr-2" />
-                        )}
-                        {user.plan}
-                      </span>
+                    {/* method */}
+                    <td className="px-8 py-6 text-[#6A6D57] text-base font-semibold">
+                      {user.signup_method}
                     </td>
 
                     {/* Status */}
+
+                    <td className="px-8 py-6">{user?.closet_amount}</td>
+                    <td className="px-8 py-6">90%</td>
+                    <td className="px-8 py-6">{user?.last_active}</td>
+                    {/* closet_amount */}
+
                     <td className="px-8 py-6">
                       <span
                         className={`inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold shadow-sm ${
@@ -281,28 +286,9 @@ export default function UserManagement() {
                       </span>
                     </td>
 
-                    {/* Role */}
-                    <td className="px-8 py-6">
-                      <div className="flex items-center gap-2">
-                        {user.role === "Admin" && (
-                          <Crown size={16} className="text-yellow-600" />
-                        )}
-                        <span
-                          className={`font-semibold text-base ${
-                            user.role === "Admin"
-                              ? "text-yellow-700"
-                              : "text-[#6A6D57]"
-                          }`}
-                        >
-                          {user.role}
-                        </span>
-                      </div>
-                    </td>
-
                     {/* Actions */}
                     <td className="px-8 py-6">
                       <div className="flex items-center justify-center gap-2">
-                        {/* Block / Unblock */}
                         <button
                           onClick={() => toggleStatus(user.id)}
                           className={`group/btn p-3 rounded-xl transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 ${
@@ -329,21 +315,6 @@ export default function UserManagement() {
                           )}
                         </button>
 
-                        {/* Make Admin */}
-                        {user.role !== "Admin" && (
-                          <button
-                            onClick={() => makeAdmin(user.id)}
-                            className="group/btn p-3 rounded-xl bg-[#6A6D57]/10 text-[#6A6D57] hover:bg-[#6A6D57]/20 hover:text-[#5A5D4A] transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
-                            title="Make Admin"
-                          >
-                            <ShieldCheck
-                              size={18}
-                              className="group-hover/btn:scale-110 transition-transform"
-                            />
-                          </button>
-                        )}
-
-                        {/* Delete */}
                         <button
                           onClick={() => deleteUser(user.id)}
                           className="group/btn p-3 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-700 transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
