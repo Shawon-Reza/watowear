@@ -3,11 +3,11 @@ import Main from "../Layout/Main";
 import Dashborad from "../Pages/Dashboard/Dashborad";
 import Login from "../Pages/Authentication/Login";
 import AdminHome from "../Pages/Dashboard/AdminHome";
-import UserManagement from "../Pages/Dashboard/UserManagement";
 import PackageManagement from "../Pages/Dashboard/PackageManagement";
 import AI_Performence from "../Pages/Dashboard/AI_Performence";
 import Billing from "../Pages/Dashboard/Billing";
 import Support from "../Pages/Dashboard/Support";
+import UserManagement from "../Pages/Dashboard/UserManagement/UserManagement";
 
 export const router = createBrowserRouter([
   {

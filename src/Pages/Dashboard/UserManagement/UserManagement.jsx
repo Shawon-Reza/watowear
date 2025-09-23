@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  Plus,
   Search,
   User,
   Ban,
@@ -10,53 +9,80 @@ import {
   Crown,
   Mail,
 } from "lucide-react";
+import { TfiStatsUp } from "react-icons/tfi";
+import { IoStatsChart } from "react-icons/io5";
 
 export default function UserManagement() {
   const [users, setUsers] = useState([
     {
       id: 1,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
       name: "John Doe",
       email: "john.doe@example.com",
       signup_method: "Email",
       status: "Active",
       closet_amount: 50,
       last_active: "5h ago",
+      engagement: 90,
+      user_joined: "27 October, 25",
+      average_session_duration: "12.45 minutes",
     },
     {
       id: 2,
       name: "Jane Smith",
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
       email: "jane.smith@example.com",
       signup_method: "Google",
       status: "Inactive",
       closet_amount: 25,
       last_active: "1h ago",
+      engagement: 80,
+      user_joined: "18 February, 25",
+      average_session_duration: "12.45 minutes",
     },
     {
       id: 3,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
       name: "Michael Johnson",
       email: "michael.johnson@example.com",
       signup_method: "Apple",
       status: "Active",
       closet_amount: 3,
       last_active: "30 min ago",
+      engagement: 53,
+      user_joined: "12 July, 25",
+      average_session_duration: "12.45 minutes",
     },
     {
       id: 4,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
       name: "Emily Brown",
       email: "emily.brown@example.com",
       signup_method: "Google",
       status: "Active",
       closet_amount: 103,
       last_active: "5h ago",
+      engagement: 23,
+      user_joined: "11 July, 25",
+      average_session_duration: "12.45 minutes",
     },
     {
       id: 5,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
       name: "David Wilson",
       email: "david.wilson@example.com",
       signup_method: "Apple",
       status: "Inactive",
       closet_amount: 36,
       last_active: "18h ago",
+      engagement: 89,
+      user_joined: "12 August, 25",
+      average_session_duration: "12.45 minutes",
     },
   ]);
 
@@ -227,32 +253,80 @@ export default function UserManagement() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#6A6D57]/10">
-                {users.map((user, idx) => (
+                {users.map((user, id) => (
                   <tr
                     key={user.id}
                     className="group hover:bg-gradient-to-r hover:from-[#6A6D57]/5 hover:to-[#6A6D57]/10 transition-all duration-300 hover:shadow-md"
                   >
-                    {/* User Info */}
                     <td className="px-8 py-6">
-                      <div className="flex items-center gap-4">
-                        <div className="relative">
-                          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#6A6D57] to-[#5A5D4A] flex items-center justify-center text-white font-bold text-lg shadow-lg">
-                            {user.last_active}
+                      <button
+                        className="bg-transparent hover:bg-transparent border-none shadow-none p-0"
+                        onClick={() =>
+                          document.getElementById(user?.id).showModal()
+                        }
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="avatar">
+                            <div className="w-[50px] rounded-full">
+                              <img src={user?.image} className="rounded-full" />
+                            </div>
                           </div>
-                          {user.status === "Active" && (
-                            <div className="absolute -bottom-1 -right-1 h-4 w-4 bg-green-500 rounded-full border-2 border-white shadow-sm"></div>
-                          )}
-                        </div>
-                        <div className="space-y-1">
-                          <p className="font-bold text-[#6A6D57] text-base group-hover:text-[#5A5D4A] transition-colors">
-                            {user.name}
-                          </p>
-                          <div className="flex items-center gap-2 text-[#6A6D57]/70">
-                            <Mail size={14} />
-                            <p className="text-sm">{user.email}</p>
+                          <div className="space-y-1">
+                            <p className="font-bold text-[#6A6D57] text-start text-base group-hover:text-[#5A5D4A] transition-colors">
+                              {user.name}
+                            </p>
+                            <div className="flex items-center gap-2 text-[#6A6D57]/70">
+                              <Mail size={14} />
+                              <p className="text-sm">{user.email}</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </button>
+
+                      <dialog id={user?.id} className="modal ">
+                        <div className="modal-box dark:bg-white text-gray-900">
+                          <div className="border-b-2 pb-2">
+                            <h3 className="font-bold flex items-start gap-2 text-lg">
+                              <IoStatsChart size={24} />
+                              User Statistics
+                            </h3>
+                          </div>
+                          {/* info of user */}
+                          <div className="py-5 space-y-6">
+                            <h1 className="flex items-center justify-between">
+                              User Joined :
+                              <span className="font-bold">
+                                {user?.user_joined}
+                              </span>
+                            </h1>
+
+                            <h1 className="flex items-center justify-between">
+                              User Status :
+                              <span className="font-bold">{user?.status}</span>
+                            </h1>
+
+                            <h1 className="flex items-center justify-between">
+                              Closet Items :
+                              <span className="font-bold">
+                                {user?.closet_amount} Items
+                              </span>
+                            </h1>
+
+                            <h1 className="flex items-center justify-between">
+                              Average Session Duration :
+                              <span className="font-bold">
+                                {user?.average_session_duration}
+                              </span>
+                            </h1>
+                          </div>
+                          <div>
+                            <h1></h1>
+                          </div>
+                        </div>
+                        <form method="dialog" className="modal-backdrop">
+                          <button>close</button>
+                        </form>
+                      </dialog>
                     </td>
 
                     {/* method */}
@@ -262,9 +336,30 @@ export default function UserManagement() {
 
                     {/* Status */}
 
-                    <td className="px-8 py-6">{user?.closet_amount}</td>
-                    <td className="px-8 py-6">90%</td>
-                    <td className="px-8 py-6">{user?.last_active}</td>
+                    <td className="px-8 py-6 text-gray-900">
+                      {user?.closet_amount}
+                    </td>
+                    <td className="px-8 py-6">
+                      <div className="w-44 h-[10px] rounded-full bg-gray-200 overflow-hidden">
+                        <div
+                          className={`h-full rounded-full ${
+                            user?.engagement < 30
+                              ? "bg-red-500"
+                              : user?.engagement < 80
+                              ? "bg-yellow-500"
+                              : "bg-green-500"
+                          }`}
+                          style={{ width: `${user?.engagement || 0}%` }}
+                        ></div>
+                      </div>
+                      <span className="ml-2 text-sm font-medium text-gray-900">
+                        {user?.engagement}%
+                      </span>
+                    </td>
+
+                    <td className="px-8 py-6 text-gray-900">
+                      {user?.last_active}
+                    </td>
                     {/* closet_amount */}
 
                     <td className="px-8 py-6">
