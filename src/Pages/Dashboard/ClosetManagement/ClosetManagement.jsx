@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Trash2, MoreVertical, Search } from "lucide-react";
 import CategoryTags from "./CategoryTags";
+import FashionManagement from "./FashionManagement";
 
 export default function ClosetManagement() {
   const [items, setItems] = useState([
@@ -195,7 +196,7 @@ export default function ClosetManagement() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-[#6A6D57] via-[#5A5D4A] to-[#4A4D3A] bg-clip-text text-transparent">
-            Inventory Management
+            Closet Management ( user )
           </h1>
         </div>
 
@@ -344,6 +345,13 @@ export default function ClosetManagement() {
           Categories & Tags Management
         </h1>
         <CategoryTags />
+      </div>
+
+      <div className=" mt-16">
+        <h1 className="mb-5 text-3xl font-bold bg-gradient-to-r from-[#6A6D57] via-[#5A5D4A] to-[#4A4D3A] bg-clip-text text-transparent">
+          Fashion Library Management ( AI ){" "}
+        </h1>
+        <FashionManagement />
       </div>
     </div>
   );
