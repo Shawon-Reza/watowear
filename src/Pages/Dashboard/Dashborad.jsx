@@ -8,6 +8,7 @@ import {
   ChevronsRight,
   BadgeDollarSign,
   LogOut,
+  Shirt,
 } from "lucide-react";
 import { LuBrain } from "react-icons/lu";
 import { BsChatSquareText } from "react-icons/bs";
@@ -33,12 +34,19 @@ export default function Dashboard({ children }) {
           path: "/admin/user_management",
           badge: "12",
         },
+        // {
+        //   name: "Subcriptions",
+        //   icon: <BadgeDollarSign size={20} />,
+        //   path: "/admin/package_management",
+        //   badge: "12",
+        // },
         {
-          name: "Subcriptions",
-          icon: <BadgeDollarSign size={20} />,
-          path: "/admin/package_management",
+          name: "Closet Management",
+          icon: <Shirt size={20} />,
+          path: "/admin/closet_management",
           badge: "12",
         },
+
         {
           name: "AI Performence",
           icon: <LuBrain size={20} />,
@@ -66,7 +74,7 @@ export default function Dashboard({ children }) {
       {/* Sidebar */}
       <aside
         className={`${
-          isCollapsed ? "w-20" : "w-64"
+          isCollapsed ? "w-20" : "w-72"
         } bg-[#6A6D57] shadow-xl transition-all duration-500 ease-in-out relative flex flex-col`}
       >
         {/* Logo Section */}

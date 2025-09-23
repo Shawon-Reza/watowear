@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Search,
   User,
@@ -9,7 +9,6 @@ import {
   Crown,
   Mail,
 } from "lucide-react";
-import { TfiStatsUp } from "react-icons/tfi";
 import { IoStatsChart } from "react-icons/io5";
 
 export default function UserManagement() {
@@ -84,7 +83,680 @@ export default function UserManagement() {
       user_joined: "12 August, 25",
       average_session_duration: "12.45 minutes",
     },
+    // Duplicated users for demonstration of infinite scroll and pagination (50 total)
+    {
+      id: 6,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "John Doe",
+      email: "john.doe@example.com",
+      signup_method: "Email",
+      status: "Active",
+      closet_amount: 50,
+      last_active: "5h ago",
+      engagement: 90,
+      user_joined: "27 October, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 7,
+      name: "Jane Smith",
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      email: "jane.smith@example.com",
+      signup_method: "Google",
+      status: "Inactive",
+      closet_amount: 25,
+      last_active: "1h ago",
+      engagement: 80,
+      user_joined: "18 February, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 8,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "Michael Johnson",
+      email: "michael.johnson@example.com",
+      signup_method: "Apple",
+      status: "Active",
+      closet_amount: 3,
+      last_active: "30 min ago",
+      engagement: 53,
+      user_joined: "12 July, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 9,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "Emily Brown",
+      email: "emily.brown@example.com",
+      signup_method: "Google",
+      status: "Active",
+      closet_amount: 103,
+      last_active: "5h ago",
+      engagement: 23,
+      user_joined: "11 July, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 10,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "David Wilson",
+      email: "david.wilson@example.com",
+      signup_method: "Apple",
+      status: "Inactive",
+      closet_amount: 36,
+      last_active: "18h ago",
+      engagement: 89,
+      user_joined: "12 August, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 11,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "John Doe",
+      email: "john.doe@example.com",
+      signup_method: "Email",
+      status: "Active",
+      closet_amount: 50,
+      last_active: "5h ago",
+      engagement: 90,
+      user_joined: "27 October, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 12,
+      name: "Jane Smith",
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      email: "jane.smith@example.com",
+      signup_method: "Google",
+      status: "Inactive",
+      closet_amount: 25,
+      last_active: "1h ago",
+      engagement: 80,
+      user_joined: "18 February, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 13,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "Michael Johnson",
+      email: "michael.johnson@example.com",
+      signup_method: "Apple",
+      status: "Active",
+      closet_amount: 3,
+      last_active: "30 min ago",
+      engagement: 53,
+      user_joined: "12 July, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 14,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "Emily Brown",
+      email: "emily.brown@example.com",
+      signup_method: "Google",
+      status: "Active",
+      closet_amount: 103,
+      last_active: "5h ago",
+      engagement: 23,
+      user_joined: "11 July, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 15,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "David Wilson",
+      email: "david.wilson@example.com",
+      signup_method: "Apple",
+      status: "Inactive",
+      closet_amount: 36,
+      last_active: "18h ago",
+      engagement: 89,
+      user_joined: "12 August, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 16,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "John Doe",
+      email: "john.doe@example.com",
+      signup_method: "Email",
+      status: "Active",
+      closet_amount: 50,
+      last_active: "5h ago",
+      engagement: 90,
+      user_joined: "27 October, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 17,
+      name: "Jane Smith",
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      email: "jane.smith@example.com",
+      signup_method: "Google",
+      status: "Inactive",
+      closet_amount: 25,
+      last_active: "1h ago",
+      engagement: 80,
+      user_joined: "18 February, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 18,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "Michael Johnson",
+      email: "michael.johnson@example.com",
+      signup_method: "Apple",
+      status: "Active",
+      closet_amount: 3,
+      last_active: "30 min ago",
+      engagement: 53,
+      user_joined: "12 July, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 19,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "Emily Brown",
+      email: "emily.brown@example.com",
+      signup_method: "Google",
+      status: "Active",
+      closet_amount: 103,
+      last_active: "5h ago",
+      engagement: 23,
+      user_joined: "11 July, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 20,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "David Wilson",
+      email: "david.wilson@example.com",
+      signup_method: "Apple",
+      status: "Inactive",
+      closet_amount: 36,
+      last_active: "18h ago",
+      engagement: 89,
+      user_joined: "12 August, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 21,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "John Doe",
+      email: "john.doe@example.com",
+      signup_method: "Email",
+      status: "Active",
+      closet_amount: 50,
+      last_active: "5h ago",
+      engagement: 90,
+      user_joined: "27 October, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 22,
+      name: "Jane Smith",
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      email: "jane.smith@example.com",
+      signup_method: "Google",
+      status: "Inactive",
+      closet_amount: 25,
+      last_active: "1h ago",
+      engagement: 80,
+      user_joined: "18 February, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 23,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "Michael Johnson",
+      email: "michael.johnson@example.com",
+      signup_method: "Apple",
+      status: "Active",
+      closet_amount: 3,
+      last_active: "30 min ago",
+      engagement: 53,
+      user_joined: "12 July, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 24,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "Emily Brown",
+      email: "emily.brown@example.com",
+      signup_method: "Google",
+      status: "Active",
+      closet_amount: 103,
+      last_active: "5h ago",
+      engagement: 23,
+      user_joined: "11 July, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 25,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "David Wilson",
+      email: "david.wilson@example.com",
+      signup_method: "Apple",
+      status: "Inactive",
+      closet_amount: 36,
+      last_active: "18h ago",
+      engagement: 89,
+      user_joined: "12 August, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 26,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "John Doe",
+      email: "john.doe@example.com",
+      signup_method: "Email",
+      status: "Active",
+      closet_amount: 50,
+      last_active: "5h ago",
+      engagement: 90,
+      user_joined: "27 October, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 27,
+      name: "Jane Smith",
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      email: "jane.smith@example.com",
+      signup_method: "Google",
+      status: "Inactive",
+      closet_amount: 25,
+      last_active: "1h ago",
+      engagement: 80,
+      user_joined: "18 February, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 28,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "Michael Johnson",
+      email: "michael.johnson@example.com",
+      signup_method: "Apple",
+      status: "Active",
+      closet_amount: 3,
+      last_active: "30 min ago",
+      engagement: 53,
+      user_joined: "12 July, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 29,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "Emily Brown",
+      email: "emily.brown@example.com",
+      signup_method: "Google",
+      status: "Active",
+      closet_amount: 103,
+      last_active: "5h ago",
+      engagement: 23,
+      user_joined: "11 July, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 30,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "David Wilson",
+      email: "david.wilson@example.com",
+      signup_method: "Apple",
+      status: "Inactive",
+      closet_amount: 36,
+      last_active: "18h ago",
+      engagement: 89,
+      user_joined: "12 August, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 31,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "John Doe",
+      email: "john.doe@example.com",
+      signup_method: "Email",
+      status: "Active",
+      closet_amount: 50,
+      last_active: "5h ago",
+      engagement: 90,
+      user_joined: "27 October, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 32,
+      name: "Jane Smith",
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      email: "jane.smith@example.com",
+      signup_method: "Google",
+      status: "Inactive",
+      closet_amount: 25,
+      last_active: "1h ago",
+      engagement: 80,
+      user_joined: "18 February, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 33,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "Michael Johnson",
+      email: "michael.johnson@example.com",
+      signup_method: "Apple",
+      status: "Active",
+      closet_amount: 3,
+      last_active: "30 min ago",
+      engagement: 53,
+      user_joined: "12 July, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 34,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "Emily Brown",
+      email: "emily.brown@example.com",
+      signup_method: "Google",
+      status: "Active",
+      closet_amount: 103,
+      last_active: "5h ago",
+      engagement: 23,
+      user_joined: "11 July, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 35,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "David Wilson",
+      email: "david.wilson@example.com",
+      signup_method: "Apple",
+      status: "Inactive",
+      closet_amount: 36,
+      last_active: "18h ago",
+      engagement: 89,
+      user_joined: "12 August, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 36,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "John Doe",
+      email: "john.doe@example.com",
+      signup_method: "Email",
+      status: "Active",
+      closet_amount: 50,
+      last_active: "5h ago",
+      engagement: 90,
+      user_joined: "27 October, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 37,
+      name: "Jane Smith",
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      email: "jane.smith@example.com",
+      signup_method: "Google",
+      status: "Inactive",
+      closet_amount: 25,
+      last_active: "1h ago",
+      engagement: 80,
+      user_joined: "18 February, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 38,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "Michael Johnson",
+      email: "michael.johnson@example.com",
+      signup_method: "Apple",
+      status: "Active",
+      closet_amount: 3,
+      last_active: "30 min ago",
+      engagement: 53,
+      user_joined: "12 July, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 39,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "Emily Brown",
+      email: "emily.brown@example.com",
+      signup_method: "Google",
+      status: "Active",
+      closet_amount: 103,
+      last_active: "5h ago",
+      engagement: 23,
+      user_joined: "11 July, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 40,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "David Wilson",
+      email: "david.wilson@example.com",
+      signup_method: "Apple",
+      status: "Inactive",
+      closet_amount: 36,
+      last_active: "18h ago",
+      engagement: 89,
+      user_joined: "12 August, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 41,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "John Doe",
+      email: "john.doe@example.com",
+      signup_method: "Email",
+      status: "Active",
+      closet_amount: 50,
+      last_active: "5h ago",
+      engagement: 90,
+      user_joined: "27 October, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 42,
+      name: "Jane Smith",
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      email: "jane.smith@example.com",
+      signup_method: "Google",
+      status: "Inactive",
+      closet_amount: 25,
+      last_active: "1h ago",
+      engagement: 80,
+      user_joined: "18 February, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 43,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "Michael Johnson",
+      email: "michael.johnson@example.com",
+      signup_method: "Apple",
+      status: "Active",
+      closet_amount: 3,
+      last_active: "30 min ago",
+      engagement: 53,
+      user_joined: "12 July, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 44,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "Emily Brown",
+      email: "emily.brown@example.com",
+      signup_method: "Google",
+      status: "Active",
+      closet_amount: 103,
+      last_active: "5h ago",
+      engagement: 23,
+      user_joined: "11 July, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 45,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "David Wilson",
+      email: "david.wilson@example.com",
+      signup_method: "Apple",
+      status: "Inactive",
+      closet_amount: 36,
+      last_active: "18h ago",
+      engagement: 89,
+      user_joined: "12 August, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 46,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "John Doe",
+      email: "john.doe@example.com",
+      signup_method: "Email",
+      status: "Active",
+      closet_amount: 50,
+      last_active: "5h ago",
+      engagement: 90,
+      user_joined: "27 October, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 47,
+      name: "Jane Smith",
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      email: "jane.smith@example.com",
+      signup_method: "Google",
+      status: "Inactive",
+      closet_amount: 25,
+      last_active: "1h ago",
+      engagement: 80,
+      user_joined: "18 February, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 48,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "Michael Johnson",
+      email: "michael.johnson@example.com",
+      signup_method: "Apple",
+      status: "Active",
+      closet_amount: 3,
+      last_active: "30 min ago",
+      engagement: 53,
+      user_joined: "12 July, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 49,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "Emily Brown",
+      email: "emily.brown@example.com",
+      signup_method: "Google",
+      status: "Active",
+      closet_amount: 103,
+      last_active: "5h ago",
+      engagement: 23,
+      user_joined: "11 July, 25",
+      average_session_duration: "12.45 minutes",
+    },
+    {
+      id: 50,
+      image:
+        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
+      name: "David Wilson",
+      email: "david.wilson@example.com",
+      signup_method: "Apple",
+      status: "Inactive",
+      closet_amount: 36,
+      last_active: "18h ago",
+      engagement: 89,
+      user_joined: "12 August, 25",
+      average_session_duration: "12.45 minutes",
+    },
   ]);
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState("All Status");
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 10;
+  const loaderRef = useRef(null);
+
+  const filteredUsers = users.filter((user) => {
+    const matchesSearch =
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      filterStatus === "All Status" || user.status === filterStatus;
+    return matchesSearch && matchesStatus;
+  });
+
+  const visibleUsers = filteredUsers.slice(0, page * itemsPerPage);
+  const hasMore = visibleUsers.length < filteredUsers.length;
+
+  // Reset page when filters change
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm, filterStatus]);
+
+  // Set up intersection observer for infinite scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && hasMore) {
+        setPage((prev) => prev + 1);
+      }
+    });
+
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+
+    return () => {
+      if (loaderRef.current) {
+        observer.unobserve(loaderRef.current);
+      }
+    };
+  }, [hasMore]);
 
   // Toggle status
   const toggleStatus = (id) => {
@@ -100,15 +772,6 @@ export default function UserManagement() {
     );
   };
 
-  // Make Admin
-  const makeAdmin = (id) => {
-    setUsers((prev) =>
-      prev.map((user) =>
-        user.id === id ? { ...user, closet_amount: "Admin" } : user
-      )
-    );
-  };
-
   // Delete user
   const deleteUser = (id) => {
     setUsers((prev) => prev.filter((user) => user.id !== id));
@@ -116,14 +779,14 @@ export default function UserManagement() {
 
   return (
     <div className="min-h-screen">
-      <div className=" mx-auto space-y-4">
+      <div className="mx-auto space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="mb-8">
             <h1 className="text-3xl font-bold bg-gradient-to-r from-[#6A6D57] via-[#5A5D4A] to-[#4A4D3A] bg-clip-text text-transparent">
               User Management
             </h1>
-            <p className="text-[#6A6D57]/80 ">
+            <p className="text-[#6A6D57]/80">
               Manage and monitor your application users with ease
             </p>
           </div>
@@ -203,15 +866,16 @@ export default function UserManagement() {
                   type="text"
                   placeholder="Search users by name or email..."
                   className="w-full pl-12 pr-4 py-4 bg-white/60 border border-[#6A6D57]/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#6A6D57]/50 focus:border-[#6A6D57]/50 transition-all duration-300 text-[#6A6D57] placeholder-[#6A6D57]/50"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <div className="flex items-center gap-3 ml-">
-                <select className="px-3 py-3 bg-white/60 border border-[#6A6D57]/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6A6D57]/50 text-[#6A6D57] ">
-                  <option>All Roles</option>
-                  <option>Admin</option>
-                  <option>User</option>
-                </select>
-                <select className="px-4 py-3 bg-white/60 border border-[#6A6D57]/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6A6D57]/50 text-[#6A6D57]">
+              <div className="flex items-center gap-3">
+                <select
+                  className="px-4 py-3 bg-white/60 border border-[#6A6D57]/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6A6D57]/50 text-[#6A6D57]"
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                >
                   <option>All Status</option>
                   <option>Active</option>
                   <option>Inactive</option>
@@ -221,10 +885,13 @@ export default function UserManagement() {
           </div>
 
           {/* Enhanced Table */}
-          <div className="overflow-x-auto cursor-pointer">
+          <div
+            className="overflow-x-auto cursor-pointer"
+            style={{ maxHeight: "600px", overflowY: "auto" }}
+          >
             <table className="w-full">
               <thead className="bg-gradient-to-r from-[#F4F1EB] to-white">
-                <tr className=" border-b border-[#6A6D57]/10">
+                <tr className="border-b border-[#6A6D57]/10">
                   <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
                     User Information
                   </th>
@@ -234,26 +901,22 @@ export default function UserManagement() {
                   <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
                     Closet Items
                   </th>
-
                   <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
                     Engagement
                   </th>
-
                   <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
                     Last Login
                   </th>
-
                   <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
                     Status
                   </th>
-
                   <th className="px-8 py-6 text-center font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#6A6D57]/10">
-                {users.map((user, id) => (
+                {visibleUsers.map((user) => (
                   <tr
                     key={user.id}
                     className="group hover:bg-gradient-to-r hover:from-[#6A6D57]/5 hover:to-[#6A6D57]/10 transition-all duration-300 hover:shadow-md"
@@ -262,13 +925,15 @@ export default function UserManagement() {
                       <button
                         className="bg-transparent hover:bg-transparent border-none shadow-none p-0"
                         onClick={() =>
-                          document.getElementById(user?.id).showModal()
+                          document
+                            .getElementById(`modal-${user.id}`)
+                            .showModal()
                         }
                       >
                         <div className="flex items-center gap-4">
                           <div className="avatar">
                             <div className="w-[50px] rounded-full">
-                              <img src={user?.image} className="rounded-full" />
+                              <img src={user.image} className="rounded-full" />
                             </div>
                           </div>
                           <div className="space-y-1">
@@ -283,7 +948,7 @@ export default function UserManagement() {
                         </div>
                       </button>
 
-                      <dialog id={user?.id} className="modal ">
+                      <dialog id={`modal-${user.id}`} className="modal">
                         <div className="modal-box dark:bg-white text-gray-900">
                           <div className="border-b-2 pb-2">
                             <h3 className="font-bold flex items-start gap-2 text-lg">
@@ -296,26 +961,26 @@ export default function UserManagement() {
                             <h1 className="flex items-center justify-between">
                               User Joined :
                               <span className="font-bold">
-                                {user?.user_joined}
+                                {user.user_joined}
                               </span>
                             </h1>
 
                             <h1 className="flex items-center justify-between">
                               User Status :
-                              <span className="font-bold">{user?.status}</span>
+                              <span className="font-bold">{user.status}</span>
                             </h1>
 
                             <h1 className="flex items-center justify-between">
                               Closet Items :
                               <span className="font-bold">
-                                {user?.closet_amount} Items
+                                {user.closet_amount} Items
                               </span>
                             </h1>
 
                             <h1 className="flex items-center justify-between">
                               Average Session Duration :
                               <span className="font-bold">
-                                {user?.average_session_duration}
+                                {user.average_session_duration}
                               </span>
                             </h1>
                           </div>
@@ -334,34 +999,36 @@ export default function UserManagement() {
                       {user.signup_method}
                     </td>
 
-                    {/* Status */}
-
+                    {/* Closet Items */}
                     <td className="px-8 py-6 text-gray-900">
-                      {user?.closet_amount}
+                      {user.closet_amount}
                     </td>
+
+                    {/* Engagement */}
                     <td className="px-8 py-6">
                       <div className="w-44 h-[10px] rounded-full bg-gray-200 overflow-hidden">
                         <div
                           className={`h-full rounded-full ${
-                            user?.engagement < 30
+                            user.engagement < 30
                               ? "bg-red-500"
-                              : user?.engagement < 80
+                              : user.engagement < 80
                               ? "bg-yellow-500"
                               : "bg-green-500"
                           }`}
-                          style={{ width: `${user?.engagement || 0}%` }}
+                          style={{ width: `${user.engagement || 0}%` }}
                         ></div>
                       </div>
                       <span className="ml-2 text-sm font-medium text-gray-900">
-                        {user?.engagement}%
+                        {user.engagement}%
                       </span>
                     </td>
 
+                    {/* Last Login */}
                     <td className="px-8 py-6 text-gray-900">
-                      {user?.last_active}
+                      {user.last_active}
                     </td>
-                    {/* closet_amount */}
 
+                    {/* Status */}
                     <td className="px-8 py-6">
                       <span
                         className={`inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold shadow-sm ${
@@ -426,6 +1093,11 @@ export default function UserManagement() {
                 ))}
               </tbody>
             </table>
+            {hasMore && (
+              <div ref={loaderRef} className="py-4 text-center">
+                Loading more...
+              </div>
+            )}
           </div>
         </div>
       </div>

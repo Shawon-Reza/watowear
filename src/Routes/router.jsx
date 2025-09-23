@@ -8,6 +8,7 @@ import AI_Performence from "../Pages/Dashboard/AI_Performence";
 import Billing from "../Pages/Dashboard/Billing";
 import Support from "../Pages/Dashboard/Support";
 import UserManagement from "../Pages/Dashboard/UserManagement/UserManagement";
+import ClosetManagement from "../Pages/Dashboard/ClosetManagement/ClosetManagement";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
       {
         path: "user_management",
         element: <UserManagement />,
+      },
+      {
+        path: "closet_management",
+        element: <ClosetManagement />,
       },
       {
         path: "package_management",
