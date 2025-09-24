@@ -9,6 +9,8 @@ import Billing from "../Pages/Dashboard/Billing";
 import Support from "../Pages/Dashboard/Support";
 import UserManagement from "../Pages/Dashboard/UserManagement/UserManagement";
 import ClosetManagement from "../Pages/Dashboard/ClosetManagement/ClosetManagement";
+import FashionManagement from "../Pages/Dashboard/ClosetManagement/FashionManagement";
+import FashionLibraryManagement from "../Pages/Dashboard/ClosetManagement/FashionLibraryManagement";
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +43,10 @@ export const router = createBrowserRouter([
       {
         path: "closet_management",
         element: <ClosetManagement />,
+      },
+      {
+        path: "fashion_management",
+        element: <FashionLibraryManagement />,
       },
       {
         path: "package_management",

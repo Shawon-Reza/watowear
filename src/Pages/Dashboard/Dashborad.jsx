@@ -26,44 +26,41 @@ export default function Dashboard({ children }) {
           name: "Dashboard",
           icon: <LayoutDashboard size={20} />,
           path: "/admin/admin_home",
-          badge: "3",
+          activePaths: ["/admin/admin_home"], // default = itself
         },
         {
           name: "User Management",
           icon: <Users size={20} />,
           path: "/admin/user_management",
-          badge: "12",
+          activePaths: ["/admin/user_management"],
         },
-        // {
-        //   name: "Subcriptions",
-        //   icon: <BadgeDollarSign size={20} />,
-        //   path: "/admin/package_management",
-        //   badge: "12",
-        // },
         {
           name: "Closet Management",
           icon: <Shirt size={20} />,
           path: "/admin/closet_management",
-          badge: "12",
+          // 👇 add both closet & fashion paths here
+          activePaths: [
+            "/admin/closet_management",
+            "/admin/fashion_management",
+          ],
         },
-
         {
           name: "AI Performence",
           icon: <LuBrain size={20} />,
           path: "/admin/ai_performence",
-          badge: "12",
+          activePaths: ["/admin/ai_performence"],
         },
         {
           name: "Billing",
           icon: <PiNotepad size={20} />,
           path: "/admin/billing",
-          badge: "12",
+          activePaths: ["/admin/billing"],
         },
         {
           name: "Support",
           icon: <BsChatSquareText size={20} />,
           path: "/admin/support",
-          badge: "12",
+          activePaths: ["/admin/support"],
         },
       ],
     },
@@ -113,7 +110,7 @@ export default function Dashboard({ children }) {
                       <Link
                         to={item.path}
                         className={`flex items-center px-4 py-3 rounded-xl group/item relative transition-all duration-300 ${
-                          pathname === item.path
+                          item.activePaths.includes(pathname)
                             ? "bg-[#F4F1EB] text-[#6A6D57] shadow-lg shadow-[#F4F1EB]/20"
                             : "text-[#F4F1EB]/90 hover:bg-[#F4F1EB]/15 hover:text-[#F4F1EB] hover:shadow-md"
                         }`}
@@ -121,7 +118,7 @@ export default function Dashboard({ children }) {
                         {/* Icon */}
                         <span
                           className={`transition-all duration-300 ${
-                            pathname === item.path
+                            item.activePaths.includes(pathname)
                               ? "text-[#6A6D57]"
                               : "text-[#F4F1EB]/80 group-hover/item:text-[#F4F1EB]"
                           }`}
@@ -135,7 +132,11 @@ export default function Dashboard({ children }) {
                             isCollapsed
                               ? "opacity-0 invisible w-0"
                               : "opacity-100 visible"
-                          } ${pathname === item.path ? "font-semibold" : ""}`}
+                          } ${
+                            item.activePaths.includes(pathname)
+                              ? "font-semibold"
+                              : ""
+                          }`}
                         >
                           {item.name}
                         </span>

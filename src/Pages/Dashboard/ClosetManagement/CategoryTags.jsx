@@ -49,7 +49,7 @@ const CategoryTags = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6">
       <div className="flex items-stretch justify-between gap-20">
         {/* Categories card */}
         <div className="dark:bg-white basis-6/12 h-full backdrop-blur-sm rounded-3xl border border-[#6A6D57]/10 shadow-md overflow-hidden flex flex-col">

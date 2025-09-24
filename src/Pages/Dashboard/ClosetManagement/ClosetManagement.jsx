@@ -195,7 +195,7 @@ export default function ClosetManagement() {
       <div className="mx-auto space-y-4 ">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-[#6A6D57] via-[#5A5D4A] to-[#4A4D3A] bg-clip-text text-transparent">
+          <h1 className="text-3xl font-extrabold bg-gradient-to-r from-[#6A6D57] via-[#5A5D4A] to-[#4A4D3A] bg-clip-text text-transparent">
             Closet Management ( user )
           </h1>
         </div>
@@ -341,14 +341,14 @@ export default function ClosetManagement() {
         {/* category & tags */}
       </div>
       <div className=" mt-16">
-        <h1 className="mb-5 text-3xl font-bold bg-gradient-to-r from-[#6A6D57] via-[#5A5D4A] to-[#4A4D3A] bg-clip-text text-transparent">
+        <h1 className="mb-5 text-3xl font-extrabold bg-gradient-to-r from-[#6A6D57] via-[#5A5D4A] to-[#4A4D3A] bg-clip-text text-transparent">
           Categories & Tags Management
         </h1>
         <CategoryTags />
       </div>
 
       <div className=" mt-16">
-        <h1 className="mb-5 text-3xl font-bold bg-gradient-to-r from-[#6A6D57] via-[#5A5D4A] to-[#4A4D3A] bg-clip-text text-transparent">
+        <h1 className="mb-5 text-3xl font-extrabold bg-gradient-to-r from-[#6A6D57] via-[#5A5D4A] to-[#4A4D3A] bg-clip-text text-transparent">
           Fashion Library Management ( AI ){" "}
         </h1>
         <FashionManagement />
