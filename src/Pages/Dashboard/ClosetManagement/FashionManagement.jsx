@@ -1,12 +1,12 @@
-
-
 import { Tags, X, Edit3, Upload } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { IoMdImage } from "react-icons/io";
 import { Link } from "react-router-dom";
 
 const FashionManagement = () => {
   const [showModal, setShowModal] = useState(null);
+  const [deleteItemId, setDeleteItemId] = useState(null);
   const [items, setItems] = useState([
     {
       id: 1,
@@ -55,7 +55,16 @@ const FashionManagement = () => {
   };
 
   const handleRemove = (id) => {
-    console.log(id);
+    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+    setDeleteItemId(null); // Close the modal after deletion
+  };
+
+  const openDeleteModal = (id) => {
+    setDeleteItemId(id);
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteItemId(null);
   };
 
   const onSubmit = (data) => {
@@ -76,7 +85,7 @@ const FashionManagement = () => {
               >
                 {/* X Button */}
                 <button
-                  onClick={() => handleRemove(item.id)}
+                  onClick={() => openDeleteModal(item.id)}
                   className="absolute top-2 right-2 p-2 rounded-full bg-red-100 hover:bg-red-400 shadow hover:text-white"
                 >
                   <X size={16} className="text-gray-500" />
@@ -114,6 +123,35 @@ const FashionManagement = () => {
           </div>
         </div>
 
+        {deleteItemId && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 text-[#1B1B1B] rounded-lg shadow-xl w-full max-w-[500px] mx-4">
+              <div className="p-6">
+                <h3 className="font-extrabold text-center text-2xl">
+                  Remove from Closet list
+                </h3>
+                <p className="text-center text-lg font-extrabold py-3 text-[#E43636]">
+                  Are you sure you want to remove this item?
+                </p>
+                <div className="flex justify-end gap-2 py-3">
+                  <button
+                    onClick={closeDeleteModal}
+                    className="px-4 basis-5/12 py-2 border-2 boder-[#475467] text-gray-700 rounded-lg hover:bg-gray-100"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => handleRemove(deleteItemId)}
+                    className="px-4 basis-5/12 py-2 hover:bg-red-600 text-white rounded-lg bg-[#FF6361]"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg shadow-xl w-full max-w-[700px] mx-4">
@@ -122,7 +160,6 @@ const FashionManagement = () => {
                   {showModal === "add" ? "Add New Item" : "Edit Item"}
                 </h2>
                 <div className="flex items-center space-x-2">
-                  <Edit3 size={16} className="text-gray-400" />
                   <button
                     onClick={() => {
                       setShowModal(null);
@@ -143,9 +180,9 @@ const FashionManagement = () => {
                   <input
                     {...register("name", { required: "Item name is required" })}
                     placeholder="T-shirt"
-                    className={`w-full px-3 py-2 border ${
+                    className={`w-full px-3 py-2 border dark:bg-white dark:text-gray-900 ${
                       errors.name ? "border-red-500" : "border-gray-300"
-                    } rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent`}
+                    } rounded-lg`}
                   />
                   {errors.name && (
                     <p className="text-red-500 text-xs mt-1">
@@ -164,13 +201,13 @@ const FashionManagement = () => {
                         required: "Category is required",
                       })}
                       placeholder="Casual"
-                      className={`flex-1 px-3 py-2 border ${
-                        errors.category ? "border-red-500" : "border-gray-300"
-                      } rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent`}
+                      className={`w-full px-3 py-2 border dark:bg-white dark:text-gray-900 ${
+                        errors.name ? "border-red-500" : "border-gray-300"
+                      } rounded-lg`}
                     />
                     <select
                       {...register("tag")}
-                      className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="px-3 py-2 border border-gray-300 rounded-lg dark:bg-white dark:text-gray-900"
                     >
                       <option value="Top">Top</option>
                       <option value="Bottom">Bottom</option>
@@ -190,7 +227,6 @@ const FashionManagement = () => {
                     Upload Image
                   </label>
                   <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                    <Upload className="mx-auto h-8 w-8 text-gray-400 mb-2" />
                     <p className="text-sm text-gray-600 mb-2">
                       Drag and drop files here, or click to browse
                     </p>
@@ -208,17 +244,17 @@ const FashionManagement = () => {
                     onClick={() =>
                       document.getElementById("image-upload").click()
                     }
-                    className="w-full mt-3 bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2"
+                    className="w-full mt-3 border border-[#6A6D57] text-[#6A6D57] font-bold py-2 rounded-lg  transition-colors flex items-center justify-center space-x-2"
                   >
-                    <Upload size={16} />
+                    <IoMdImage size={24} />
                     <span>Upload Image</span>
                   </button>
                 </div>
 
-                <div className="px-6 py-4 border-t border-gray-200">
+                <div className=" py-4 border-t border-gray-200">
                   <button
                     type="submit"
-                    className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
+                    className="w-full bg-[#6A6D57] hover:bg-[#585a48] text-white py-3 rounded-lg  transition-colors font-medium"
                   >
                     {showModal === "add" ? "Add" : "Update"}
                   </button>

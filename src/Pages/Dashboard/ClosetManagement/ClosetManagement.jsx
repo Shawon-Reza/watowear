@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { Trash2, MoreVertical, Search } from "lucide-react";
+import { Trash2, MoreVertical, Search, Eye } from "lucide-react";
 import CategoryTags from "./CategoryTags";
 import FashionManagement from "./FashionManagement";
+import { Link } from "react-router-dom";
 
 export default function ClosetManagement() {
   const [items, setItems] = useState([
@@ -161,7 +162,6 @@ export default function ClosetManagement() {
   const visibleItems = filteredItems.slice(0, page * itemsPerPage);
   const hasMore = visibleItems.length < filteredItems.length;
 
-  // Reset page when filters change
   useEffect(() => {
     setPage(1);
   }, [searchTerm, filterStatus]);
@@ -260,70 +260,65 @@ export default function ClosetManagement() {
                     Date Added
                   </th>
                   <th className="px-8 py-6 text-center font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
-                    Actions
+                    View
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#6A6D57]/10">
-                {visibleItems.map((item) => (
+                {visibleItems.map((itemData) => (
                   <tr
-                    key={item.id}
+                    key={itemData.id}
                     className="group hover:bg-gradient-to-r hover:from-[#6A6D57]/5 hover:to-[#6A6D57]/10 transition-all duration-300 hover:shadow-md"
                   >
                     <td className="px-8 py-6">
                       <div className="flex items-center gap-4">
                         <div className="w-[50px] h-[50px] bg-gray-200 rounded flex items-center justify-center">
-                          ID #{item.id}
+                          ID #{itemData.id}
                         </div>
                         <div className="space-y-1">
                           <p className="font-bold text-[#6A6D57] text-start text-base group-hover:text-[#5A5D4A] transition-colors">
-                            {item.item}
+                            {itemData.item}
                           </p>
                         </div>
                       </div>
                     </td>
                     <td className="px-8 py-6 text-[#6A6D57] text-base font-semibold">
-                      {item.category}
+                      {itemData.category}
                     </td>
-                    <td className="px-8 py-6 text-gray-900">{item.tags}</td>
+                    <td className="px-8 py-6 text-gray-900">{itemData.tags}</td>
                     <td className="px-8 py-6 text-gray-900">
-                      {item.uploadedBy}
+                      {itemData.uploadedBy}
                     </td>
                     <td className="px-8 py-6">
                       <span
                         className={`inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold shadow-sm ${
-                          item.status === "Approved"
+                          itemData.status === "Approved"
                             ? "bg-gradient-to-r from-green-100 to-emerald-200 text-green-700"
                             : "bg-gradient-to-r from-red-100 to-red-200 text-red-700"
                         }`}
                       >
-                        {item.status}
+                        {itemData.status}
                       </span>
                     </td>
                     <td className="px-8 py-6 text-gray-900">
-                      {item.dateAdded}
+                      {itemData.dateAdded}
                     </td>
                     <td className="px-8 py-6">
                       <div className="flex items-center justify-center gap-2">
-                        <button
-                          onClick={() => deleteItem(item.id)}
-                          className="group/btn p-3 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-700 transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
-                          title="Delete Item"
+                        <Link
+                          to={`/admin/closet_showcase/${itemData?.id}`}
+                          state={itemData}
                         >
-                          <Trash2
-                            size={18}
-                            className="group-hover/btn:scale-110 transition-transform"
-                          />
-                        </button>
-                        <button
-                          className="group/btn p-3 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-700 transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
-                          title="More Actions"
-                        >
-                          <MoreVertical
-                            size={18}
-                            className="group-hover/btn:scale-110 transition-transform"
-                          />
-                        </button>
+                          <button
+                            className="group/btn p-3 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-700 transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
+                            title="Delete Item"
+                          >
+                            <Eye
+                              size={18}
+                              className="group-hover/btn:scale-110 transition-transform"
+                            />
+                          </button>
+                        </Link>
                       </div>
                     </td>
                   </tr>

@@ -11,6 +11,7 @@ import UserManagement from "../Pages/Dashboard/UserManagement/UserManagement";
 import ClosetManagement from "../Pages/Dashboard/ClosetManagement/ClosetManagement";
 import FashionManagement from "../Pages/Dashboard/ClosetManagement/FashionManagement";
 import FashionLibraryManagement from "../Pages/Dashboard/ClosetManagement/FashionLibraryManagement";
+import IndividualCloset from "../Pages/Dashboard/ClosetManagement/IndividualCloset";
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ export const router = createBrowserRouter([
       {
         path: "fashion_management",
         element: <FashionLibraryManagement />,
+      },
+      {
+        path: "closet_showcase/:id",
+        element: <IndividualCloset />,
       },
       {
         path: "package_management",

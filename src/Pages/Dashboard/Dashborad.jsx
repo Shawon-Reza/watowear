@@ -42,6 +42,7 @@ export default function Dashboard({ children }) {
           activePaths: [
             "/admin/closet_management",
             "/admin/fashion_management",
+            "/admin/closet_showcase",
           ],
         },
         {
@@ -107,10 +108,22 @@ export default function Dashboard({ children }) {
                 <ul className="space-y-2">
                   {section.items.map((item, itemIdx) => (
                     <li key={itemIdx} className="relative group">
+                      {/* {console.log(
+                        "/" +
+                          pathname.split("/")[1] +
+                          "/" +
+                          pathname.split("/")[2],
+                        pathname.split("/")
+                      )} */}
                       <Link
                         to={item.path}
                         className={`flex items-center px-4 py-3 rounded-xl group/item relative transition-all duration-300 ${
-                          item.activePaths.includes(pathname)
+                          item.activePaths.includes(
+                            "/" +
+                              pathname.split("/")[1] +
+                              "/" +
+                              pathname.split("/")[2]
+                          )
                             ? "bg-[#F4F1EB] text-[#6A6D57] shadow-lg shadow-[#F4F1EB]/20"
                             : "text-[#F4F1EB]/90 hover:bg-[#F4F1EB]/15 hover:text-[#F4F1EB] hover:shadow-md"
                         }`}
