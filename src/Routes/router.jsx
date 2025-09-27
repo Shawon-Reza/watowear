@@ -4,7 +4,6 @@ import Dashborad from "../Pages/Dashboard/Dashborad";
 import Login from "../Pages/Authentication/Login";
 import AdminHome from "../Pages/Dashboard/AdminHome";
 import PackageManagement from "../Pages/Dashboard/PackageManagement";
-import AI_Performence from "../Pages/Dashboard/AI_Performence";
 import Billing from "../Pages/Dashboard/Billing";
 import Support from "../Pages/Dashboard/Support";
 import UserManagement from "../Pages/Dashboard/UserManagement/UserManagement";
@@ -12,6 +11,9 @@ import ClosetManagement from "../Pages/Dashboard/ClosetManagement/ClosetManageme
 import FashionManagement from "../Pages/Dashboard/ClosetManagement/FashionManagement";
 import FashionLibraryManagement from "../Pages/Dashboard/ClosetManagement/FashionLibraryManagement";
 import IndividualCloset from "../Pages/Dashboard/ClosetManagement/IndividualCloset";
+import AI_Performence from "../Pages/Dashboard/AIPerformence/AI_Performence";
+import BrandPartners from "../Pages/Dashboard/BrandPartners/BrandPartners";
+import Analytics from "../Pages/Dashboard/Analytics/Analytics";
 
 export const router = createBrowserRouter([
   {
@@ -62,8 +64,12 @@ export const router = createBrowserRouter([
         element: <AI_Performence />,
       },
       {
-        path: "billing",
-        element: <Billing />,
+        path: "brand_partners",
+        element: <BrandPartners />,
+      },
+      {
+        path: "analytics",
+        element: <Analytics />,
       },
       {
         path: "support",

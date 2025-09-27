@@ -9,10 +9,12 @@ import {
   BadgeDollarSign,
   LogOut,
   Shirt,
+  ChartColumn,
 } from "lucide-react";
 import { LuBrain } from "react-icons/lu";
 import { BsChatSquareText } from "react-icons/bs";
 import { PiNotepad } from "react-icons/pi";
+import { FiShoppingBag } from "react-icons/fi";
 
 export default function Dashboard({ children }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -52,10 +54,17 @@ export default function Dashboard({ children }) {
           activePaths: ["/admin/ai_performence"],
         },
         {
-          name: "Billing",
-          icon: <PiNotepad size={20} />,
-          path: "/admin/billing",
-          activePaths: ["/admin/billing"],
+          name: "Brand Partners",
+          icon: <FiShoppingBag size={20} />,
+          path: "/admin/brand_partners",
+          activePaths: ["/admin/brand_partners"],
+        },
+
+        {
+          name: "Analytics",
+          icon: <ChartColumn size={20} />,
+          path: "/admin/analytics",
+          activePaths: ["/admin/analytics"],
         },
         {
           name: "Support",
