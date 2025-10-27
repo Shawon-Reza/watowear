@@ -5,7 +5,7 @@ import Login from "../Pages/Authentication/Login";
 import AdminHome from "../Pages/Dashboard/AdminHome";
 import PackageManagement from "../Pages/Dashboard/PackageManagement";
 import Billing from "../Pages/Dashboard/Billing";
-import Support from "../Pages/Dashboard/Support";
+
 import UserManagement from "../Pages/Dashboard/UserManagement/UserManagement";
 import ClosetManagement from "../Pages/Dashboard/ClosetManagement/ClosetManagement";
 import FashionManagement from "../Pages/Dashboard/ClosetManagement/FashionManagement";
@@ -15,6 +15,7 @@ import AI_Performence from "../Pages/Dashboard/AIPerformence/AI_Performence";
 import BrandPartners from "../Pages/Dashboard/BrandPartners/BrandPartners";
 import Analytics from "../Pages/Dashboard/Analytics/Analytics";
 import History from "../Pages/Dashboard/History/History";
+import Support from "../Pages/Dashboard/Support/Support";
 
 export const router = createBrowserRouter([
   {
@@ -74,7 +75,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "support",
-        element: <Support />,
+        element: <Support></Support>,
       },
       {
         path: "history",
