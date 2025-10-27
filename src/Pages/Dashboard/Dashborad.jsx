@@ -72,6 +72,12 @@ export default function Dashboard({ children }) {
           path: "/admin/support",
           activePaths: ["/admin/support"],
         },
+        {
+          name: "History",
+          icon: <BsChatSquareText size={20} />,
+          path: "/admin/history",
+          activePaths: ["/admin/history"],
+        },
       ],
     },
   ];

@@ -14,6 +14,7 @@ import IndividualCloset from "../Pages/Dashboard/ClosetManagement/IndividualClos
 import AI_Performence from "../Pages/Dashboard/AIPerformence/AI_Performence";
 import BrandPartners from "../Pages/Dashboard/BrandPartners/BrandPartners";
 import Analytics from "../Pages/Dashboard/Analytics/Analytics";
+import History from "../Pages/Dashboard/History/History";
 
 export const router = createBrowserRouter([
   {
@@ -74,6 +75,10 @@ export const router = createBrowserRouter([
       {
         path: "support",
         element: <Support />,
+      },
+      {
+        path: "history",
+        element: <History></History>,
       },
     ],
   },
