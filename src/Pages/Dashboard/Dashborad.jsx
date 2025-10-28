@@ -15,6 +15,7 @@ import { LuBrain } from "react-icons/lu";
 import { BsChatSquareText } from "react-icons/bs";
 import { PiNotepad } from "react-icons/pi";
 import { FiShoppingBag } from "react-icons/fi";
+import { BiSupport } from "react-icons/bi";
 
 export default function Dashboard({ children }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -68,7 +69,7 @@ export default function Dashboard({ children }) {
         },
         {
           name: "Support",
-          icon: <BsChatSquareText size={20} />,
+          icon: <BiSupport size={20} />,
           path: "/admin/support",
           activePaths: ["/admin/support"],
         },

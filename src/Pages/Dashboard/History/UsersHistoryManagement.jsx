@@ -7,7 +7,7 @@ import { HiDotsVertical } from 'react-icons/hi'
  * - users: array of user objects from parent
  *    { id, name, email, avatar, signupMethod, status, actionTakenBy, date }
  */
-export default function HistoryManagement({ users = [] , title = 'User management'}) {
+export default function UsersHistoryManagement({ users = [] , title = 'User management'}) {
   const [tab, setTab] = useState('All')
   const [page, setPage] = useState(1)
   const [pageSize] = useState(6)

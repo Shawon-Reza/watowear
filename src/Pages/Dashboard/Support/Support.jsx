@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { FaUserGroup } from 'react-icons/fa6'
+import { FaCheck, FaUserGroup } from 'react-icons/fa6'
 import { HiDotsVertical } from 'react-icons/hi'
 import SupportReplyModal from './SupportReplyModal'
+import { MdOutlineEmail, MdOutlineWatchLater } from 'react-icons/md'
 
 // Simulated backend data (initial fake data). Replace fetchSupportData to call real API.
 const FAKE_SUPPORT = [
@@ -131,7 +132,7 @@ export default function Support() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 flex items-center  gap-3">
                     <div className='bg-[#3B82F6] p-2 rounded-md' >
-                        <FaUserGroup color='' className='text-black' />
+                        <FaUserGroup color='' className='text-white' />
                     </div>
                     <div>
                         <div className="text-sm text-gray-500">Total Support Submitted</div>
@@ -140,8 +141,8 @@ export default function Support() {
                 </div>
 
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 flex items-center gap-3">
-                    <div className='bg-[#3B82F6] p-2 rounded-md' >
-                        <FaUserGroup color='' className='text-black' />
+                    <div className='bg-[#6A6D57] p-2 rounded-md' >
+                        <FaCheck color='' className='text-white' />
                     </div>
                     <div>
                         <div className="text-sm text-gray-500">Recent Submitted</div>
@@ -150,8 +151,8 @@ export default function Support() {
                 </div>
 
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 flex items-center gap-3">
-                    <div className='bg-[#3B82F6] p-2 rounded-md' >
-                        <FaUserGroup color='' className='text-black' />
+                    <div className='bg-[#f63b3b] p-2 rounded-md flex items-center justify-center'>
+                        <MdOutlineEmail size={18} color='' className='text-black ' />
                     </div>
                     <div>
                         <div className="text-sm text-gray-500">Read</div>
@@ -160,8 +161,8 @@ export default function Support() {
                 </div>
 
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 flex items-center gap-3">
-                    <div className='bg-[#3B82F6] p-2 rounded-md' >
-                        <FaUserGroup color='' className='text-black' />
+                    <div className='bg-[#EAB308] p-2 rounded-md' >
+                        <MdOutlineWatchLater size={18} color='' className='text-black' />
                     </div>
                     <div>
                         <div className="text-sm text-gray-500">This Month</div>
