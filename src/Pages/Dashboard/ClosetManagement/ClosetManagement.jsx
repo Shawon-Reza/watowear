@@ -3,6 +3,7 @@ import { Trash2, MoreVertical, Search, Eye } from "lucide-react";
 import CategoryTags from "./CategoryTags";
 import FashionManagement from "./FashionManagement";
 import { Link } from "react-router-dom";
+import ClosetManagementTable from "./ClosetManagementTable";
 
 export default function ClosetManagement() {
   const [items, setItems] = useState([
@@ -200,138 +201,9 @@ export default function ClosetManagement() {
           </h1>
         </div>
 
-        {/* Main Card */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-3xl border border-[#6A6D57]/10  shadow-md overflow-hidden">
-          {/* Search Header */}
-          <div className="p-8 bg-gradient-to-r from-white/40 to-[#6A6D57]/5 border-b border-[#6A6D57]/10">
-            <div className="flex items-center justify-between">
-              <div className="relative flex-1 max-w-md">
-                <Search
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#6A6D57]/60"
-                  size={20}
-                />
-                <input
-                  type="text"
-                  placeholder="Search items or uploaded by..."
-                  className="w-full pl-12 pr-4 py-4 bg-white/60 border border-[#6A6D57]/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#6A6D57]/50 focus:border-[#6A6D57]/50 transition-all duration-300 text-[#6A6D57] placeholder-[#6A6D57]/50"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-
-              <div className="flex items-center gap-3">
-                <select
-                  className="px-4 py-3 bg-white/60 border border-[#6A6D57]/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6A6D57]/50 text-[#6A6D57]"
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                >
-                  <option>All Status</option>
-                  <option>Approved</option>
-                  <option>Rejected</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* Enhanced Table */}
-          <div
-            className="overflow-x-auto cursor-pointer"
-            style={{ maxHeight: "600px", overflowY: "auto" }}
-          >
-            <table className="w-full">
-              <thead className="bg-gradient-to-r from-[#F4F1EB] to-white">
-                <tr className="border-b border-[#6A6D57]/10">
-                  <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
-                    Item
-                  </th>
-                  <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
-                    Category
-                  </th>
-                  <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
-                    Tags
-                  </th>
-                  <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
-                    Uploaded By
-                  </th>
-                  <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
-                    Date Added
-                  </th>
-                  <th className="px-8 py-6 text-center font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
-                    View
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#6A6D57]/10">
-                {visibleItems.map((itemData) => (
-                  <tr
-                    key={itemData.id}
-                    className="group hover:bg-gradient-to-r hover:from-[#6A6D57]/5 hover:to-[#6A6D57]/10 transition-all duration-300 hover:shadow-md"
-                  >
-                    <td className="px-8 py-6">
-                      <div className="flex items-center gap-4">
-                        <div className="w-[50px] h-[50px] bg-gray-200 rounded flex items-center justify-center">
-                          ID #{itemData.id}
-                        </div>
-                        <div className="space-y-1">
-                          <p className="font-bold text-[#6A6D57] text-start text-base group-hover:text-[#5A5D4A] transition-colors">
-                            {itemData.item}
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-8 py-6 text-[#6A6D57] text-base font-semibold">
-                      {itemData.category}
-                    </td>
-                    <td className="px-8 py-6 text-gray-900">{itemData.tags}</td>
-                    <td className="px-8 py-6 text-gray-900">
-                      {itemData.uploadedBy}
-                    </td>
-                    <td className="px-8 py-6">
-                      <span
-                        className={`inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold shadow-sm ${
-                          itemData.status === "Approved"
-                            ? "bg-gradient-to-r from-green-100 to-emerald-200 text-green-700"
-                            : "bg-gradient-to-r from-red-100 to-red-200 text-red-700"
-                        }`}
-                      >
-                        {itemData.status}
-                      </span>
-                    </td>
-                    <td className="px-8 py-6 text-gray-900">
-                      {itemData.dateAdded}
-                    </td>
-                    <td className="px-8 py-6">
-                      <div className="flex items-center justify-center gap-2">
-                        <Link
-                          to={`/admin/closet_showcase/${itemData?.id}`}
-                          state={itemData}
-                        >
-                          <button
-                            className="group/btn p-3 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-700 transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
-                            title="Delete Item"
-                          >
-                            <Eye
-                              size={18}
-                              className="group-hover/btn:scale-110 transition-transform"
-                            />
-                          </button>
-                        </Link>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {hasMore && (
-              <div ref={loaderRef} className="py-4 text-center">
-                Loading more...
-              </div>
-            )}
-          </div>
-        </div>
+        <section className="max-h-[calc(100vh-200px)] overflow-auto">
+          <ClosetManagementTable></ClosetManagementTable>
+        </section>
 
         {/* category & tags */}
       </div>
