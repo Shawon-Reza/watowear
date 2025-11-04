@@ -6,6 +6,7 @@ import {
   Users,
 } from "lucide-react";
 import AnalyticsGraph from "./AnalyticsGraph";
+import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar } from "recharts";
 
 const Analytics = () => {
   // Dynamic stats object - replace these values with backend values when available
@@ -35,8 +36,14 @@ const Analytics = () => {
             <p className={`text-sm ${stats.dailyActive.change >= 0 ? 'text-green-600' : 'text-red-600'} mt-1`}>
               {stats.dailyActive.change >= 0 ? '+' : ''}{stats.dailyActive.change}% vs last month
             </p>
-            <div className="w-full bg-gray-100 rounded-full h-2 mt-3">
-              <div className="h-2 rounded-full" style={{ width: `${stats.dailyActive.percent}%`, background: stats.dailyActive.color }} />
+            <div className="w-full rounded-full h-3 mt-3">
+              <ResponsiveContainer width="100%" height={18}>
+                <BarChart data={[{ name: "p", value: stats.dailyActive.percent }]} layout="vertical" margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+                  <XAxis type="number" domain={[0, 100]} hide />
+                  <YAxis type="category" dataKey="name" hide />
+                  <Bar dataKey="value" fill={stats.dailyActive.color} radius={[8, 8, 8, 8]} barSize={12} />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </div>
         </div>
@@ -54,8 +61,14 @@ const Analytics = () => {
             <p className={`text-sm ${stats.avgSession.change >= 0 ? 'text-green-600' : 'text-red-600'} mt-1`}>
               {stats.avgSession.change >= 0 ? '+' : ''}{stats.avgSession.change}% vs last month
             </p>
-            <div className="w-full bg-gray-100 rounded-full h-2 mt-3">
-              <div className="h-2 rounded-full" style={{ width: `${stats.avgSession.percent}%`, background: stats.avgSession.color }} />
+            <div className="w-full rounded-full h-3 mt-3">
+              <ResponsiveContainer width="100%" height={18}>
+                <BarChart data={[{ name: "p", value: stats.avgSession.percent }]} layout="vertical" margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+                  <XAxis type="number" domain={[0, 100]} hide />
+                  <YAxis type="category" dataKey="name" hide />
+                  <Bar dataKey="value" fill={stats.avgSession.color} radius={[8, 8, 8, 8]} barSize={12} />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </div>
         </div>
@@ -73,8 +86,14 @@ const Analytics = () => {
             <p className={`text-sm ${stats.avgSessionDaily.change >= 0 ? 'text-green-600' : 'text-red-600'} mt-1`}>
               {stats.avgSessionDaily.change >= 0 ? '+' : ''}{stats.avgSessionDaily.change}% vs last month
             </p>
-            <div className="w-full bg-gray-100 rounded-full h-2 mt-3">
-              <div className="h-2 rounded-full" style={{ width: `${stats.avgSessionDaily.percent}%`, background: stats.avgSessionDaily.color }} />
+            <div className="w-full rounded-full h-3 mt-3">
+              <ResponsiveContainer width="100%" height={18}>
+                <BarChart data={[{ name: "p", value: stats.avgSessionDaily.percent }]} layout="vertical" margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+                  <XAxis type="number" domain={[0, 100]} hide />
+                  <YAxis type="category" dataKey="name" hide />
+                  <Bar dataKey="value" fill={stats.avgSessionDaily.color} radius={[8, 8, 8, 8]} barSize={12} />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </div>
         </div>

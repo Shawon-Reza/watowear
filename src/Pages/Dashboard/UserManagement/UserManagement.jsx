@@ -1,1091 +1,254 @@
-import { useState, useRef, useEffect } from "react";
-import {
-  Search,
-  User,
-  Ban,
-  CheckCircle,
-  ShieldCheck,
-  Trash2,
-  Crown,
-  Mail,
-} from "lucide-react";
-import { IoStatsChart } from "react-icons/io5";
+import React, { useMemo, useState } from "react";
+import { Search, Mail, MoreVertical } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+const SAMPLE_USERS = [
+  {
+    id: 1,
+    image: "https://i.pravatar.cc/64?img=11",
+    name: "Emma Johnson",
+    email: "emma.j@example.com",
+    signup_method: "Email",
+    status: "Active",
+    closet_amount: 128,
+    last_active: "2 hours ago",
+    engagement: 92,
+  },
+  {
+    id: 2,
+    image: "https://i.pravatar.cc/64?img=12",
+    name: "Michael Chen",
+    email: "michael.c@example.com",
+    signup_method: "Google",
+    status: "Active",
+    closet_amount: 75,
+    last_active: "1 day ago",
+    engagement: 78,
+  },
+  {
+    id: 3,
+    image: "https://i.pravatar.cc/64?img=13",
+    name: "Sophia Rodriguez",
+    email: "sophia.r@example.com",
+    signup_method: "Apple",
+    status: "Active",
+    closet_amount: 210,
+    last_active: "3 days ago",
+    engagement: 85,
+  },
+  {
+    id: 4,
+    image: "https://i.pravatar.cc/64?img=14",
+    name: "James Wilson",
+    email: "james.w@example.com",
+    signup_method: "Email",
+    status: "Inactive",
+    closet_amount: 42,
+    last_active: "2 months ago",
+    engagement: 23,
+  },
+  {
+    id: 5,
+    image: "https://i.pravatar.cc/64?img=15",
+    name: "Olivia Martinez",
+    email: "olivia.m@example.com",
+    signup_method: "Google",
+    status: "Suspended",
+    closet_amount: 156,
+    last_active: "1 week ago",
+    engagement: 65,
+  },
+  {
+    id: 6,
+    image: "https://i.pravatar.cc/64?img=16",
+    name: "Noah Brown",
+    email: "noah.b@example.com",
+    signup_method: "Google",
+    status: "Active",
+    closet_amount: 89,
+    last_active: "5 hours ago",
+    engagement: 88,
+  },
+];
 
 export default function UserManagement() {
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "John Doe",
-      email: "john.doe@example.com",
-      signup_method: "Email",
-      status: "Active",
-      closet_amount: 50,
-      last_active: "5h ago",
-      engagement: 90,
-      user_joined: "27 October, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      email: "jane.smith@example.com",
-      signup_method: "Google",
-      status: "Inactive",
-      closet_amount: 25,
-      last_active: "1h ago",
-      engagement: 80,
-      user_joined: "18 February, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 3,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Michael Johnson",
-      email: "michael.johnson@example.com",
-      signup_method: "Apple",
-      status: "Active",
-      closet_amount: 3,
-      last_active: "30 min ago",
-      engagement: 53,
-      user_joined: "12 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 4,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Emily Brown",
-      email: "emily.brown@example.com",
-      signup_method: "Google",
-      status: "Active",
-      closet_amount: 103,
-      last_active: "5h ago",
-      engagement: 23,
-      user_joined: "11 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 5,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "David Wilson",
-      email: "david.wilson@example.com",
-      signup_method: "Apple",
-      status: "Inactive",
-      closet_amount: 36,
-      last_active: "18h ago",
-      engagement: 89,
-      user_joined: "12 August, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    // Duplicated users for demonstration of infinite scroll and pagination (50 total)
-    {
-      id: 6,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "John Doe",
-      email: "john.doe@example.com",
-      signup_method: "Email",
-      status: "Active",
-      closet_amount: 50,
-      last_active: "5h ago",
-      engagement: 90,
-      user_joined: "27 October, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 7,
-      name: "Jane Smith",
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      email: "jane.smith@example.com",
-      signup_method: "Google",
-      status: "Inactive",
-      closet_amount: 25,
-      last_active: "1h ago",
-      engagement: 80,
-      user_joined: "18 February, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 8,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Michael Johnson",
-      email: "michael.johnson@example.com",
-      signup_method: "Apple",
-      status: "Active",
-      closet_amount: 3,
-      last_active: "30 min ago",
-      engagement: 53,
-      user_joined: "12 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 9,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Emily Brown",
-      email: "emily.brown@example.com",
-      signup_method: "Google",
-      status: "Active",
-      closet_amount: 103,
-      last_active: "5h ago",
-      engagement: 23,
-      user_joined: "11 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 10,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "David Wilson",
-      email: "david.wilson@example.com",
-      signup_method: "Apple",
-      status: "Inactive",
-      closet_amount: 36,
-      last_active: "18h ago",
-      engagement: 89,
-      user_joined: "12 August, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 11,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "John Doe",
-      email: "john.doe@example.com",
-      signup_method: "Email",
-      status: "Active",
-      closet_amount: 50,
-      last_active: "5h ago",
-      engagement: 90,
-      user_joined: "27 October, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 12,
-      name: "Jane Smith",
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      email: "jane.smith@example.com",
-      signup_method: "Google",
-      status: "Inactive",
-      closet_amount: 25,
-      last_active: "1h ago",
-      engagement: 80,
-      user_joined: "18 February, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 13,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Michael Johnson",
-      email: "michael.johnson@example.com",
-      signup_method: "Apple",
-      status: "Active",
-      closet_amount: 3,
-      last_active: "30 min ago",
-      engagement: 53,
-      user_joined: "12 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 14,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Emily Brown",
-      email: "emily.brown@example.com",
-      signup_method: "Google",
-      status: "Active",
-      closet_amount: 103,
-      last_active: "5h ago",
-      engagement: 23,
-      user_joined: "11 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 15,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "David Wilson",
-      email: "david.wilson@example.com",
-      signup_method: "Apple",
-      status: "Inactive",
-      closet_amount: 36,
-      last_active: "18h ago",
-      engagement: 89,
-      user_joined: "12 August, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 16,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "John Doe",
-      email: "john.doe@example.com",
-      signup_method: "Email",
-      status: "Active",
-      closet_amount: 50,
-      last_active: "5h ago",
-      engagement: 90,
-      user_joined: "27 October, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 17,
-      name: "Jane Smith",
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      email: "jane.smith@example.com",
-      signup_method: "Google",
-      status: "Inactive",
-      closet_amount: 25,
-      last_active: "1h ago",
-      engagement: 80,
-      user_joined: "18 February, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 18,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Michael Johnson",
-      email: "michael.johnson@example.com",
-      signup_method: "Apple",
-      status: "Active",
-      closet_amount: 3,
-      last_active: "30 min ago",
-      engagement: 53,
-      user_joined: "12 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 19,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Emily Brown",
-      email: "emily.brown@example.com",
-      signup_method: "Google",
-      status: "Active",
-      closet_amount: 103,
-      last_active: "5h ago",
-      engagement: 23,
-      user_joined: "11 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 20,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "David Wilson",
-      email: "david.wilson@example.com",
-      signup_method: "Apple",
-      status: "Inactive",
-      closet_amount: 36,
-      last_active: "18h ago",
-      engagement: 89,
-      user_joined: "12 August, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 21,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "John Doe",
-      email: "john.doe@example.com",
-      signup_method: "Email",
-      status: "Active",
-      closet_amount: 50,
-      last_active: "5h ago",
-      engagement: 90,
-      user_joined: "27 October, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 22,
-      name: "Jane Smith",
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      email: "jane.smith@example.com",
-      signup_method: "Google",
-      status: "Inactive",
-      closet_amount: 25,
-      last_active: "1h ago",
-      engagement: 80,
-      user_joined: "18 February, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 23,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Michael Johnson",
-      email: "michael.johnson@example.com",
-      signup_method: "Apple",
-      status: "Active",
-      closet_amount: 3,
-      last_active: "30 min ago",
-      engagement: 53,
-      user_joined: "12 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 24,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Emily Brown",
-      email: "emily.brown@example.com",
-      signup_method: "Google",
-      status: "Active",
-      closet_amount: 103,
-      last_active: "5h ago",
-      engagement: 23,
-      user_joined: "11 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 25,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "David Wilson",
-      email: "david.wilson@example.com",
-      signup_method: "Apple",
-      status: "Inactive",
-      closet_amount: 36,
-      last_active: "18h ago",
-      engagement: 89,
-      user_joined: "12 August, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 26,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "John Doe",
-      email: "john.doe@example.com",
-      signup_method: "Email",
-      status: "Active",
-      closet_amount: 50,
-      last_active: "5h ago",
-      engagement: 90,
-      user_joined: "27 October, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 27,
-      name: "Jane Smith",
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      email: "jane.smith@example.com",
-      signup_method: "Google",
-      status: "Inactive",
-      closet_amount: 25,
-      last_active: "1h ago",
-      engagement: 80,
-      user_joined: "18 February, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 28,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Michael Johnson",
-      email: "michael.johnson@example.com",
-      signup_method: "Apple",
-      status: "Active",
-      closet_amount: 3,
-      last_active: "30 min ago",
-      engagement: 53,
-      user_joined: "12 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 29,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Emily Brown",
-      email: "emily.brown@example.com",
-      signup_method: "Google",
-      status: "Active",
-      closet_amount: 103,
-      last_active: "5h ago",
-      engagement: 23,
-      user_joined: "11 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 30,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "David Wilson",
-      email: "david.wilson@example.com",
-      signup_method: "Apple",
-      status: "Inactive",
-      closet_amount: 36,
-      last_active: "18h ago",
-      engagement: 89,
-      user_joined: "12 August, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 31,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "John Doe",
-      email: "john.doe@example.com",
-      signup_method: "Email",
-      status: "Active",
-      closet_amount: 50,
-      last_active: "5h ago",
-      engagement: 90,
-      user_joined: "27 October, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 32,
-      name: "Jane Smith",
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      email: "jane.smith@example.com",
-      signup_method: "Google",
-      status: "Inactive",
-      closet_amount: 25,
-      last_active: "1h ago",
-      engagement: 80,
-      user_joined: "18 February, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 33,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Michael Johnson",
-      email: "michael.johnson@example.com",
-      signup_method: "Apple",
-      status: "Active",
-      closet_amount: 3,
-      last_active: "30 min ago",
-      engagement: 53,
-      user_joined: "12 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 34,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Emily Brown",
-      email: "emily.brown@example.com",
-      signup_method: "Google",
-      status: "Active",
-      closet_amount: 103,
-      last_active: "5h ago",
-      engagement: 23,
-      user_joined: "11 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 35,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "David Wilson",
-      email: "david.wilson@example.com",
-      signup_method: "Apple",
-      status: "Inactive",
-      closet_amount: 36,
-      last_active: "18h ago",
-      engagement: 89,
-      user_joined: "12 August, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 36,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "John Doe",
-      email: "john.doe@example.com",
-      signup_method: "Email",
-      status: "Active",
-      closet_amount: 50,
-      last_active: "5h ago",
-      engagement: 90,
-      user_joined: "27 October, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 37,
-      name: "Jane Smith",
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      email: "jane.smith@example.com",
-      signup_method: "Google",
-      status: "Inactive",
-      closet_amount: 25,
-      last_active: "1h ago",
-      engagement: 80,
-      user_joined: "18 February, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 38,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Michael Johnson",
-      email: "michael.johnson@example.com",
-      signup_method: "Apple",
-      status: "Active",
-      closet_amount: 3,
-      last_active: "30 min ago",
-      engagement: 53,
-      user_joined: "12 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 39,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Emily Brown",
-      email: "emily.brown@example.com",
-      signup_method: "Google",
-      status: "Active",
-      closet_amount: 103,
-      last_active: "5h ago",
-      engagement: 23,
-      user_joined: "11 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 40,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "David Wilson",
-      email: "david.wilson@example.com",
-      signup_method: "Apple",
-      status: "Inactive",
-      closet_amount: 36,
-      last_active: "18h ago",
-      engagement: 89,
-      user_joined: "12 August, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 41,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "John Doe",
-      email: "john.doe@example.com",
-      signup_method: "Email",
-      status: "Active",
-      closet_amount: 50,
-      last_active: "5h ago",
-      engagement: 90,
-      user_joined: "27 October, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 42,
-      name: "Jane Smith",
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      email: "jane.smith@example.com",
-      signup_method: "Google",
-      status: "Inactive",
-      closet_amount: 25,
-      last_active: "1h ago",
-      engagement: 80,
-      user_joined: "18 February, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 43,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Michael Johnson",
-      email: "michael.johnson@example.com",
-      signup_method: "Apple",
-      status: "Active",
-      closet_amount: 3,
-      last_active: "30 min ago",
-      engagement: 53,
-      user_joined: "12 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 44,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Emily Brown",
-      email: "emily.brown@example.com",
-      signup_method: "Google",
-      status: "Active",
-      closet_amount: 103,
-      last_active: "5h ago",
-      engagement: 23,
-      user_joined: "11 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 45,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "David Wilson",
-      email: "david.wilson@example.com",
-      signup_method: "Apple",
-      status: "Inactive",
-      closet_amount: 36,
-      last_active: "18h ago",
-      engagement: 89,
-      user_joined: "12 August, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 46,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "John Doe",
-      email: "john.doe@example.com",
-      signup_method: "Email",
-      status: "Active",
-      closet_amount: 50,
-      last_active: "5h ago",
-      engagement: 90,
-      user_joined: "27 October, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 47,
-      name: "Jane Smith",
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      email: "jane.smith@example.com",
-      signup_method: "Google",
-      status: "Inactive",
-      closet_amount: 25,
-      last_active: "1h ago",
-      engagement: 80,
-      user_joined: "18 February, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 48,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Michael Johnson",
-      email: "michael.johnson@example.com",
-      signup_method: "Apple",
-      status: "Active",
-      closet_amount: 3,
-      last_active: "30 min ago",
-      engagement: 53,
-      user_joined: "12 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 49,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "Emily Brown",
-      email: "emily.brown@example.com",
-      signup_method: "Google",
-      status: "Active",
-      closet_amount: 103,
-      last_active: "5h ago",
-      engagement: 23,
-      user_joined: "11 July, 25",
-      average_session_duration: "12.45 minutes",
-    },
-    {
-      id: 50,
-      image:
-        "https://img.freepik.com/free-photo/portrait-smiling-young-man_1268-21877.jpg?semt=ais_incoming&w=740&q=80",
-      name: "David Wilson",
-      email: "david.wilson@example.com",
-      signup_method: "Apple",
-      status: "Inactive",
-      closet_amount: 36,
-      last_active: "18h ago",
-      engagement: 89,
-      user_joined: "12 August, 25",
-      average_session_duration: "12.45 minutes",
-    },
-  ]);
-
+  const [users, setUsers] = useState(SAMPLE_USERS);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState("All Status");
+  const [activeTab, setActiveTab] = useState("All Users");
   const [page, setPage] = useState(1);
-  const itemsPerPage = 10;
-  const loaderRef = useRef(null);
+  const navigate=useNavigate();
+  const itemsPerPage = 6;
 
-  const filteredUsers = users.filter((user) => {
-    const matchesSearch =
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus =
-      filterStatus === "All Status" || user.status === filterStatus;
-    return matchesSearch && matchesStatus;
-  });
-
-  const visibleUsers = filteredUsers.slice(0, page * itemsPerPage);
-  const hasMore = visibleUsers.length < filteredUsers.length;
-
-  // Reset page when filters change
-  useEffect(() => {
-    setPage(1);
-  }, [searchTerm, filterStatus]);
-
-  // Set up intersection observer for infinite scroll
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && hasMore) {
-        setPage((prev) => prev + 1);
-      }
+  const filtered = useMemo(() => {
+    const q = searchTerm.trim().toLowerCase();
+    return users.filter((u) => {
+      const matchesQuery =
+        !q || u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q);
+      const matchesTab = activeTab === "All Users" ? true : u.status === activeTab;
+      return matchesQuery && matchesTab;
     });
+  }, [users, searchTerm, activeTab]);
 
-    if (loaderRef.current) {
-      observer.observe(loaderRef.current);
-    }
+  const totalItems = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
+  const visible = filtered.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
-    return () => {
-      if (loaderRef.current) {
-        observer.unobserve(loaderRef.current);
-      }
-    };
-  }, [hasMore]);
+  // Keep page in range when filters change
+  if (page > totalPages) setPage(1);
 
-  // Toggle status
+  const engagementColor = (v) => {
+    if (v < 30) return "bg-red-500";
+    if (v < 80) return "bg-yellow-500";
+    return "bg-green-500";
+  };
+
   const toggleStatus = (id) => {
-    setUsers((prev) =>
-      prev.map((user) =>
-        user.id === id
-          ? {
-              ...user,
-              status: user.status === "Active" ? "Inactive" : "Active",
-            }
-          : user
-      )
-    );
+    setUsers((prev) => prev.map((u) => (u.id === id ? { ...u, status: u.status === "Active" ? "Inactive" : "Active" } : u)));
   };
 
-  // Delete user
-  const deleteUser = (id) => {
-    setUsers((prev) => prev.filter((user) => user.id !== id));
-  };
+  const deleteUser = (id) => setUsers((prev) => prev.filter((u) => u.id !== id));
 
   return (
-    <div className="min-h-screen">
-      <div className="mx-auto space-y-4">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-[#6A6D57] via-[#5A5D4A] to-[#4A4D3A] bg-clip-text text-transparent">
-              User Management
-            </h1>
-            <p className="text-[#6A6D57]/80">
-              Manage and monitor your application users with ease
-            </p>
+    <div className="">
+      <div className="mx-auto space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold text-[#222]">User Management</h1>
+        </div>
+
+        <div className="bg-white/70 rounded-xl p-3 border border-[#6A6D57]/10">
+          <div className="flex items-center gap-4">
+            {["All Users", "Active", "Inactive", "Suspended"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => {
+                  setActiveTab(tab);
+                  setPage(1);
+                }}
+                className={`px-4 py-2 text-sm rounded-md font-medium ${
+                  activeTab === tab ? "border-b-2 border-[#6A6D57] text-[#123]" : "text-[#6A6D57] hover:bg-white/60"
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 pb-5">
-          <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-[#6A6D57]/10 shadow-md">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-[#6A6D57]/10 rounded-xl">
-                <User className="text-[#6A6D57]" size={24} />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-[#6A6D57]">
-                  {users.length}
-                </p>
-                <p className="text-[#6A6D57]/70 text-sm">Total Users</p>
-              </div>
-            </div>
-          </div>
-          <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-[#6A6D57]/10 shadow-lg">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-green-100 rounded-xl">
-                <CheckCircle className="text-green-600" size={24} />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-[#6A6D57]">
-                  {users.filter((u) => u.status === "Active").length}
-                </p>
-                <p className="text-[#6A6D57]/70 text-sm">Active Users</p>
-              </div>
-            </div>
-          </div>
-          <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-[#6A6D57]/10 shadow-lg">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-purple-100 rounded-xl">
-                <Crown className="text-purple-600" size={24} />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-[#6A6D57]">
-                  {users.filter((u) => u.closet_amount === "Admin").length}
-                </p>
-                <p className="text-[#6A6D57]/70 text-sm">Administrators</p>
-              </div>
-            </div>
-          </div>
-          <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-[#6A6D57]/10 shadow-lg">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-orange-100 rounded-xl">
-                <ShieldCheck className="text-orange-600" size={24} />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-[#6A6D57]">
-                  {
-                    users.filter(
-                      (u) => u.plan === "Pro" || u.plan === "Enterprise"
-                    ).length
-                  }
-                </p>
-                <p className="text-[#6A6D57]/70 text-sm">Premium Users</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Main Card */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-3xl border border-[#6A6D57]/10 shadow-md overflow-hidden">
-          {/* Search Header */}
-          <div className="p-8 bg-gradient-to-r from-white/40 to-[#6A6D57]/5 border-b border-[#6A6D57]/10">
-            <div className="flex items-center justify-between">
-              <div className="relative flex-1 max-w-md">
-                <Search
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#6A6D57]/60"
-                  size={20}
-                />
-                <input
-                  type="text"
-                  placeholder="Search users by name or email..."
-                  className="w-full pl-12 pr-4 py-4 bg-white/60 border border-[#6A6D57]/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#6A6D57]/50 focus:border-[#6A6D57]/50 transition-all duration-300 text-[#6A6D57] placeholder-[#6A6D57]/50"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-              <div className="flex items-center gap-3">
-                <select
-                  className="px-4 py-3 bg-white/60 border border-[#6A6D57]/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6A6D57]/50 text-[#6A6D57]"
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                >
-                  <option>All Status</option>
-                  <option>Active</option>
-                  <option>Inactive</option>
-                </select>
-              </div>
+        <div className="bg-white/70 rounded-3xl border border-[#6A6D57]/10 shadow-md overflow-hidden">
+          <div className="p-6 border-b border-[#6A6D57]/10 flex items-center justify-between gap-4">
+            <div className="relative w-full md:max-w-md">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6A6D57]/60" size={18} />
+              <input
+                type="text"
+                placeholder="Search users by name or email..."
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setPage(1);
+                }}
+                className="w-full pl-11 pr-4 py-3 rounded-2xl bg-white/60 border border-[#6A6D57]/20 text-[#6A6D57]"
+              />
             </div>
           </div>
 
-          {/* Enhanced Table */}
-          <div
-            className="overflow-x-auto cursor-pointer"
-            style={{ maxHeight: "600px", overflowY: "auto" }}
-          >
-            <table className="w-full">
+            <div className="md:hidden px-4 py-3">
+              {/* Mobile stacked cards */}
+              <div className="space-y-4">
+                {visible.map((u) => (
+                  <div key={u.id} className="bg-white rounded-xl p-4 border border-[#6A6D57]/10 shadow-sm">
+                    <div className="flex items-start gap-4">
+                      <img src={u.image} alt="avatar" className="w-12 h-12 rounded-full mt-1" />
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="font-medium text-[#333]">{u.name}</div>
+                            <div className="text-sm text-[#6A6D57]/70">{u.email}</div>
+                          </div>
+                          <div className="text-sm text-[#6A6D57]">{u.signup_method}</div>
+                        </div>
+
+                        <div className="mt-3 flex items-center justify-between gap-4">
+                          <div className="text-sm text-gray-900">{u.closet_amount} items</div>
+                          <div className="flex items-center gap-3">
+                            <div className={`w-28 h-2.5 rounded-full bg-gray-200 overflow-hidden`}>
+                              <div className={`${engagementColor(u.engagement)} h-full rounded-full`} style={{ width: `${u.engagement}%` }} />
+                            </div>
+                            <div className="text-sm text-gray-900">{u.engagement}%</div>
+                          </div>
+                        </div>
+
+                        <div className="mt-3 flex items-center justify-between">
+                          <div className="text-sm text-[#6A6D57]/80">{u.last_active}</div>
+                          <div>
+                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold ${
+                              u.status === "Active" ? "bg-green-100 text-green-700" : u.status === "Inactive" ? "bg-gray-100 text-gray-700" : "bg-red-100 text-red-700"
+                            }`}>{u.status}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="hidden md:block overflow-x-auto max-h-[calc(100vh-400px)]" >
+              <table className="w-full min-w-[900px]">
               <thead className="bg-gradient-to-r from-[#F4F1EB] to-white">
                 <tr className="border-b border-[#6A6D57]/10">
-                  <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
-                    User Information
-                  </th>
-                  <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
-                    Signup Method
-                  </th>
-                  <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
-                    Closet Items
-                  </th>
-                  <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
-                    Engagement
-                  </th>
-                  <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
-                    Last Login
-                  </th>
-                  <th className="px-8 py-6 text-left font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-8 py-6 text-center font-bold text-[#6A6D57] text-sm uppercase tracking-wider">
-                    Actions
-                  </th>
+                  <th className="px-8 py-6 text-left text-sm font-bold text-[#6A6D57]">User</th>
+                  <th className="px-8 py-6 text-left text-sm font-bold text-[#6A6D57]">Signup Method</th>
+                  <th className="px-8 py-6 text-left text-sm font-bold text-[#6A6D57]">Closet Items</th>
+                  <th className="px-8 py-6 text-left text-sm font-bold text-[#6A6D57]">Engagement</th>
+                  <th className="px-8 py-6 text-left text-sm font-bold text-[#6A6D57]">Last Login</th>
+                  <th className="px-8 py-6 text-left text-sm font-bold text-[#6A6D57]">Status</th>
+                  <th className="px-8 py-6 text-center text-sm font-bold text-[#6A6D57]">Actions</th>
                 </tr>
               </thead>
+
               <tbody className="divide-y divide-[#6A6D57]/10">
-                {visibleUsers.map((user) => (
-                  <tr
-                    key={user.id}
-                    className="group hover:bg-gradient-to-r hover:from-[#6A6D57]/5 hover:to-[#6A6D57]/10 transition-all duration-300 hover:shadow-md"
-                  >
+                {visible.map((u) => (
+                  <tr key={u.id} className="group hover:bg-[#f8fbf8] transition-all">
                     <td className="px-8 py-6">
-                      <button
-                        className="bg-transparent hover:bg-transparent border-none shadow-none p-0"
-                        onClick={() =>
-                          document
-                            .getElementById(`modal-${user.id}`)
-                            .showModal()
-                        }
-                      >
-                        <div className="flex items-center gap-4">
-                          <div className="avatar">
-                            <div className="w-[50px] rounded-full">
-                              <img src={user.image} className="rounded-full" />
-                            </div>
-                          </div>
-                          <div className="space-y-1">
-                            <p className="font-bold text-[#6A6D57] text-start text-base group-hover:text-[#5A5D4A] transition-colors">
-                              {user.name}
-                            </p>
-                            <div className="flex items-center gap-2 text-[#6A6D57]/70">
-                              <Mail size={14} />
-                              <p className="text-sm">{user.email}</p>
-                            </div>
-                          </div>
+                      <div
+                      onClick={()=>{
+                        navigate(`user_profile/${u.id}`)
+                      }}
+                      className="flex items-center gap-4">
+                        <img src={u.image} alt="avatar" className="w-12 h-12 rounded-full" />
+                        <div>
+                          <div className="font-medium text-[#333]">{u.name}</div>
+                          <div className="text-sm text-[#6A6D57]/70 flex items-center gap-2"><Mail size={14} /> <span>{u.email}</span></div>
                         </div>
-                      </button>
-
-                      <dialog id={`modal-${user.id}`} className="modal">
-                        <div className="modal-box dark:bg-white text-gray-900">
-                          <div className="border-b-2 pb-2">
-                            <h3 className="font-bold flex items-start gap-2 text-lg">
-                              <IoStatsChart size={24} />
-                              User Statistics
-                            </h3>
-                          </div>
-                          {/* info of user */}
-                          <div className="py-5 space-y-6">
-                            <h1 className="flex items-center justify-between">
-                              User Joined :
-                              <span className="font-bold">
-                                {user.user_joined}
-                              </span>
-                            </h1>
-
-                            <h1 className="flex items-center justify-between">
-                              User Status :
-                              <span className="font-bold">{user.status}</span>
-                            </h1>
-
-                            <h1 className="flex items-center justify-between">
-                              Closet Items :
-                              <span className="font-bold">
-                                {user.closet_amount} Items
-                              </span>
-                            </h1>
-
-                            <h1 className="flex items-center justify-between">
-                              Average Session Duration :
-                              <span className="font-bold">
-                                {user.average_session_duration}
-                              </span>
-                            </h1>
-                          </div>
-                          <div>
-                            <h1></h1>
-                          </div>
-                        </div>
-                        <form method="dialog" className="modal-backdrop">
-                          <button>close</button>
-                        </form>
-                      </dialog>
-                    </td>
-
-                    {/* method */}
-                    <td className="px-8 py-6 text-[#6A6D57] text-base font-semibold">
-                      {user.signup_method}
-                    </td>
-
-                    {/* Closet Items */}
-                    <td className="px-8 py-6 text-gray-900">
-                      {user.closet_amount}
-                    </td>
-
-                    {/* Engagement */}
-                    <td className="px-8 py-6">
-                      <div className="w-44 h-[10px] rounded-full bg-gray-200 overflow-hidden">
-                        <div
-                          className={`h-full rounded-full ${
-                            user.engagement < 30
-                              ? "bg-red-500"
-                              : user.engagement < 80
-                              ? "bg-yellow-500"
-                              : "bg-green-500"
-                          }`}
-                          style={{ width: `${user.engagement || 0}%` }}
-                        ></div>
                       </div>
-                      <span className="ml-2 text-sm font-medium text-gray-900">
-                        {user.engagement}%
+                    </td>
+
+                    <td className="px-8 py-6 text-[#6A6D57]">{u.signup_method}</td>
+
+                    <td className="px-8 py-6 text-gray-900">{u.closet_amount}</td>
+
+                    <td className="px-8 py-6">
+                      <div className="w-44 h-[10px] rounded-full bg-gray-200 overflow-hidden inline-block align-middle">
+                        <div className={`${engagementColor(u.engagement)} h-full rounded-full`} style={{ width: `${u.engagement}%` }} />
+                      </div>
+                      <span className="ml-2 text-sm font-medium text-gray-900">{u.engagement}%</span>
+                    </td>
+
+                    <td className="px-8 py-6 text-gray-900">{u.last_active}</td>
+
+                    <td className="px-8 py-6">
+                      <span className={`inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold shadow-sm ${
+                        u.status === "Active" ? "bg-gradient-to-r from-green-100 to-emerald-200 text-green-700" : u.status === "Inactive" ? "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700" : "bg-gradient-to-r from-red-100 to-red-200 text-red-700"
+                      }`}>
+                        <div className={`w-2 h-2 rounded-full mr-2 ${u.status === "Active" ? "bg-green-500" : u.status === "Inactive" ? "bg-gray-500" : "bg-red-500"}`} />
+                        {u.status}
                       </span>
                     </td>
 
-                    {/* Last Login */}
-                    <td className="px-8 py-6 text-gray-900">
-                      {user.last_active}
-                    </td>
-
-                    {/* Status */}
                     <td className="px-8 py-6">
-                      <span
-                        className={`inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold shadow-sm ${
-                          user.status === "Active"
-                            ? "bg-gradient-to-r from-green-100 to-emerald-200 text-green-700"
-                            : "bg-gradient-to-r from-red-100 to-red-200 text-red-700"
-                        }`}
-                      >
-                        <div
-                          className={`w-2 h-2 rounded-full mr-2 ${
-                            user.status === "Active"
-                              ? "bg-green-500"
-                              : "bg-red-500"
-                          }`}
-                        ></div>
-                        {user.status}
-                      </span>
-                    </td>
-
-                    {/* Actions */}
-                    <td className="px-8 py-6">
-                      <div className="flex items-center justify-center gap-2">
-                        <button
-                          onClick={() => toggleStatus(user.id)}
-                          className={`group/btn p-3 rounded-xl transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 ${
-                            user.status === "Active"
-                              ? "bg-red-100 text-red-600 hover:bg-red-200 hover:text-red-700"
-                              : "bg-green-100 text-green-600 hover:bg-green-200 hover:text-green-700"
-                          }`}
-                          title={
-                            user.status === "Active"
-                              ? "Block User"
-                              : "Unblock User"
-                          }
-                        >
-                          {user.status === "Active" ? (
-                            <Ban
-                              size={18}
-                              className="group-hover/btn:scale-110 transition-transform"
-                            />
-                          ) : (
-                            <CheckCircle
-                              size={18}
-                              className="group-hover/btn:scale-110 transition-transform"
-                            />
-                          )}
-                        </button>
-
-                        <button
-                          onClick={() => deleteUser(user.id)}
-                          className="group/btn p-3 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-700 transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
-                          title="Delete User"
-                        >
-                          <Trash2
-                            size={18}
-                            className="group-hover/btn:scale-110 transition-transform"
-                          />
+                      <div className="flex items-center justify-center">
+                        <button className="p-2 rounded-md hover:bg-gray-100">
+                          <MoreVertical size={18} />
                         </button>
                       </div>
                     </td>
@@ -1093,11 +256,28 @@ export default function UserManagement() {
                 ))}
               </tbody>
             </table>
-            {hasMore && (
-              <div ref={loaderRef} className="py-4 text-center">
-                Loading more...
+
+            <div className="px-6 py-4 bg-gradient-to-r from-white/40 to-[#6A6D57]/5 border-t border-[#6A6D57]/10 flex items-center justify-between">
+              <div className="text-sm text-[#6A6D57]/80">
+                {totalItems === 0 ? (
+                  "Showing 0 to 0 of 0 result"
+                ) : (
+                  <>Showing {(page - 1) * itemsPerPage + 1} to {Math.min(page * itemsPerPage, totalItems)} of {totalItems} result{totalItems > 1 ? "s" : ""}</>
+                )}
               </div>
-            )}
+
+              <div className="flex items-center gap-2">
+                <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1} className={`px-3 py-2 rounded-lg border border-[#6A6D57]/10 text-[#6A6D57] ${page === 1 ? "opacity-50 cursor-not-allowed" : "hover:bg-white/60"}`}>&lt;</button>
+
+                <div className="flex items-center gap-2">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                    <button key={p} onClick={() => setPage(p)} className={`w-9 h-9 flex items-center justify-center rounded-md text-sm font-medium transition ${p === page ? "bg-[#CDEDD6] text-[#1f6f45] shadow" : "bg-white/70 text-[#6A6D57] hover:bg-white/90"}`}>{p}</button>
+                  ))}
+                </div>
+
+                <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages} className={`px-3 py-2 rounded-lg border border-[#6A6D57]/10 text-[#6A6D57] ${page === totalPages ? "opacity-50 cursor-not-allowed" : "hover:bg-white/60"}`}>&gt;</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

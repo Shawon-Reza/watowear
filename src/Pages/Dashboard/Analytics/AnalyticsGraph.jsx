@@ -163,9 +163,15 @@ const AnalyticsGraph = () => {
               {userActivity.map((item, idx) => (
                 <div key={idx} className="flex items-center justify-between">
                   <div className="text-sm text-gray-600">{item.label}</div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-24 sm:w-48 bg-gray-100 h-3 rounded-full overflow-hidden">
-                      <div style={{ width: `${(item.value / 1750) * 100}%`, background: item.color, height: '100%' }} />
+                  <div className="flex items-center gap-3 flex-1 ml-4">
+                    <div className="w-full max-w-[220px] bg-gray-100 h-3 rounded-full overflow-hidden">
+                      <ResponsiveContainer width="100%" height={18}>
+                        <BarChart data={[{ name: 'a', value: (item.value / 1750) * 100 }]} layout="vertical" margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+                          <XAxis type="number" domain={[0, 100]} hide />
+                          <YAxis type="category" dataKey="name" hide />
+                          <Bar dataKey="value" fill={item.color} radius={[8,8,8,8]} barSize={14} />
+                        </BarChart>
+                      </ResponsiveContainer>
                     </div>
                     <div className="text-sm font-medium">{item.value.toLocaleString()}</div>
                   </div>
@@ -178,19 +184,25 @@ const AnalyticsGraph = () => {
             <h4 className="text-base font-semibold text-gray-700">Device Breakdown</h4>
             <div className="mt-4 space-y-4">
               {deviceBreakdown.map((item, idx) => (
-                <div key={idx} className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="h-9 w-9 rounded-full bg-gray-50 flex items-center justify-center">{item.label === 'iOS' ? '📱' : '📱'}</div>
-                    <div className="text-sm text-gray-700">{item.label}</div>
-                  </div>
-                  <div className="flex-1 ml-4">
-                    <div className="w-full bg-gray-100 h-3 rounded-full">
-                      <div style={{ width: `${item.value}%`, background: item.color, height: '100%' }} />
+                  <div key={idx} className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="h-9 w-9 rounded-full bg-gray-50 flex items-center justify-center">{item.label === 'iOS' ? '📱' : '📱'}</div>
+                      <div className="text-sm text-gray-700">{item.label}</div>
                     </div>
-                    <div className="text-sm text-gray-500 mt-2">{item.value}%</div>
+                    <div className="flex-1 ml-4">
+                      <div className="w-full bg-gray-100 h-3 rounded-full">
+                        <ResponsiveContainer width="100%" height={18}>
+                          <BarChart data={[{ name: 'a', value: item.value }]} layout="vertical" margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+                            <XAxis type="number" domain={[0, 100]} hide />
+                            <YAxis type="category" dataKey="name" hide />
+                            <Bar dataKey="value" fill={item.color} radius={[8,8,8,8]} barSize={14} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </div>
+                      <div className="text-sm text-gray-500 mt-2">{item.value}%</div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
 
               <div className="mt-2 text-sm text-gray-500">
                 {versionData.map((item, index) => (

@@ -49,50 +49,45 @@ const CategoryTags = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-stretch justify-between gap-20">
+    <div className="space-y-4">
+      <div className="flex flex-col md:flex-row items-stretch justify-between gap-6">
         {/* Categories card */}
-        <div className="dark:bg-white basis-6/12 h-full backdrop-blur-sm rounded-3xl border border-[#6A6D57]/10 shadow-md overflow-hidden flex flex-col">
-          <h1 className="text-[#303030] font-bold text-xl border-b-2 p-6">
+        <div className="bg-white basis-full md:basis-6/12 rounded-xl border border-[#6A6D57]/10 shadow-sm overflow-hidden flex flex-col">
+          <h1 className="text-[#303030] font-semibold text-lg border-b p-4">
             Categories
           </h1>
-          <div className="border-b flex-grow">
+          <div className="border-b">
             {categories?.map((cat) => (
-              <div
-                key={cat.id}
-                className="flex items-center justify-between p-5"
-              >
-                <div className="text-lg font-extrabold flex items-center gap-2 text-[#374151]">
-                  <Shirt size={22} className="text-[#6A6D57]" />
+              <div key={cat.id} className="flex items-center justify-between px-4 py-3">
+                <div className="text-base font-semibold flex items-center gap-2 text-[#374151]">
+                  <Shirt size={18} className="text-[#6A6D57]" />
                   {cat.name}
                 </div>
-                <div className="text-lg font-extrabold text-[#374151]">
-                  {cat.amount}
-                </div>
+                <div className="text-sm font-semibold text-[#374151]">{cat.amount}</div>
               </div>
             ))}
           </div>
 
           <button
-            className="flex items-center gap-2 py-5 text-lg text-[#374151] font-extrabold mx-auto"
+            className="flex items-center gap-2 py-2 text-sm text-[#374151] font-semibold mx-auto"
             onClick={() => document.getElementById("category_add").showModal()}
           >
-            <Plus size={20} />
+            <Plus size={16} />
             Add Category
           </button>
         </div>
 
         {/* Tags card */}
-        <div className="dark:bg-white basis-6/12 h-full backdrop-blur-sm rounded-3xl border border-[#6A6D57]/10 shadow-md overflow-hidden flex flex-col">
-          <h1 className="text-[#303030] font-bold text-xl border-b-2 p-6">
+        <div className="bg-white basis-full md:basis-6/12 rounded-xl border border-[#6A6D57]/10 shadow-sm overflow-hidden flex flex-col">
+          <h1 className="text-[#303030] font-semibold text-lg border-b p-4">
             Tags
           </h1>
-          <div className="border-b p-5 flex gap-2">
+          <div className="border-b p-4 flex flex-wrap gap-2">
             {tags?.map((tag) => (
-              <div key={tag.id} className="hover:cursor-pointer ">
-                <div className="text-lg font-extrabold flex items-center gap-2 text-[#374151]">
-                  <div className="badge badge-lg bg-[#F3F4F6] hover:bg-gray-200 rounded-full p-5 border-none text-[#374151]">
-                    <Tags size={18} className="text-[#6B7280]" />
+              <div key={tag.id} className="hover:cursor-pointer">
+                <div className="text-sm font-semibold flex items-center gap-2 text-[#374151]">
+                  <div className="inline-flex items-center bg-[#F3F4F6] hover:bg-gray-200 rounded-full px-3 py-1 text-sm text-[#374151]">
+                    <Tags size={14} className="text-[#6B7280] mr-2" />
                     {tag.name}
                   </div>
                 </div>
@@ -101,10 +96,10 @@ const CategoryTags = () => {
           </div>
 
           <button
-            className="flex items-center gap-2 py-5 text-lg text-[#374151] font-extrabold mx-auto"
+            className="flex items-center gap-2 py-2 text-sm text-[#374151] font-semibold mx-auto"
             onClick={() => document.getElementById("tag_add").showModal()}
           >
-            <Plus size={20} />
+            <Plus size={16} />
             Add Tag
           </button>
         </div>
@@ -112,80 +107,62 @@ const CategoryTags = () => {
 
       {/* Category Modal */}
       <dialog id="category_add" className="modal">
-        <div className="modal-box bg-white text-[#374151] relative">
+        <div className="modal-box bg-white text-[#374151] relative p-4">
           <button
-            className="btn btn-sm btn-circle btn-ghost hover:bg-gray-200 absolute right-2 top-2"
+            className="absolute right-2 top-2 text-gray-600 hover:bg-gray-100 rounded-full p-1"
             onClick={() => document.getElementById("category_add").close()}
           >
             ✕
           </button>
-          <h3 className="font-extrabold text-2xl mb-4">Add Category</h3>
+          <h3 className="font-semibold text-lg mb-3">Add Category</h3>
 
           <form onSubmit={handleCategorySubmit(addCategory)}>
-            <fieldset className="fieldset mb-4">
-              <legend className="fieldset-legend text-base text-[#374151]">
-                Category name
-              </legend>
+            <fieldset className="mb-3">
+              <legend className="text-sm text-[#374151] mb-1">Category name</legend>
               <input
                 type="text"
                 {...registerCategory("category_name", {
                   required: "Category name is required",
                 })}
-                className="w-full border text-sm border-gray-300 rounded-md px-3 py-3 focus:outline-none focus:ring-0 dark:bg-white"
+                className="w-full border text-sm border-gray-300 rounded-md px-2 py-2 focus:outline-none"
                 placeholder="Type category"
               />
               {categoryErrors.category_name && (
-                <p className="text-red-500 text-sm mt-1">
-                  {categoryErrors.category_name.message}
-                </p>
+                <p className="text-red-500 text-sm mt-1">{categoryErrors.category_name.message}</p>
               )}
             </fieldset>
-            <button
-              type="submit"
-              className="font-extrabold text-base bg-[#6A6D57] w-full p-2 rounded-[6px] text-white"
-            >
-              Add Category
-            </button>
+            <button type="submit" className="font-semibold text-sm bg-[#6A6D57] w-full py-2 rounded text-white">Add Category</button>
           </form>
         </div>
       </dialog>
 
       {/* Tag Modal */}
       <dialog id="tag_add" className="modal">
-        <div className="modal-box bg-white text-[#374151] relative">
+        <div className="modal-box bg-white text-[#374151] relative p-4">
           <button
-            className="btn btn-sm btn-circle btn-ghost hover:bg-gray-200 absolute right-2 top-2"
+            className="absolute right-2 top-2 text-gray-600 hover:bg-gray-100 rounded-full p-1"
             onClick={() => document.getElementById("tag_add").close()}
           >
             ✕
           </button>
-          <h3 className="font-extrabold text-2xl mb-4">Add Tag</h3>
+          <h3 className="font-semibold text-lg mb-3">Add Tag</h3>
 
           <form onSubmit={handleTagSubmit(addTag)}>
-            <fieldset className="fieldset mb-4">
-              <legend className="fieldset-legend text-base text-[#374151]">
-                Tag name
-              </legend>
+            <fieldset className="mb-3">
+              <legend className="text-sm text-[#374151] mb-1">Tag name</legend>
               <input
                 type="text"
                 {...registerTag("tag_name", {
                   required: "Tag name is required",
                 })}
-                className="w-full border text-sm border-gray-300 rounded-md px-3 py-3 focus:outline-none focus:ring-0 dark:bg-white"
+                className="w-full border text-sm border-gray-300 rounded-md px-2 py-2 focus:outline-none"
                 placeholder="Type tag"
               />
               {tagErrors.tag_name && (
-                <p className="text-red-500 text-sm mt-1">
-                  {tagErrors.tag_name.message}
-                </p>
+                <p className="text-red-500 text-sm mt-1">{tagErrors.tag_name.message}</p>
               )}
             </fieldset>
-            <button
-              type="submit"
-              className="font-extrabold text-base bg-[#6A6D57] w-full p-2 rounded-[6px] text-white"
-            >
-              Add Tag
-            </button>
+            <button type="submit" className="font-semibold text-sm bg-[#6A6D57] w-full py-2 rounded text-white">Add Tag</button>
           </form>
         </div>
       </dialog>

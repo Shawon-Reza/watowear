@@ -351,7 +351,7 @@ const ClosetManagementTable = () => {
       </div>
 
       {/* Pagination: Prev, 3 page numbers, Next */}
-      <div className="mt-4 flex items-center justify-center text-sm">
+      <div className="mt-4 flex items-center justify-end text-sm">
         <div className="flex items-center gap-2">
           <button
             onClick={() => handlePageChange(page - 1)}

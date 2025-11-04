@@ -16,6 +16,7 @@ import BrandPartners from "../Pages/Dashboard/BrandPartners/BrandPartners";
 import Analytics from "../Pages/Dashboard/Analytics/Analytics";
 import History from "../Pages/Dashboard/History/History";
 import Support from "../Pages/Dashboard/Support/Support";
+import UserProfile from "../Pages/Dashboard/UserProfile/UserProfile";
 
 export const router = createBrowserRouter([
   {
@@ -44,6 +45,10 @@ export const router = createBrowserRouter([
       {
         path: "user_management",
         element: <UserManagement />,
+      },
+      {
+        path: "user_management/user_profile/:userId",
+        element: <UserProfile />,
       },
       {
         path: "closet_management",

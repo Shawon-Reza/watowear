@@ -45,13 +45,13 @@ const FashionLibraryManagement = () => {
         items.map((item) =>
           item.id === editItem.id
             ? {
-                ...item,
-                name: data.name,
-                category: data.category,
-                image: data.image[0]
-                  ? URL.createObjectURL(data.image[0])
-                  : item.image,
-              }
+              ...item,
+              name: data.name,
+              category: data.category,
+              image: data.image[0]
+                ? URL.createObjectURL(data.image[0])
+                : item.image,
+            }
             : item
         )
       );
@@ -128,7 +128,7 @@ const FashionLibraryManagement = () => {
       </div>
 
       <div className="pb-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 mb-8">
           {items
             .filter(
               (item) =>
@@ -239,9 +239,8 @@ const FashionLibraryManagement = () => {
                 <input
                   {...register("name", { required: "Item name is required" })}
                   placeholder="T-shirt"
-                  className={`w-full px-3 py-2 border dark:bg-white dark:text-gray-900 ${
-                    errors.name ? "border-red-500" : "border-gray-300"
-                  } rounded-lg`}
+                  className={`w-full px-3 py-2 border dark:bg-white dark:text-gray-900 ${errors.name ? "border-red-500" : "border-gray-300"
+                    } rounded-lg`}
                 />
                 {errors.name && (
                   <p className="text-red-500 text-xs mt-1">
@@ -260,9 +259,8 @@ const FashionLibraryManagement = () => {
                       required: "Category is required",
                     })}
                     placeholder="Casual"
-                    className={`flex-1 px-3 py-2 border dark:bg-white dark:text-gray-900 ${
-                      errors.category ? "border-red-500" : "border-gray-300"
-                    } rounded-lg `}
+                    className={`flex-1 px-3 py-2 border dark:bg-white dark:text-gray-900 ${errors.category ? "border-red-500" : "border-gray-300"
+                      } rounded-lg `}
                   />
                   <select
                     {...register("tag")}
