@@ -1,26 +1,21 @@
-import React from 'react'
-import UserProfileHeader from './UserProfileHeader'
-import UserProfilePaymentHistory from './UserProfilePaymentHistory'
-import UserProfileRecentActivity from './UserProfileRecentActivity'
+import UserProfileHeader from "./UserProfileHeader";
+import UserProfilePaymentHistory from "./UserProfilePaymentHistory";
+import UserProfileRecentActivity from "./UserProfileRecentActivity";
 
 const UserProfile = () => {
-    return (
-        <div>
-            <section>
-                <UserProfileHeader></UserProfileHeader>
-            </section>
-            <section className='my-10'>
-                <UserProfilePaymentHistory></UserProfilePaymentHistory>
-            </section>
-            <section>
-                <UserProfileRecentActivity></UserProfileRecentActivity>
-            </section>
+	return (
+		<div>
+			<section>
+				<UserProfileHeader />
+			</section>
+			<section className="my-10">
+				<UserProfilePaymentHistory />
+			</section>
+			<section>
+				<UserProfileRecentActivity />
+			</section>
+		</div>
+	);
+};
 
-
-
-
-        </div>
-    )
-}
-
-export default UserProfile
+export default UserProfile;
