@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { FaCheck, FaUserGroup } from "react-icons/fa6";
+import { FaCheck, FaChevronDown, FaUserGroup } from "react-icons/fa6";
 import { HiDotsVertical } from "react-icons/hi";
 import { MdOutlineEmail, MdOutlineWatchLater } from "react-icons/md";
 import SupportReplyModal from "./SupportReplyModal";
@@ -359,7 +359,7 @@ export default function Support() {
 								<tr>
 									<td
 										colSpan={7}
-										className="py-6 px-4 text-center"
+										className="py-6 px-4 text-center text-[#111827]"
 									>
 										No results
 									</td>
@@ -367,39 +367,42 @@ export default function Support() {
 							) : (
 								items.map((s) => (
 									<tr key={s.id} className="border-t">
-										<td className="py-4 px-4 align-middle">
+										<td className="py-4 px-4 align-middle text-[#111827]">
 											{s.email}
 										</td>
-										<td className="py-4 px-4">
+										<td className="py-4 px-4 text-[#6B7280]">
 											{s.subject}
 										</td>
 										<td className="py-4 px-4 text-gray-600">
 											{s.message}
 										</td>
 										<td className="py-4 px-4">
-											{s.photos && s.photos.length > 0 ? (
-												<button className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-													View photo
-												</button>
-											) : (
+											{/* {s.photos && s.photos.length > 0 ? ( */}
+											<button className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
+												View photo
+											</button>
+											{/* ) : (
 												<span className="text-xs text-gray-400">
 													—
 												</span>
-											)}
+											)} */}
 										</td>
-										<td className="py-4 px-4">{s.date}</td>
+										<td className="py-4 px-4 text-[#6B7280]">
+											{s.date}
+										</td>
 										<td className="py-4 px-4">
 											<button
 												onClick={() =>
 													handleToggleStatus(s.id)
 												}
-												className={`px-3 py-1 rounded text-sm ${
+												className={`px-3 py-1 rounded text-sm flex flex-row items-center justify-center ${
 													s.status === "Read"
-														? "bg-green-100 text-green-800"
-														: "bg-red-100 text-red-700"
+														? "bg-[#22C55E] text-white"
+														: "bg-[#FF6361] text-white"
 												}`}
 											>
 												{s.status}
+												<FaChevronDown className="ml-1" />
 											</button>
 										</td>
 										<td className="py-4 px-4 relative">
@@ -419,7 +422,7 @@ export default function Support() {
 											</button>
 
 											{actionOpenId === s.id && (
-												<div className="action-dropdown absolute right-2 top-8 z-10 bg-white dark:bg-gray-700 border rounded shadow-md w-36 py-1">
+												<div className="action-dropdown absolute right-2 top-8 z-10 bg-white border rounded shadow-md w-36 py-1">
 													<button
 														onClick={() => {
 															setActiveSupportItem(
@@ -432,7 +435,7 @@ export default function Support() {
 																null
 															);
 														}}
-														className="w-full text-left px-3 py-2 hover:bg-gray-100"
+														className="w-full text-left px-3 py-2 text-black hover:bg-[#C2C7A3]"
 													>
 														Reply
 													</button>
@@ -458,7 +461,7 @@ export default function Support() {
 																null
 															);
 														}}
-														className="w-full text-left px-3 py-2 hover:bg-gray-100"
+														className="w-full text-left px-3 py-2 text-black hover:bg-[#FEE2E2]"
 													>
 														Archived
 													</button>
