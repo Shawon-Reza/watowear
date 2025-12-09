@@ -27,20 +27,22 @@ export default function SupportReplyModal({
 				onClick={onClose}
 			/>
 
-			<div className="relative bg-white dark:bg-gray-800 rounded-md shadow-lg w-full max-w-md p-6">
+			<div className="relative bg-white rounded-md shadow-lg w-full max-w-md p-6">
 				<div className="flex items-center justify-between mb-4">
-					<h3 className="text-lg font-semibold">Give a Reply</h3>
+					<h3 className="text-lg font-semibold text-black">
+						Give a Reply
+					</h3>
 					<button onClick={onClose} className="text-gray-500">
 						✕
 					</button>
 				</div>
 
 				<div className="mb-3">
-					<label className="block text-sm text-gray-600">
+					<label className="block text-sm text-[#374151]">
 						Subject of Issue
 					</label>
 					<input
-						className="w-full border rounded px-3 py-2 mt-1"
+						className="w-full border rounded px-3 py-2 mt-1 bg-white text-black"
 						value={supportItem?.subject || ""}
 						readOnly
 					/>
@@ -51,7 +53,7 @@ export default function SupportReplyModal({
 						Your Reply
 					</label>
 					<textarea
-						className="w-full border rounded px-3 py-2 mt-1 h-28"
+						className="w-full border rounded px-3 py-2 mt-1 h-28 bg-white text-black"
 						value={reply}
 						onChange={(e) => setReply(e.target.value)}
 						placeholder="Type your reply here"
@@ -61,7 +63,7 @@ export default function SupportReplyModal({
 				<div className="flex justify-end">
 					<button
 						onClick={handleSend}
-						className="bg-emerald-700 text-white px-4 py-2 rounded"
+						className="bg-[#6A6D57] text-white px-4 py-2 rounded"
 					>
 						Send Reply
 					</button>
