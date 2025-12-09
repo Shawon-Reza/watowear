@@ -232,36 +232,36 @@ export default function Support() {
 
 			{/* Top cards */}
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
-				<div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 flex items-center  gap-3">
-					<div className="bg-[#3B82F6] p-2 rounded-md">
+				<div className="bg-white rounded-lg shadow-sm p-6 flex items-center gap-5">
+					<div className="bg-[#3B82F6] p-3 rounded-md">
 						<FaUserGroup color="" className="text-white" />
 					</div>
 					<div>
 						<div className="text-sm text-gray-500">
 							Total Support Submitted
 						</div>
-						<div className="text-lg font-semibold">
+						<div className="text-lg font-semibold text-black">
 							{totalSubmitted}
 						</div>
 					</div>
 				</div>
 
-				<div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 flex items-center gap-3">
-					<div className="bg-[#6A6D57] p-2 rounded-md">
+				<div className="bg-white rounded-lg shadow-sm p-6 flex items-center gap-5">
+					<div className="bg-[#6A6D57] p-3 rounded-md">
 						<FaCheck color="" className="text-white" />
 					</div>
 					<div>
 						<div className="text-sm text-gray-500">
 							Recent Submitted
 						</div>
-						<div className="text-lg font-semibold">
+						<div className="text-lg font-semibold text-black">
 							{recentSubmitted}
 						</div>
 					</div>
 				</div>
 
-				<div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 flex items-center gap-3">
-					<div className="bg-[#f63b3b] p-2 rounded-md flex items-center justify-center">
+				<div className="bg-white rounded-lg shadow-sm p-6 flex items-center gap-5">
+					<div className="bg-[#f63b3b] p-3 rounded-md flex items-center justify-center">
 						<MdOutlineEmail
 							size={18}
 							color=""
@@ -272,15 +272,15 @@ export default function Support() {
 						<div className="text-sm text-gray-500">Read</div>
 						<div className="text-lg font-semibold text-green-600">
 							{readCount}{" "}
-							<span className="text-sm text-gray-500">
+							<span className="text-sm text-black">
 								/ Unread {unreadCount}
 							</span>
 						</div>
 					</div>
 				</div>
 
-				<div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 flex items-center gap-3">
-					<div className="bg-[#EAB308] p-2 rounded-md">
+				<div className="bg-white rounded-lg shadow-sm p-6 flex items-center gap-5">
+					<div className="bg-[#EAB308] p-3 rounded-md">
 						<MdOutlineWatchLater
 							size={18}
 							color=""
@@ -289,13 +289,15 @@ export default function Support() {
 					</div>
 					<div>
 						<div className="text-sm text-gray-500">This Month</div>
-						<div className="text-lg font-semibold">0</div>
+						<div className="text-lg font-semibold text-black">
+							0
+						</div>
 					</div>
 				</div>
 			</div>
 
 			{/* Filters and tabs */}
-			<div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mb-4">
+			<div className="p-4">
 				<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
 					<div className="flex items-center gap-3">
 						{["All", "Archived"].map((t) => (
@@ -306,9 +308,9 @@ export default function Support() {
 									setArchived(t === "Archived");
 									setPage(1);
 								}}
-								className={`px-3 py-1 rounded ${
+								className={`px-3 py-3 ${
 									tab === t
-										? "bg-gray-100 dark:bg-gray-700 text-gray-900"
+										? "border-b-2 border-[#6A6D57] text-gray-900"
 										: "text-gray-600"
 								}`}
 							>
@@ -327,7 +329,7 @@ export default function Support() {
 			</div>
 
 			{/* Table */}
-			<div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
+			<div className="bg-white rounded-lg shadow-sm overflow-hidden">
 				<div className="p-4 overflow-x-auto">
 					<table className="min-w-full text-left text-sm">
 						<thead>

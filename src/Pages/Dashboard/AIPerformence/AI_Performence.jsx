@@ -64,7 +64,7 @@ const AI_Performence = () => {
 						Suggestions Accuracy
 					</h3>
 					<div className="flex items-center justify-between py-3">
-						<h1 className="font-extrabold text-2xl">
+						<h1 className="font-extrabold text-2xl text-black">
 							{stats.suggestionsAccuracy.value}%
 						</h1>
 						<div className="p-1 rounded-md bg-gray-50">
@@ -97,7 +97,7 @@ const AI_Performence = () => {
 						User Acceptance Rate
 					</h3>
 					<div className="flex items-center justify-between py-3">
-						<h1 className="font-extrabold text-2xl">
+						<h1 className="font-extrabold text-2xl text-black">
 							{stats.userAcceptance.value}%
 						</h1>
 						<div className="p-1 rounded-md bg-gray-50">
@@ -130,7 +130,7 @@ const AI_Performence = () => {
 						Avg. Response Time
 					</h3>
 					<div className="flex items-center justify-between py-3">
-						<h1 className="font-extrabold text-2xl">
+						<h1 className="font-extrabold text-2xl text-black">
 							{stats.avgResponse.value}
 						</h1>
 						<div className="p-1 rounded-md bg-gray-50">
@@ -159,7 +159,7 @@ const AI_Performence = () => {
 						Daily Suggestions
 					</h3>
 					<div className="flex items-center justify-between py-3">
-						<h1 className="font-extrabold text-2xl">
+						<h1 className="font-extrabold text-2xl text-black">
 							{stats.totalSuggestions.value.toLocaleString()}
 						</h1>
 						<div className="p-1 rounded-md bg-gray-50">

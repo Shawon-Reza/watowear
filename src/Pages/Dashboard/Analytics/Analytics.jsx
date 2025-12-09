@@ -44,7 +44,7 @@ const Analytics = () => {
 							Daily Active Users
 						</h3>
 						<div className="flex items-center justify-between py-2">
-							<h1 className="font-extrabold text-2xl">
+							<h1 className="font-extrabold text-2xl text-black">
 								{stats.dailyActive.value.toLocaleString()}
 							</h1>
 							<div
@@ -110,7 +110,7 @@ const Analytics = () => {
 							Avg. Session Duration
 						</h3>
 						<div className="flex items-center justify-between py-2">
-							<h1 className="font-extrabold text-2xl">
+							<h1 className="font-extrabold text-2xl text-black">
 								{stats.avgSession.value}
 							</h1>
 							<div
@@ -176,7 +176,7 @@ const Analytics = () => {
 							Avg. Session Duration ( Daily )
 						</h3>
 						<div className="flex items-center justify-between py-2">
-							<h1 className="font-extrabold text-2xl">
+							<h1 className="font-extrabold text-2xl text-black">
 								{stats.avgSessionDaily.value}
 							</h1>
 							<div
