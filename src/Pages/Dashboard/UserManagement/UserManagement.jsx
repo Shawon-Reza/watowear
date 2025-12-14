@@ -1,5 +1,5 @@
 import { Mail, MoreVertical, Search } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import useUserStore from "../../../store/useUserStore";
 
@@ -9,6 +9,34 @@ export default function UserManagement() {
 	const [page, setPage] = useState(1);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [activeTab, setActiveTab] = useState("All Users");
+	const [openActionId, setOpenActionId] = useState(null);
+	const dropdownRef = useRef(null);
+
+	useEffect(() => {
+		function handleClickOutside(event) {
+			if (
+				dropdownRef.current &&
+				!dropdownRef.current.contains(event.target)
+			) {
+				setOpenActionId(null);
+			}
+		}
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, []);
+
+	const handleActionClick = (id) => {
+		setOpenActionId(openActionId === id ? null : id);
+	};
+
+	const handleStatusChange = (id, newStatus) => {
+		// Placeholder for future status update API call
+		console.log(`Change user ${id} status to ${newStatus}`);
+		setOpenActionId(null);
+	};
+
 	const itemsPerPage = 6; // API might return different pageSize, need to adjust based on API or use API pagination directly.
 
 	// Calculate total pages based on count from API and items per page (assuming API defaults to 10 or similar, but here we can just use the provided count)
@@ -307,13 +335,67 @@ export default function UserManagement() {
 												</span>
 											</td>
 
-											<td className="px-8 py-6">
+											<td className="px-8 py-6 relative">
 												<div className="flex items-center justify-center">
-													<button className="p-2 rounded-md hover:bg-gray-100">
+													<button
+														onClick={(e) => {
+															e.stopPropagation();
+															handleActionClick(
+																u.id
+															);
+														}}
+														className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+													>
 														<MoreVertical
 															size={18}
 														/>
 													</button>
+													{openActionId === u.id && (
+														<div
+															ref={dropdownRef}
+															className="absolute right-8 top-12 z-50 w-40 bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden p-2 flex flex-col gap-1"
+															onClick={(e) =>
+																e.stopPropagation()
+															}
+														>
+															{[
+																"Active",
+																"Inactive",
+																"Suspended",
+															].map((status) => (
+																<button
+																	key={status}
+																	onClick={() =>
+																		handleStatusChange(
+																			u.id,
+																			status
+																		)
+																	}
+																	className={`w-full text-left px-4 py-2 rounded-lg text-sm transition-all font-medium
+                                                                    ${
+																		u.status ===
+																		status
+																			? "bg-[#C4C9A2] text-[#2F3124]" // Matches the greenish Active look in image if selected
+																			: "text-[#2F3124] hover:bg-gray-50"
+																	}
+                                                                    ${
+																		status ===
+																			"Active" &&
+																		u.status !==
+																			"Active"
+																			? "hover:bg-[#C4C9A2]/30"
+																			: ""
+																	}
+                                                                `}
+																>
+																	{status ===
+																	"Suspended"
+																		? "suspend"
+																		: status}
+																</button>
+															))}
+														</div>
+													)}
 												</div>
 											</td>
 										</tr>
