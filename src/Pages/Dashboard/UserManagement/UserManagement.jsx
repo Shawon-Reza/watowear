@@ -344,7 +344,7 @@ export default function UserManagement() {
 																u.id
 															);
 														}}
-														className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+														className="p-2 rounded-md transition-colors text-[#2C2C2C]"
 													>
 														<MoreVertical
 															size={18}
@@ -390,7 +390,7 @@ export default function UserManagement() {
 																>
 																	{status ===
 																	"Suspended"
-																		? "suspend"
+																		? "Suspend"
 																		: status}
 																</button>
 															))}
