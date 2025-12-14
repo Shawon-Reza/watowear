@@ -16,6 +16,8 @@ import Support from "../Pages/Dashboard/Support/Support";
 import UserManagement from "../Pages/Dashboard/UserManagement/UserManagement";
 import UserProfile from "../Pages/Dashboard/UserProfile/UserProfile";
 
+import PrivateRoute from "./PrivateRoute";
+
 export const router = createBrowserRouter([
 	{
 		path: "/",
@@ -30,7 +32,11 @@ export const router = createBrowserRouter([
 
 	{
 		path: "/admin",
-		element: <Dashborad />,
+		element: (
+			<PrivateRoute>
+				<Dashborad />
+			</PrivateRoute>
+		),
 		children: [
 			{
 				index: true,
