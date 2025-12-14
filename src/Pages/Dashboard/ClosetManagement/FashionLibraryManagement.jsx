@@ -158,7 +158,7 @@ const FashionLibraryManagement = () => {
 										className="object-contain w-full h-full"
 									/>
 								</figure>
-								<div className="card-body p-4 dark:bg-[#FDFFF4]">
+								<div className="card-body p-4 ">
 									<div className="flex text-xl font-extrabold items-center justify-between text-[#4A4A4A]">
 										{item.name}
 										<div className="badge font-semibold badge-lg text-xs px-2 bg-[#F3F4F6] hover:bg-gray-200 rounded-full p-1 border-none text-[#374151]">
@@ -252,7 +252,7 @@ const FashionLibraryManagement = () => {
 										required: "Item name is required",
 									})}
 									placeholder="T-shirt"
-									className={`w-full px-3 py-2 border dark:bg-white dark:text-gray-900 ${
+									className={`w-full px-3 py-2 border   ${
 										errors.name
 											? "border-red-500"
 											: "border-gray-300"
@@ -275,7 +275,7 @@ const FashionLibraryManagement = () => {
 											required: "Category is required",
 										})}
 										placeholder="Casual"
-										className={`flex-1 px-3 py-2 border dark:bg-white dark:text-gray-900 ${
+										className={`flex-1 px-3 py-2 border   ${
 											errors.category
 												? "border-red-500"
 												: "border-gray-300"
@@ -283,7 +283,7 @@ const FashionLibraryManagement = () => {
 									/>
 									<select
 										{...register("tag")}
-										className="px-3 py-2 border dark:bg-white dark:text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+										className="px-3 py-2 border   rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
 									>
 										<option value="Top">Top</option>
 										<option value="Bottom">Bottom</option>

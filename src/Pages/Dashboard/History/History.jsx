@@ -116,7 +116,7 @@ export default function History({ stats = defaultStats }) {
 		<div>
 			{/* History Actions - top summary cards */}
 			<section className="">
-				<h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
+				<h2 className="text-2xl font-semibold text-gray-800  mb-4">
 					History of Actions
 				</h2>
 
@@ -126,7 +126,7 @@ export default function History({ stats = defaultStats }) {
 						return (
 							<div
 								key={s.id}
-								className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4"
+								className="flex items-center justify-between bg-white  rounded-lg shadow-sm p-4"
 							>
 								<div className="flex items-center gap-4">
 									<div
@@ -135,14 +135,14 @@ export default function History({ stats = defaultStats }) {
 										}`}
 										aria-hidden="true"
 									>
-										<Icon className="w-5 h-5 text-gray-800 dark:text-white" />
+										<Icon className="w-5 h-5 text-gray-800 " />
 									</div>
 
 									<div>
-										<div className="text-sm text-gray-500 dark:text-gray-300">
+										<div className="text-sm text-gray-500 ">
 											{s.title}
 										</div>
-										<div className="text-lg font-semibold text-gray-900 dark:text-white">
+										<div className="text-lg font-semibold text-gray-900 ">
 											{s.count}
 										</div>
 									</div>

@@ -47,10 +47,10 @@ export default function FashionHistoryManagement({
 	}
 
 	return (
-		<div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+		<div className="bg-white  rounded-lg shadow-sm p-4">
 			<div className="flex items-start justify-between mb-4">
 				<div>
-					<h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+					<h3 className="text-lg font-semibold text-gray-800 ">
 						{title}
 					</h3>
 					<div className="mt-2 flex items-center gap-2 text-sm text-gray-500">
@@ -63,7 +63,7 @@ export default function FashionHistoryManagement({
 								}}
 								className={`px-3 py-1 rounded ${
 									tab === t
-										? "bg-gray-100 dark:bg-gray-700 text-gray-900"
+										? "bg-gray-100  text-gray-900"
 										: "text-gray-600"
 								}`}
 							>
@@ -114,7 +114,7 @@ export default function FashionHistoryManagement({
 											<div className="w-12 h-12 rounded-md bg-gray-100" />
 										)}
 										<div>
-											<div className="text-gray-800 dark:text-gray-100 font-medium">
+											<div className="text-gray-800  font-medium">
 												{it.title}
 											</div>
 										</div>

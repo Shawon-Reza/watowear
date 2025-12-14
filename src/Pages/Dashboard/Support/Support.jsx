@@ -226,7 +226,7 @@ export default function Support() {
 
 	return (
 		<div>
-			<h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
+			<h2 className="text-2xl font-semibold text-gray-800  mb-4">
 				Support
 			</h2>
 
