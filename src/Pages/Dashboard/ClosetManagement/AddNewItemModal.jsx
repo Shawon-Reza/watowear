@@ -38,12 +38,7 @@ const AddNewItemModal = ({ isOpen, onClose, onSubmit, editItem }) => {
 						onClick={onClose}
 						className="text-gray-400 hover:text-gray-600 transition-colors"
 					>
-						{/* Edit icon in design top right? No, standard close usually. Design shows Edit icon in header title area maybe? Keeping standard close for UX. */}
-						{/* Actually image 3 shows a Pencil icon on top right corner of the Modal Title area? */}
-						{/* Let's assume the Pencil is just decorative or indicating "Edit Mode" if editing. */}
-						{/* I will use X for close. */}
-						{/* Wait, the image 3 shows a Pencil icon on the top right. It might be the "Close" button styled as pencil?? No that makes no sense. */}
-						{/* It might be valid "Edit" icon. But usually top right is close. I'll stick to simple layout. */}
+						{/* Design Image 4 shows a Pencil icon in top right. */}
 						<div className="p-1 hover:bg-gray-100 rounded-full">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"

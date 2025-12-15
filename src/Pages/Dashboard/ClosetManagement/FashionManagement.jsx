@@ -1,12 +1,8 @@
-import { Tags, X } from "lucide-react";
+import { Tags } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { IoMdImage } from "react-icons/io";
 import { Link } from "react-router-dom";
 
 const FashionManagement = () => {
-	const [showModal, setShowModal] = useState(null);
-	const [deleteItemId, setDeleteItemId] = useState(null);
 	const [items, setItems] = useState([
 		{
 			id: 1,
@@ -38,81 +34,77 @@ const FashionManagement = () => {
 		},
 	]);
 
-	const {
-		register,
-		handleSubmit,
-		reset,
-		formState: { errors },
-	} = useForm();
-
-	const handleEdit = (item) => {
-		setShowModal("edit");
-		console.log(item);
-	};
-
-	const handleRemove = (id) => {
-		setItems((prevItems) => prevItems.filter((item) => item.id !== id));
-		setDeleteItemId(null); // Close the modal after deletion
-	};
-
-	const openDeleteModal = (id) => {
-		setDeleteItemId(id);
-	};
-
-	const closeDeleteModal = () => {
-		setDeleteItemId(null);
-	};
-
-	const onSubmit = (data) => {
-		console.log(data);
-		setShowModal(null);
-		reset();
-	};
-
 	return (
-		<div className=" ">
-			<div className=" mx-auto">
+		<div className="">
+			<div className="mx-auto">
+				{/* Tabs and Search Header */}
+				<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+					<div className="flex items-center gap-6 border-b border-gray-200 w-full sm:w-auto">
+						<button className="pb-2 text-sm font-semibold text-[#6A6D57] border-b-2 border-[#6A6D57]">
+							All Items
+						</button>
+						<button className="pb-2 text-sm font-medium text-gray-500 hover:text-gray-700">
+							Searched
+						</button>
+					</div>
+					<div className="relative">
+						<span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+							<svg
+								className="h-4 w-4 text-gray-400"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth="2"
+									d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+								/>
+							</svg>
+						</span>
+						<input
+							type="text"
+							placeholder="Search..."
+							className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#6A6D57] w-full sm:w-64"
+						/>
+					</div>
+				</div>
+
 				<div className="pb-6">
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 mb-8">
 						{items.map((item) => (
 							<div
 								key={item.id}
-								className="relative bg-white shadow drop-shadow-lg rounded-[20px] overflow-hidden"
+								className="relative bg-white shadow-sm drop-shadow-md rounded-[20px] overflow-hidden group hover:shadow-lg transition-shadow duration-300"
 							>
-								<figure className="aspect-square bg-[#F9FAFB] p-4 flex items-center justify-center">
+								<figure className="aspect-[4/5] bg-[#F9FAFB] p-6 flex items-center justify-center relative">
+									{/* Hanger Image Mockup Style */}
 									<img
 										src={item.image}
 										alt={item.name}
-										className="object-contain max-h-full"
+										className="object-contain w-full h-full drop-shadow-xl"
 									/>
 								</figure>
-								<div className="card-body p-4 ">
-									<div className="flex items-center justify-between mb-3">
-										<h2 className="text-lg font-bold text-[#4A4A4A]">
+								<div className="p-4">
+									<div className="flex items-center justify-between mb-4">
+										<h2 className="text-lg font-bold text-[#1B1B1B]">
 											{item.name}
 										</h2>
-										<div className="flex items-center gap-1 bg-[#F3F4F6] px-2 py-1 rounded-full text-xs font-semibold text-[#374151]">
+										<div className="flex items-center gap-1 bg-white border border-gray-100 px-2 py-1 rounded-full text-[10px] font-medium text-gray-500 shadow-sm">
 											<Tags
-												size={12}
-												className="text-[#6B7280]"
+												size={10}
+												className="text-gray-400"
 											/>
 											{item.category}
 										</div>
 									</div>
 
-									<div className="flex items-center justify-between gap-3 mt-2">
-										<button
-											onClick={() => handleEdit(item)}
-											className="flex-1 rounded-lg px-4 py-2 text-white bg-[#6A6D57] hover:bg-[#585a48] text-sm font-bold shadow-sm transition-colors"
-										>
+									<div className="grid grid-cols-2 gap-3">
+										<button className="flex items-center justify-center px-4 py-1.5 bg-[#6A6D57] hover:bg-[#595b49] text-white text-xs font-semibold rounded-md transition-colors">
 											Edit
 										</button>
-										<button
-											onClick={() =>
-												openDeleteModal(item.id)
-											}
-											className="flex-1 rounded-lg px-4 py-2 text-white bg-[#FF6B6B] hover:bg-[#ff5252] text-sm font-bold shadow-sm transition-colors"
-										>
+										<button className="flex items-center justify-center px-4 py-1.5 bg-[#FF6B6B] hover:bg-[#ff5252] text-white text-xs font-semibold rounded-md transition-colors">
 											Remove
 										</button>
 									</div>
@@ -122,175 +114,11 @@ const FashionManagement = () => {
 					</div>
 				</div>
 
-				{deleteItemId && (
-					<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-						<div className="bg-white p-6 text-[#1B1B1B] rounded-lg shadow-xl w-full max-w-[500px] mx-4">
-							<div className="p-6">
-								<h3 className="font-extrabold text-center text-2xl">
-									Remove from Closet list
-								</h3>
-								<p className="text-center text-lg font-extrabold py-3 text-[#E43636]">
-									Are you sure you want to remove this item?
-								</p>
-								<div className="flex justify-end gap-2 py-3">
-									<button
-										onClick={closeDeleteModal}
-										className="px-4 basis-5/12 py-2 border-2 boder-[#475467] text-gray-700 rounded-lg hover:bg-gray-100"
-									>
-										Cancel
-									</button>
-									<button
-										onClick={() =>
-											handleRemove(deleteItemId)
-										}
-										className="px-4 basis-5/12 py-2 hover:bg-red-600 text-white rounded-lg bg-[#FF6361]"
-									>
-										Remove
-									</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				)}
-
-				{showModal && (
-					<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-						<div className="bg-white rounded-lg shadow-xl w-full max-w-[700px] mx-4">
-							<div className="flex items-center justify-between p-6 border-b border-gray-200">
-								<h2 className="text-lg font-semibold text-gray-900">
-									{showModal === "add"
-										? "Add New Item"
-										: "Edit Item"}
-								</h2>
-								<div className="flex items-center space-x-2">
-									<button
-										onClick={() => {
-											setShowModal(null);
-											reset();
-										}}
-										className="text-gray-400 hover:text-gray-600"
-									>
-										<X size={20} />
-									</button>
-								</div>
-							</div>
-
-							<form
-								onSubmit={handleSubmit(onSubmit)}
-								className="p-6 space-y-4"
-							>
-								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-2">
-										Item Name
-									</label>
-									<input
-										{...register("name", {
-											required: "Item name is required",
-										})}
-										placeholder="T-shirt"
-										className={`w-full px-3 py-2 border   ${
-											errors.name
-												? "border-red-500"
-												: "border-gray-300"
-										} rounded-lg`}
-									/>
-									{errors.name && (
-										<p className="text-red-500 text-xs mt-1">
-											{errors.name.message}
-										</p>
-									)}
-								</div>
-
-								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-2">
-										Category
-									</label>
-									<div className="flex space-x-4">
-										<input
-											{...register("category", {
-												required:
-													"Category is required",
-											})}
-											placeholder="Casual"
-											className={`w-full px-3 py-2 border   ${
-												errors.name
-													? "border-red-500"
-													: "border-gray-300"
-											} rounded-lg`}
-										/>
-										<select
-											{...register("tag")}
-											className="px-3 py-2 border border-gray-300 rounded-lg  "
-										>
-											<option value="Top">Top</option>
-											<option value="Bottom">
-												Bottom
-											</option>
-											<option value="Dress">Dress</option>
-											<option value="Outerwear">
-												Outerwear
-											</option>
-										</select>
-									</div>
-									{errors.category && (
-										<p className="text-red-500 text-xs mt-1">
-											{errors.category.message}
-										</p>
-									)}
-								</div>
-
-								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-2">
-										Upload Image
-									</label>
-									<div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-										<p className="text-sm text-gray-600 mb-2">
-											Drag and drop files here, or click
-											to browse
-										</p>
-										<p className="text-xs text-gray-500">
-											Supports: JPG, PNG
-										</p>
-										<input
-											type="file"
-											accept="image/*"
-											{...register("image")}
-											className="hidden"
-											id="image-upload"
-										/>
-									</div>
-									<button
-										type="button"
-										onClick={() =>
-											document
-												.getElementById("image-upload")
-												.click()
-										}
-										className="w-full mt-3 border border-[#6A6D57] text-[#6A6D57] font-bold py-2 rounded-lg  transition-colors flex items-center justify-center space-x-2"
-									>
-										<IoMdImage size={24} />
-										<span>Upload Image</span>
-									</button>
-								</div>
-
-								<div className=" py-4 border-t border-gray-200">
-									<button
-										type="submit"
-										className="w-full bg-[#6A6D57] hover:bg-[#585a48] text-white py-3 rounded-lg  transition-colors font-medium"
-									>
-										{showModal === "add" ? "Add" : "Update"}
-									</button>
-								</div>
-							</form>
-						</div>
-					</div>
-				)}
-
 				<Link
 					to="/admin/fashion_management"
 					className="text-right flex items-center justify-end"
 				>
-					<button className="bg-white hover:bg-gray-50 shadow drop-shadow-lg shadow-gray-200 text-[#6A6D57] px-8 py-2 rounded-[12px] hover:cursor-pointer font-extrabold">
+					<button className="bg-white hover:bg-gray-50 text-[#6A6D57] px-6 py-2 rounded-lg text-sm font-semibold shadow-sm border border-gray-100 transition-all">
 						View All
 					</button>
 				</Link>

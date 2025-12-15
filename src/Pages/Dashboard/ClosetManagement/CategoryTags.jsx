@@ -126,20 +126,36 @@ const CategoryTags = () => {
 
 			{/* Category Modal */}
 			<dialog id="category_add" className="modal">
-				<div className="modal-box bg-white text-[#374151] relative p-4">
+				<div className="modal-box bg-white text-[#374151] relative p-6">
 					<button
-						className="absolute right-2 top-2 text-gray-600 hover:bg-gray-100 rounded-full p-1"
+						className="absolute right-4 top-4 text-gray-400 hover:bg-gray-100 rounded-full p-1 transition-colors"
 						onClick={() =>
 							document.getElementById("category_add").close()
 						}
 					>
-						✕
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							strokeWidth="2"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							className="lucide lucide-pencil"
+						>
+							<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+							<path d="m15 5 4 4" />
+						</svg>
 					</button>
-					<h3 className="font-semibold text-lg mb-3">Add Category</h3>
+					<h3 className="font-semibold text-xl mb-6">
+						Add New Category
+					</h3>
 
 					<form onSubmit={handleCategorySubmit(addCategory)}>
-						<fieldset className="mb-3">
-							<legend className="text-sm text-[#374151] mb-1">
+						<fieldset className="mb-4 space-y-2">
+							<legend className="text-sm font-medium text-gray-700">
 								Category name
 							</legend>
 							<input
@@ -147,41 +163,58 @@ const CategoryTags = () => {
 								{...registerCategory("category_name", {
 									required: "Category name is required",
 								})}
-								className="w-full border text-sm border-gray-300 rounded-md px-2 py-2 focus:outline-none"
-								placeholder="Type category"
+								className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#6A6D57]/50 focus:border-transparent transition-all"
+								placeholder="e.g. T-shirt"
 							/>
 							{categoryErrors.category_name && (
-								<p className="text-red-500 text-sm mt-1">
+								<p className="text-red-500 text-xs mt-1">
 									{categoryErrors.category_name.message}
 								</p>
 							)}
 						</fieldset>
 						<button
 							type="submit"
-							className="font-semibold text-sm bg-[#6A6D57] w-full py-2 rounded text-white"
+							className="w-full bg-[#6A6D57] hover:bg-[#585a48] text-white font-bold py-3 rounded-lg transition-colors text-sm"
 						>
 							Add Category
 						</button>
 					</form>
 				</div>
+				<form method="dialog" className="modal-backdrop">
+					<button>close</button>
+				</form>
 			</dialog>
 
 			{/* Tag Modal */}
 			<dialog id="tag_add" className="modal">
-				<div className="modal-box bg-white text-[#374151] relative p-4">
+				<div className="modal-box bg-white text-[#374151] relative p-6">
 					<button
-						className="absolute right-2 top-2 text-gray-600 hover:bg-gray-100 rounded-full p-1"
+						className="absolute right-4 top-4 text-gray-400 hover:bg-gray-100 rounded-full p-1 transition-colors"
 						onClick={() =>
 							document.getElementById("tag_add").close()
 						}
 					>
-						✕
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							strokeWidth="2"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							className="lucide lucide-pencil"
+						>
+							<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+							<path d="m15 5 4 4" />
+						</svg>
 					</button>
-					<h3 className="font-semibold text-lg mb-3">Add Tag</h3>
+					<h3 className="font-semibold text-xl mb-6">Add New Tag</h3>
 
 					<form onSubmit={handleTagSubmit(addTag)}>
-						<fieldset className="mb-3">
-							<legend className="text-sm text-[#374151] mb-1">
+						<fieldset className="mb-4 space-y-2">
+							<legend className="text-sm font-medium text-gray-700">
 								Tag name
 							</legend>
 							<input
@@ -189,23 +222,26 @@ const CategoryTags = () => {
 								{...registerTag("tag_name", {
 									required: "Tag name is required",
 								})}
-								className="w-full border text-sm border-gray-300 rounded-md px-2 py-2 focus:outline-none"
-								placeholder="Type tag"
+								className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#6A6D57]/50 focus:border-transparent transition-all"
+								placeholder="e.g. Trendy"
 							/>
 							{tagErrors.tag_name && (
-								<p className="text-red-500 text-sm mt-1">
+								<p className="text-red-500 text-xs mt-1">
 									{tagErrors.tag_name.message}
 								</p>
 							)}
 						</fieldset>
 						<button
 							type="submit"
-							className="font-semibold text-sm bg-[#6A6D57] w-full py-2 rounded text-white"
+							className="w-full bg-[#6A6D57] hover:bg-[#585a48] text-white font-bold py-3 rounded-lg transition-colors text-sm"
 						>
 							Add Tag
 						</button>
 					</form>
 				</div>
+				<form method="dialog" className="modal-backdrop">
+					<button>close</button>
+				</form>
 			</dialog>
 		</div>
 	);

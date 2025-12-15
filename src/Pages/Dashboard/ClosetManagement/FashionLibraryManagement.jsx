@@ -1,7 +1,5 @@
-import { ArrowLeft, Plus, Search, Tags, Upload, X } from "lucide-react";
+import { ArrowLeft, Plus, Search, Tags, X } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { IoMdImage } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import AddNewItemModal from "./AddNewItemModal";
 
@@ -11,12 +9,6 @@ const FashionLibraryManagement = () => {
 	const [showModal, setShowModal] = useState(null);
 	const [deleteItemId, setDeleteItemId] = useState(null);
 	const [editItem, setEditItem] = useState(null);
-	const {
-		register,
-		handleSubmit,
-		reset,
-		formState: { errors },
-	} = useForm();
 
 	const [items, setItems] = useState(
 		Array(20)

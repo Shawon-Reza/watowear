@@ -267,51 +267,28 @@ const ClosetManagementTable = () => {
 		<div className="bg-white rounded-md shadow-sm p-4 sm:p-6">
 			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
 				<div className="flex items-center gap-3">
-					<h3 className="text-sm font-semibold text-gray-700">
+					<div className="text-sm font-semibold text-[#6A6D57] border-b-2 border-[#6A6D57] pb-1">
 						All Items
-					</h3>
-					<div className="text-xs text-gray-500">
-						Showing {items.length} of {total} results
 					</div>
 				</div>
 
 				<div className="flex items-center gap-2">
-					<select
-						className="border rounded px-2 py-1 text-sm"
-						value={filters.status}
-						onChange={(e) =>
-							handleFilterChange("status", e.target.value)
-						}
-					>
-						<option value="all">All</option>
-						<option value="Uploaded">Uploaded</option>
-						<option value="Archived">Archived</option>
-					</select>
-
-					<select
-						className="border rounded px-2 py-1 text-sm"
-						value={filters.category}
-						onChange={(e) =>
-							handleFilterChange("category", e.target.value)
-						}
-					>
-						<option value="all">All Categories</option>
-						<option value="Outerwear">Outerwear</option>
-						<option value="Footwear">Footwear</option>
-						<option value="Tops">Tops</option>
-						<option value="Dresses">Dresses</option>
-						<option value="Knitwear">Knitwear</option>
-						<option value="Bottoms">Bottoms</option>
-					</select>
-
-					<input
-						placeholder="Search title"
-						className="border rounded px-2 py-1 text-sm"
-						value={filters.search}
-						onChange={(e) =>
-							handleFilterChange("search", e.target.value)
-						}
-					/>
+					<div className="flex items-center gap-2 text-sm text-gray-500 border rounded-lg px-3 py-2 bg-white">
+						<span>Sort by Date</span>
+						<svg
+							className="w-4 h-4"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth="2"
+								d="M19 9l-7 7-7-7"
+							></path>
+						</svg>
+					</div>
 				</div>
 			</div>
 
