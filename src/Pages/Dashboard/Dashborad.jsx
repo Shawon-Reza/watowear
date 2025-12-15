@@ -47,12 +47,6 @@ export default function Dashboard({ children }) {
 					activePaths: ["/admin/user_management"],
 				},
 				{
-					name: "Role Management",
-					icon: <Shield size={20} />,
-					path: "/admin/role_management",
-					activePaths: ["/admin/role_management"],
-				},
-				{
 					name: "Closet Management",
 					icon: <Shirt size={20} />,
 					path: "/admin/closet_management",
@@ -62,6 +56,12 @@ export default function Dashboard({ children }) {
 						"/admin/fashion_management",
 						"/admin/closet_showcase",
 					],
+				},
+				{
+					name: "Role Management",
+					icon: <Shield size={20} />,
+					path: "/admin/role_management",
+					activePaths: ["/admin/role_management"],
 				},
 				{
 					name: "AI Performence",
@@ -76,17 +76,16 @@ export default function Dashboard({ children }) {
 					activePaths: ["/admin/brand_partners"],
 				},
 				{
-					name: "Monetization",
-					icon: <BadgeDollarSign size={20} />,
-					path: "/admin/monetization",
-					activePaths: ["/admin/monetization"],
-				},
-
-				{
 					name: "Analytics",
 					icon: <ChartColumn size={20} />,
 					path: "/admin/analytics",
 					activePaths: ["/admin/analytics"],
+				},
+				{
+					name: "Monetization",
+					icon: <BadgeDollarSign size={20} />,
+					path: "/admin/monetization",
+					activePaths: ["/admin/monetization"],
 				},
 				{
 					name: "Support",
