@@ -10,6 +10,7 @@ import {
 	LogOut,
 	Shirt,
 	ChartColumn,
+	Shield,
 } from "lucide-react";
 import { LuBrain } from "react-icons/lu";
 import { BsChatSquareText } from "react-icons/bs";
@@ -44,6 +45,12 @@ export default function Dashboard({ children }) {
 					icon: <Users size={20} />,
 					path: "/admin/user_management",
 					activePaths: ["/admin/user_management"],
+				},
+				{
+					name: "Role Management",
+					icon: <Shield size={20} />,
+					path: "/admin/role_management",
+					activePaths: ["/admin/role_management"],
 				},
 				{
 					name: "Closet Management",
