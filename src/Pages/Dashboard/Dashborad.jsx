@@ -75,6 +75,12 @@ export default function Dashboard({ children }) {
 					path: "/admin/brand_partners",
 					activePaths: ["/admin/brand_partners"],
 				},
+				{
+					name: "Monetization",
+					icon: <BadgeDollarSign size={20} />,
+					path: "/admin/monetization",
+					activePaths: ["/admin/monetization"],
+				},
 
 				{
 					name: "Analytics",
