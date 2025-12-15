@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoMdImage } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import AddNewItemModal from "./AddNewItemModal";
 
 const FashionLibraryManagement = () => {
 	const [searchTerm, setSearchTerm] = useState("");
@@ -143,41 +144,41 @@ const FashionLibraryManagement = () => {
 								key={item.id}
 								className="relative bg-white shadow drop-shadow-lg rounded-[20px] overflow-hidden"
 							>
-								{/* X Button */}
-								<button
-									onClick={() => openDeleteModal(item.id)}
-									className="absolute top-2 right-2 p-2 rounded-full bg-red-100 hover:bg-red-400 shadow hover:text-white"
-								>
-									<X size={16} className="text-gray-500" />
-								</button>
-
-								<figure className="aspect-square bg-white">
+								<figure className="aspect-square bg-[#F9FAFB] p-4 flex items-center justify-center">
 									<img
 										src={item.image}
 										alt={item.name}
-										className="object-contain w-full h-full"
+										className="object-contain max-h-full"
 									/>
 								</figure>
 								<div className="card-body p-4 ">
-									<div className="flex text-xl font-extrabold items-center justify-between text-[#4A4A4A]">
-										{item.name}
-										<div className="badge font-semibold badge-lg text-xs px-2 bg-[#F3F4F6] hover:bg-gray-200 rounded-full p-1 border-none text-[#374151]">
+									<div className="flex items-center justify-between mb-3">
+										<h2 className="text-lg font-bold text-[#4A4A4A]">
+											{item.name}
+										</h2>
+										<div className="flex items-center gap-1 bg-[#F3F4F6] px-2 py-1 rounded-full text-xs font-semibold text-[#374151]">
 											<Tags
-												size={14}
+												size={12}
 												className="text-[#6B7280]"
 											/>
 											{item.category}
 										</div>
 									</div>
-									<p className="text-sm text-gray-600">
-										This is a sample product description.
-									</p>
-									<div className="card-actions justify-between mt-2">
+
+									<div className="flex items-center justify-between gap-3 mt-2">
 										<button
 											onClick={() => handleEdit(item)}
-											className="rounded-[6px] w-full px-10 py-2 text-white bg-[#6A6D57] hover:bg-[#585a48]"
+											className="flex-1 rounded-lg px-4 py-2 text-white bg-[#6A6D57] hover:bg-[#585a48] text-sm font-bold shadow-sm transition-colors"
 										>
 											Edit
+										</button>
+										<button
+											onClick={() =>
+												openDeleteModal(item.id)
+											}
+											className="flex-1 rounded-lg px-4 py-2 text-white bg-[#FF6B6B] hover:bg-[#ff5252] text-sm font-bold shadow-sm transition-colors"
+										>
+											Remove
 										</button>
 									</div>
 								</div>
@@ -217,136 +218,15 @@ const FashionLibraryManagement = () => {
 			)}
 
 			{/* Add/Edit Modal */}
-			{showModal && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-					<div className="bg-white rounded-lg shadow-xl w-full max-w-[700px] mx-4">
-						<div className="flex items-center justify-between p-6 border-b border-gray-200">
-							<h2 className="text-lg font-semibold text-gray-900">
-								{showModal === "add"
-									? "Add New Item"
-									: "Edit Item"}
-							</h2>
-							<div className="flex items-center space-x-2">
-								<button
-									onClick={() => {
-										setShowModal(null);
-										reset();
-									}}
-									className="text-gray-400 hover:text-gray-600"
-								>
-									<X size={20} />
-								</button>
-							</div>
-						</div>
-
-						<form
-							onSubmit={handleSubmit(onSubmit)}
-							className="p-6 space-y-4"
-						>
-							<div>
-								<label className="block text-sm font-medium text-gray-700 mb-2">
-									Item Name
-								</label>
-								<input
-									{...register("name", {
-										required: "Item name is required",
-									})}
-									placeholder="T-shirt"
-									className={`w-full px-3 py-2 border   ${
-										errors.name
-											? "border-red-500"
-											: "border-gray-300"
-									} rounded-lg`}
-								/>
-								{errors.name && (
-									<p className="text-red-500 text-xs mt-1">
-										{errors.name.message}
-									</p>
-								)}
-							</div>
-
-							<div>
-								<label className="block text-sm font-medium text-gray-700 mb-2">
-									Category
-								</label>
-								<div className="flex space-x-4">
-									<input
-										{...register("category", {
-											required: "Category is required",
-										})}
-										placeholder="Casual"
-										className={`flex-1 px-3 py-2 border   ${
-											errors.category
-												? "border-red-500"
-												: "border-gray-300"
-										} rounded-lg `}
-									/>
-									<select
-										{...register("tag")}
-										className="px-3 py-2 border   rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-									>
-										<option value="Top">Top</option>
-										<option value="Bottom">Bottom</option>
-										<option value="Dress">Dress</option>
-										<option value="Outerwear">
-											Outerwear
-										</option>
-									</select>
-								</div>
-								{errors.category && (
-									<p className="text-red-500 text-xs mt-1">
-										{errors.category.message}
-									</p>
-								)}
-							</div>
-
-							<div>
-								<label className="block text-sm font-medium text-gray-700 mb-2">
-									Upload Image
-								</label>
-								<div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-									<Upload className="mx-auto h-8 w-8 text-gray-400 mb-2" />
-									<p className="text-sm text-gray-600 mb-2">
-										Drag and drop files here, or click to
-										browse
-									</p>
-									<p className="text-xs text-gray-500">
-										Supports: JPG, PNG
-									</p>
-									<input
-										type="file"
-										accept="image/*"
-										{...register("image")}
-										className="hidden"
-										id="image-upload"
-									/>
-								</div>
-								<button
-									type="button"
-									onClick={() =>
-										document
-											.getElementById("image-upload")
-											.click()
-									}
-									className="w-full mt-3 border border-[#6A6D57] text-[#6A6D57] font-bold py-2 rounded-lg  transition-colors flex items-center justify-center space-x-2"
-								>
-									<IoMdImage size={24} />
-									<span>Upload Image</span>
-								</button>
-							</div>
-
-							<div className=" py-4 border-t border-gray-200">
-								<button
-									type="submit"
-									className="w-full bg-[#6A6D57] hover:bg-[#585a48] text-white py-3 rounded-lg  transition-colors font-medium"
-								>
-									{showModal === "add" ? "Add" : "Update"}
-								</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			)}
+			<AddNewItemModal
+				isOpen={!!showModal}
+				onClose={() => {
+					setShowModal(null);
+					reset();
+				}}
+				onSubmit={onSubmit}
+				editItem={showModal === "edit" ? editItem : null}
+			/>
 		</div>
 	);
 };

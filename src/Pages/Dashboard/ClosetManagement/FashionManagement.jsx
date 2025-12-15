@@ -79,41 +79,41 @@ const FashionManagement = () => {
 								key={item.id}
 								className="relative bg-white shadow drop-shadow-lg rounded-[20px] overflow-hidden"
 							>
-								{/* X Button */}
-								<button
-									onClick={() => openDeleteModal(item.id)}
-									className="absolute top-2 right-2 p-2 rounded-full bg-red-100 hover:bg-red-400 shadow hover:text-white"
-								>
-									<X size={16} className="text-gray-500" />
-								</button>
-
-								<figure className="aspect-square bg-white">
+								<figure className="aspect-square bg-[#F9FAFB] p-4 flex items-center justify-center">
 									<img
 										src={item.image}
 										alt={item.name}
-										className="object-contain w-full h-full"
+										className="object-contain max-h-full"
 									/>
 								</figure>
 								<div className="card-body p-4 ">
-									<div className="flex text-xl font-extrabold items-center justify-between text-[#4A4A4A]">
-										{item.name}
-										<div className="badge font-semibold badge-lg text-xs px-2 bg-[#F3F4F6] hover:bg-gray-200 rounded-full p-1 border-none text-[#374151]">
+									<div className="flex items-center justify-between mb-3">
+										<h2 className="text-lg font-bold text-[#4A4A4A]">
+											{item.name}
+										</h2>
+										<div className="flex items-center gap-1 bg-[#F3F4F6] px-2 py-1 rounded-full text-xs font-semibold text-[#374151]">
 											<Tags
-												size={14}
+												size={12}
 												className="text-[#6B7280]"
 											/>
 											{item.category}
 										</div>
 									</div>
-									<p className="text-sm text-gray-600">
-										This is a sample product description.
-									</p>
-									<div className="card-actions justify-between mt-2">
+
+									<div className="flex items-center justify-between gap-3 mt-2">
 										<button
 											onClick={() => handleEdit(item)}
-											className="rounded-[6px] w-full px-10 py-2 text-white bg-[#6A6D57] hover:bg-[#585a48]"
+											className="flex-1 rounded-lg px-4 py-2 text-white bg-[#6A6D57] hover:bg-[#585a48] text-sm font-bold shadow-sm transition-colors"
 										>
 											Edit
+										</button>
+										<button
+											onClick={() =>
+												openDeleteModal(item.id)
+											}
+											className="flex-1 rounded-lg px-4 py-2 text-white bg-[#FF6B6B] hover:bg-[#ff5252] text-sm font-bold shadow-sm transition-colors"
+										>
+											Remove
 										</button>
 									</div>
 								</div>
