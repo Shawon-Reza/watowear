@@ -9,6 +9,7 @@ import AI_Performence from "../Pages/Dashboard/AIPerformence/AI_Performence";
 import Analytics from "../Pages/Dashboard/Analytics/Analytics";
 import BrandPartners from "../Pages/Dashboard/BrandPartners/BrandPartners";
 import Monetization from "../Pages/Dashboard/Monetization/Monetization";
+import Editorial from "../Pages/Dashboard/Editorial/Editorial";
 import ClosetManagement from "../Pages/Dashboard/ClosetManagement/ClosetManagement";
 import FashionLibraryManagement from "../Pages/Dashboard/ClosetManagement/FashionLibraryManagement";
 import IndividualCloset from "../Pages/Dashboard/ClosetManagement/IndividualCloset";
@@ -87,6 +88,10 @@ export const router = createBrowserRouter([
 			{
 				path: "monetization",
 				element: <Monetization />,
+			},
+			{
+				path: "editorial",
+				element: <Editorial />,
 			},
 			{
 				path: "analytics",

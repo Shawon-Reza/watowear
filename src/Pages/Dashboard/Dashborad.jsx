@@ -99,6 +99,12 @@ export default function Dashboard({ children }) {
 					path: "/admin/history",
 					activePaths: ["/admin/history"],
 				},
+				{
+					name: "Editorial",
+					icon: <PiNotepad size={20} />,
+					path: "/admin/editorial",
+					activePaths: ["/admin/editorial"],
+				},
 			],
 		},
 	];
