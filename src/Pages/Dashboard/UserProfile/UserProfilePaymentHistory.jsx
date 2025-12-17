@@ -85,248 +85,130 @@ export default function UserProfilePaymentHistory() {
 	};
 
 	return (
-		<div className="space-y-6">
-			<div className="flex items-center justify-between">
-				<h2 className="text-2xl font-bold text-gray-900">
+		<div className="space-y-4">
+			<div className="flex items-center justify-between mb-2">
+				<h2 className="text-xl font-bold text-[#333]">
 					Payment History
 				</h2>
-				<div className="relative w-64">
-					<input
-						placeholder="Search by plan, tx id or method..."
-						value={search}
-						onChange={(e) => setSearch(e.target.value)}
-						className="w-full pl-4 pr-3 py-2 border rounded-xl bg-white/60 text-sm text-[#6A6D57]"
-					/>
-				</div>
 			</div>
 
-			<div className="bg-white/70 rounded-2xl border border-[#6A6D57]/10 p-4">
-				{/* Mobile cards */}
-				<div className="md:hidden space-y-3">
-					{filtered.map((p) => (
-						<div
-							key={p.id}
-							className="p-3 bg-white rounded-lg border border-[#eee] shadow-sm"
-						>
-							<div className="flex items-start justify-between gap-3">
-								<div>
-									<div className="text-sm font-semibold">
-										{p.plan}
-									</div>
-									<div className="text-xs text-[#6A6D57]/80">
-										{new Date(p.date).toLocaleDateString()}
-									</div>
-									<div className="mt-2 text-sm">
-										{p.method}
-									</div>
-								</div>
+			{/* Desktop table */}
+			<div className="hidden md:block overflow-x-auto">
+				<table className="w-full">
+					<thead>
+						<tr className="bg-[#f9f9f9] border-b border-gray-100">
+							<th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+								Transaction ID
+							</th>
+							<th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+								Items
+							</th>
+							<th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+								Ammount
+							</th>
+							<th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
+								Status
+							</th>
+							<th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+								Date
+							</th>
+							<th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+								Payment Method
+							</th>
+						</tr>
+					</thead>
 
-								<div className="text-right">
-									<div className="text-lg font-bold">
-										${p.amount.toFixed(2)}
-									</div>
-									<div
-										className={`mt-2 inline-flex items-center px-3 py-1 rounded-full text-sm ${statusClass(
-											p.status
-										)}`}
-									>
-										{p.status}
-									</div>
-								</div>
-							</div>
+					<tbody className="divide-y divide-gray-100">
+						{filtered.map((p) => {
+							const isPaid = p.status === "Paid";
+							const isFailed = p.status === "Failed";
+							const statusText = isPaid
+								? "Succeed"
+								: isFailed
+								? "Failed"
+								: p.status;
+							const statusBg = isPaid
+								? "bg-[#22c55e]"
+								: isFailed
+								? "bg-[#ff5656]"
+								: "bg-gray-400";
 
-							<div
-								className="mt-3 flex items-center justify-between relative"
-								ref={containerRef}
-							>
-								<div className="text-xs text-[#6A6D57]/70">
-									{p.tx}
-								</div>
-								<div className="relative">
-									<button
-										onClick={(e) => {
-											e.stopPropagation();
-											setOpenMenuId(
-												openMenuId === p.id
-													? null
-													: p.id
-											);
-										}}
-										className="p-2 rounded-md hover:bg-gray-100"
-										aria-haspopup="true"
-										aria-expanded={openMenuId === p.id}
-									>
-										<MoreVertical size={16} />
-									</button>
+							// Mock items count based on id
+							const itemsCount = 5;
 
-									{openMenuId === p.id && (
-										<div className="absolute right-0 mt-2 w-44 bg-white rounded-md shadow-lg border z-50">
-											<button
-												onClick={() => {
-													console.log("Refund", p.tx);
-													setOpenMenuId(null);
-												}}
-												className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
-											>
-												{" "}
-												<Download
-													size={14}
-													className="inline mr-2"
-												/>{" "}
-												Refund
-											</button>
-											<button
-												onClick={() => {
-													console.log(
-														"Details",
-														p.tx
-													);
-													setOpenMenuId(null);
-												}}
-												className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
-											>
-												{" "}
-												<FileText
-													size={14}
-													className="inline mr-2"
-												/>{" "}
-												Details
-											</button>
-										</div>
-									)}
-								</div>
-							</div>
-						</div>
-					))}
-				</div>
-
-				{/* Desktop table */}
-				<div className="hidden md:block overflow-x-auto">
-					<table className="w-full">
-						<thead className="bg-gradient-to-r from-[#F4F1EB] to-white">
-							<tr className="border-b border-[#6A6D57]/10">
-								<th className="px-6 py-4 text-left text-sm font-bold text-[#6A6D57]">
-									Date
-								</th>
-								<th className="px-6 py-4 text-left text-sm font-bold text-[#6A6D57]">
-									Plan
-								</th>
-								<th className="px-6 py-4 text-left text-sm font-bold text-[#6A6D57]">
-									Amount
-								</th>
-								<th className="px-6 py-4 text-left text-sm font-bold text-[#6A6D57]">
-									Method
-								</th>
-								<th className="px-6 py-4 text-left text-sm font-bold text-[#6A6D57]">
-									Status
-								</th>
-								<th className="px-6 py-4 text-left text-sm font-bold text-[#6A6D57]">
-									Transaction
-								</th>
-								<th className="px-6 py-4 text-center text-sm font-bold text-[#6A6D57]">
-									Actions
-								</th>
-							</tr>
-						</thead>
-
-						<tbody className="divide-y divide-[#6A6D57]/10">
-							{filtered.map((p) => (
+							return (
 								<tr
 									key={p.id}
-									className="hover:bg-[#f8fbf8] transition-all"
+									className="hover:bg-gray-50 transition-all"
 								>
-									<td className="px-6 py-4 text-gray-900">
-										{new Date(p.date).toLocaleDateString()}
-									</td>
-									<td className="px-6 py-4 text-[#6A6D57] font-medium">
-										{p.plan}
-									</td>
-									<td className="px-6 py-4 font-bold">
-										${p.amount.toFixed(2)}
-									</td>
-									<td className="px-6 py-4 text-gray-700">
-										{p.method}
-									</td>
 									<td className="px-6 py-4">
-										<span
-											className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold ${statusClass(
-												p.status
-											)}`}
-										>
-											{p.status}
-										</span>
-									</td>
-									<td className="px-6 py-4 text-sm text-[#6A6D57]/80">
-										{p.tx}
-									</td>
-									<td
-										className="px-6 py-4 text-center"
-										ref={containerRef}
-									>
-										<div className="flex items-center justify-center gap-2 relative">
-											<button
-												onClick={(e) => {
-													e.stopPropagation();
-													setOpenMenuId(
-														openMenuId === p.id
-															? null
-															: p.id
-													);
-												}}
-												className="p-2 rounded-md hover:bg-gray-100"
-												aria-haspopup="true"
-												aria-expanded={
-													openMenuId === p.id
-												}
-											>
-												<MoreVertical size={16} />
-											</button>
-
-											{openMenuId === p.id && (
-												<div className="absolute right-0 top-full mt-2 w-44 bg-white rounded-md shadow-lg border z-50">
-													<button
-														onClick={() => {
-															console.log(
-																"Refund",
-																p.tx
-															);
-															setOpenMenuId(null);
-														}}
-														className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
-													>
-														{" "}
-														<Download
-															size={14}
-															className="inline mr-2"
-														/>{" "}
-														Refund
-													</button>
-													<button
-														onClick={() => {
-															console.log(
-																"Details",
-																p.tx
-															);
-															setOpenMenuId(null);
-														}}
-														className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
-													>
-														{" "}
-														<FileText
-															size={14}
-															className="inline mr-2"
-														/>{" "}
-														Details
-													</button>
-												</div>
-											)}
+										<div className="text-sm font-medium text-gray-900">
+											{p.tx}
+										</div>
+										<div className="text-xs text-gray-400">
+											ch_1234
 										</div>
 									</td>
+									<td className="px-6 py-4 text-sm text-gray-600">
+										{itemsCount}
+									</td>
+									<td className="px-6 py-4 text-sm text-gray-600">
+										${p.amount.toFixed(2)}
+									</td>
+									<td className="px-6 py-4 text-center">
+										<span
+											className={`inline-block w-full py-2 text-xs font-medium text-white ${statusBg}`}
+										>
+											{statusText}
+										</span>
+									</td>
+									<td className="px-6 py-4 text-sm text-gray-600">
+										11/15/25
+									</td>
+									<td className="px-6 py-4 text-sm text-gray-600">
+										{p.method.includes("Card")
+											? "VISA Card"
+											: p.method}
+									</td>
 								</tr>
-							))}
-						</tbody>
-					</table>
-				</div>
+							);
+						})}
+					</tbody>
+				</table>
+			</div>
+
+			{/* Mobile View - Fallback to simple list if needed or keep existing cards but styled simpler */}
+			<div className="md:hidden space-y-4">
+				{filtered.map((p) => (
+					<div
+						key={p.id}
+						className="border rounded-lg p-4 bg-gray-50"
+					>
+						<div className="flex justify-between items-start mb-2">
+							<div>
+								<div className="font-semibold text-sm">
+									{p.tx}
+								</div>
+								<div className="text-xs text-gray-500">
+									11/15/25
+								</div>
+							</div>
+							<div
+								className={`px-2 py-1 text-xs text-white rounded ${
+									p.status === "Paid"
+										? "bg-green-500"
+										: "bg-red-500"
+								}`}
+							>
+								{p.status === "Paid" ? "Succeed" : "Failed"}
+							</div>
+						</div>
+						<div className="flex justify-between text-sm">
+							<span>Amount</span>
+							<span>${p.amount.toFixed(2)}</span>
+						</div>
+					</div>
+				))}
 			</div>
 		</div>
 	);
