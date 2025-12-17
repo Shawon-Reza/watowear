@@ -265,18 +265,26 @@ const ClosetManagementTable = () => {
 
 	return (
 		<div className="bg-white rounded-md shadow-sm p-4 sm:p-6">
-			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+			{/* Header Actions */}
+			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
 				<div className="flex items-center gap-3">
-					<div className="text-sm font-semibold text-[#6A6D57] border-b-2 border-[#6A6D57] pb-1">
+					<div className="text-sm font-semibold text-[#6A6D57] border-b-2 border-[#6A6D57] pb-1 cursor-pointer">
 						All Items
 					</div>
 				</div>
 
-				<div className="flex items-center gap-2">
-					<div className="flex items-center gap-2 text-sm text-gray-500 border rounded-lg px-3 py-2 bg-white">
-						<span>Sort by Date</span>
+				<div className="relative">
+					<select
+						className="appearance-none bg-white border border-gray-200 text-gray-700 py-2 pl-4 pr-8 rounded-lg text-sm focus:outline-none focus:border-[#6A6D57] cursor-pointer"
+						defaultValue="date"
+					>
+						<option value="date">Sort by Date</option>
+						<option value="name">Sort by Name</option>
+						<option value="status">Sort by Status</option>
+					</select>
+					<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
 						<svg
-							className="w-4 h-4"
+							className="h-4 w-4"
 							fill="none"
 							stroke="currentColor"
 							viewBox="0 0 24 24"
@@ -286,7 +294,7 @@ const ClosetManagementTable = () => {
 								strokeLinejoin="round"
 								strokeWidth="2"
 								d="M19 9l-7 7-7-7"
-							></path>
+							/>
 						</svg>
 					</div>
 				</div>
@@ -341,17 +349,27 @@ const ClosetManagementTable = () => {
 				<div className="overflow-auto">
 					<table className="w-full text-sm">
 						<thead>
-							<tr className="text-left text-xs text-gray-500 border-b">
-								<th className="px-4 py-3">Item</th>
-								<th className="px-4 py-3">Category</th>
-								<th className="px-4 py-3">Tags</th>
-								<th className="px-4 py-3">Uploaded By</th>
-								<th className="px-4 py-3">Status</th>
-								<th className="px-4 py-3">Date Added</th>
-								<th className="px-4 py-3">Actions</th>
+							<tr className="text-left text-xs text-gray-500 border-b border-gray-100">
+								<th className="px-4 py-4 font-normal">Item</th>
+								<th className="px-4 py-4 font-normal">
+									Category
+								</th>
+								<th className="px-4 py-4 font-normal">Tags</th>
+								<th className="px-4 py-4 font-normal">
+									Uploaded By
+								</th>
+								<th className="px-4 py-4 font-normal">
+									Status
+								</th>
+								<th className="px-4 py-4 font-normal">
+									Date Added
+								</th>
+								<th className="px-4 py-4 font-normal text-right">
+									Actions
+								</th>
 							</tr>
 						</thead>
-						<tbody className="divide-y">
+						<tbody className="divide-y divide-gray-50">
 							{loading ? (
 								<tr>
 									<td
@@ -376,47 +394,49 @@ const ClosetManagementTable = () => {
 										key={it.id}
 										className="hover:bg-gray-50"
 									>
-										<td className="px-4 py-3 flex items-center gap-3">
-											<div className="h-10 w-10 bg-gray-100 rounded-md flex-shrink-0" />
-											<div>
-												<div className="font-medium text-gray-800">
+										<td className="px-4 py-4">
+											<div className="flex items-center gap-3">
+												<div className="h-10 w-10 bg-gray-100 rounded-md flex-shrink-0" />
+												<div className="font-medium text-gray-800 text-xs">
 													{it.title}
 												</div>
 											</div>
 										</td>
-										<td className="px-4 py-3">
+										<td className="px-4 py-4 text-xs text-gray-600">
 											{it.category}
 										</td>
-										<td className="px-4 py-3">
-											{it.tags &&
-												it.tags.map((t, i) => (
-													<span
-														key={i}
-														className="inline-block bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full mr-1 text-xs"
-													>
-														{t}
-													</span>
-												))}
+										<td className="px-4 py-4">
+											<div className="flex flex-col gap-1">
+												{it.tags &&
+													it.tags.map((t, i) => (
+														<span
+															key={i}
+															className="inline-block bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-[10px] w-fit"
+														>
+															{t}
+														</span>
+													))}
+											</div>
 										</td>
-										<td className="px-4 py-3">
+										<td className="px-4 py-4 text-xs text-gray-600">
 											{it.uploadedBy}
 										</td>
-										<td className="px-4 py-3">
+										<td className="px-4 py-4">
 											<span
-												className={`px-2 py-1 rounded-full text-xs ${
+												className={`px-3 py-1 rounded-full text-[10px] font-medium border ${
 													it.status === "Uploaded"
-														? "bg-green-50 text-green-700"
-														: "bg-gray-100 text-gray-600"
+														? "bg-green-50 text-green-600 border-green-100"
+														: "bg-gray-100 text-gray-600 border-gray-200"
 												}`}
 											>
 												{it.status}
 											</span>
 										</td>
-										<td className="px-4 py-3">
+										<td className="px-4 py-4 text-xs text-gray-500">
 											{it.dateAdded}
 										</td>
-										<td className="px-4 py-3">
-											<div className="flex items-center gap-2">
+										<td className="px-4 py-4 text-right">
+											<div className="flex items-center justify-end gap-2">
 												<ActionMenu item={it} />
 											</div>
 										</td>
@@ -428,50 +448,29 @@ const ClosetManagementTable = () => {
 				</div>
 			</div>
 
-			{/* Pagination: Prev, 3 page numbers, Next */}
-			<div className="mt-4 flex items-center justify-end text-sm">
-				<div className="flex items-center gap-2">
+			{/* Pagination Footer */}
+			<div className="mt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500">
+				<div>
+					Showing {items.length > 0 ? (page - 1) * pageSize + 1 : 0}{" "}
+					to {Math.min(page * pageSize, total)} of {total} result
+				</div>
+				<div className="flex items-center gap-1 mt-4 sm:mt-0">
 					<button
 						onClick={() => handlePageChange(page - 1)}
 						disabled={page === 1}
-						className={`px-3 py-1 border rounded ${
-							page === 1
-								? "text-gray-300 border-gray-200"
-								: "text-gray-600 hover:bg-gray-50"
-						}`}
+						className={`w-8 h-8 flex items-center justify-center border rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed`}
 					>
-						Prev
+						&lt;
 					</button>
 
-					{/* three page numbers window */}
 					{(() => {
 						const maxButtons = 3;
-						if (totalPages <= maxButtons) {
-							return Array.from(
-								{ length: totalPages },
-								(_, i) => i + 1
-							).map((p) => (
-								<button
-									key={p}
-									onClick={() => handlePageChange(p)}
-									className={`w-10 h-8 rounded-md text-sm ${
-										p === page
-											? "bg-[#bfc986] text-gray-900 font-semibold"
-											: "border text-gray-600 hover:bg-gray-50"
-									}`}
-								>
-									{p}
-								</button>
-							));
-						}
-
-						// center the current page in the 3-button window when possible
 						let start = page - 1;
 						if (start < 1) start = 1;
 						let end = start + maxButtons - 1;
 						if (end > totalPages) {
 							end = totalPages;
-							start = totalPages - maxButtons + 1;
+							start = Math.max(1, totalPages - maxButtons + 1);
 						}
 
 						const buttons = [];
@@ -480,30 +479,25 @@ const ClosetManagementTable = () => {
 								<button
 									key={p}
 									onClick={() => handlePageChange(p)}
-									className={`w-10 h-8 rounded-md text-sm ${
+									className={`w-8 h-8 flex items-center justify-center border rounded ${
 										p === page
-											? "bg-[#bfc986] text-gray-900 font-semibold"
-											: "border text-gray-600 hover:bg-gray-50"
+											? "bg-[#D4D89A] text-black border-[#D4D89A]" // Updated active color match roughly
+											: "hover:bg-gray-50"
 									}`}
 								>
 									{p}
 								</button>
 							);
 						}
-
 						return buttons;
 					})()}
 
 					<button
 						onClick={() => handlePageChange(page + 1)}
 						disabled={page === totalPages}
-						className={`px-3 py-1 border rounded ${
-							page === totalPages
-								? "text-gray-300 border-gray-200"
-								: "text-gray-600 hover:bg-gray-50"
-						}`}
+						className={`w-8 h-8 flex items-center justify-center border rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed`}
 					>
-						Next
+						&gt;
 					</button>
 				</div>
 			</div>
