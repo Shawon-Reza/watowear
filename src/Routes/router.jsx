@@ -13,7 +13,6 @@ import Editorial from "../Pages/Dashboard/Editorial/Editorial";
 import ClosetManagement from "../Pages/Dashboard/ClosetManagement/ClosetManagement";
 import FashionLibraryManagement from "../Pages/Dashboard/ClosetManagement/FashionLibraryManagement";
 import IndividualCloset from "../Pages/Dashboard/ClosetManagement/IndividualCloset";
-import History from "../Pages/Dashboard/History/History";
 import Support from "../Pages/Dashboard/Support/Support";
 import UserManagement from "../Pages/Dashboard/UserManagement/UserManagement";
 import UserProfile from "../Pages/Dashboard/UserProfile/UserProfile";
@@ -95,10 +94,6 @@ export const router = createBrowserRouter([
 			{
 				path: "support",
 				element: <Support />,
-			},
-			{
-				path: "history",
-				element: <History />,
 			},
 		],
 	},
