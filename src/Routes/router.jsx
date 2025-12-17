@@ -17,7 +17,6 @@ import History from "../Pages/Dashboard/History/History";
 import Support from "../Pages/Dashboard/Support/Support";
 import UserManagement from "../Pages/Dashboard/UserManagement/UserManagement";
 import UserProfile from "../Pages/Dashboard/UserProfile/UserProfile";
-import RoleManagement from "../Pages/Dashboard/RoleManagement/RoleManagement";
 
 import PrivateRoute from "./PrivateRoute";
 
@@ -52,10 +51,6 @@ export const router = createBrowserRouter([
 			{
 				path: "user_management",
 				element: <UserManagement />,
-			},
-			{
-				path: "role_management",
-				element: <RoleManagement />,
 			},
 			{
 				path: "user_management/user_profile/:userId",

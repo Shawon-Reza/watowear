@@ -58,12 +58,6 @@ export default function Dashboard({ children }) {
 					],
 				},
 				{
-					name: "Role Management",
-					icon: <Shield size={20} />,
-					path: "/admin/role_management",
-					activePaths: ["/admin/role_management"],
-				},
-				{
 					name: "AI Performence",
 					icon: <LuBrain size={20} />,
 					path: "/admin/ai_performence",
