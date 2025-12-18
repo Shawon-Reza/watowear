@@ -88,12 +88,6 @@ export default function Dashboard({ children }) {
 					activePaths: ["/admin/support"],
 				},
 				{
-					name: "History",
-					icon: <BsChatSquareText size={20} />,
-					path: "/admin/history",
-					activePaths: ["/admin/history"],
-				},
-				{
 					name: "Editorial",
 					icon: <PiNotepad size={20} />,
 					path: "/admin/editorial",
