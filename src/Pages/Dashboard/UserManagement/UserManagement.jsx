@@ -5,7 +5,8 @@ import useUserStore from "../../../store/useUserStore";
 
 export default function UserManagement() {
 	const navigate = useNavigate();
-	const { users, count, fetchUsers, loading } = useUserStore();
+	const { users, count, fetchUsers, loading, updateUserStatus } =
+		useUserStore();
 	const [page, setPage] = useState(1);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [activeTab, setActiveTab] = useState("All Users");
@@ -31,10 +32,21 @@ export default function UserManagement() {
 		setOpenActionId(openActionId === id ? null : id);
 	};
 
-	const handleStatusChange = (id, newStatus) => {
-		// Placeholder for future status update API call
-		console.log(`Change user ${id} status to ${newStatus}`);
-		setOpenActionId(null);
+	const handleStatusChange = async (id, newStatus) => {
+		try {
+			// Map UI status to API status_action based on specific values allowed by the backend
+			let apiStatusAction = "";
+			if (newStatus === "Active") apiStatusAction = "reactivate";
+			else if (newStatus === "Inactive") apiStatusAction = "deactivate";
+			else if (newStatus === "Suspend") apiStatusAction = "suspend";
+
+			const success = await updateUserStatus(id, apiStatusAction);
+			if (success) {
+				setOpenActionId(null);
+			}
+		} catch (err) {
+			console.error("Status change failed", err);
+		}
 	};
 
 	const itemsPerPage = 6; // API might return different pageSize, need to adjust based on API or use API pagination directly.
@@ -63,8 +75,15 @@ export default function UserManagement() {
 		return u.status === activeTab;
 	});
 
+	const { error: storeError } = useUserStore();
+
 	return (
-		<div className="">
+		<div className="relative">
+			{storeError && (
+				<div className="fixed top-4 right-4 z-[100] bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl shadow-lg flex items-center gap-2">
+					<span>{storeError}</span>
+				</div>
+			)}
 			<div className="mx-auto space-y-6">
 				<div>
 					<h1 className="text-3xl font-bold text-[#222]">
@@ -353,45 +372,36 @@ export default function UserManagement() {
 													{openActionId === u.id && (
 														<div
 															ref={dropdownRef}
-															className="absolute right-8 top-12 z-50 w-40 bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden p-2 flex flex-col gap-1"
-															onClick={(e) =>
-																e.stopPropagation()
-															}
+															className="absolute right-8 top-12 z-[60] w-40 bg-white rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.2)] border border-gray-100 overflow-hidden p-2 flex flex-col gap-1"
 														>
 															{[
 																"Active",
 																"Inactive",
-																"Suspended",
+																"Suspend",
 															].map((status) => (
 																<button
 																	key={status}
+																	type="button"
 																	onClick={() =>
 																		handleStatusChange(
 																			u.id,
 																			status
 																		)
 																	}
-																	className={`w-full text-left px-4 py-2 rounded-lg text-sm transition-all font-medium
+																	className={`w-full text-left px-4 py-2 rounded-lg text-sm transition-all font-medium cursor-pointer
                                                                     ${
-																		u.status ===
-																		status
-																			? "bg-[#C4C9A2] text-[#2F3124]" // Matches the greenish Active look in image if selected
+																		u.status.toLowerCase() ===
+																			status.toLowerCase() ||
+																		(u.status ===
+																			"Suspended" &&
+																			status ===
+																				"Suspend")
+																			? "bg-[#C4C9A2] text-[#2F3124]"
 																			: "text-[#2F3124] hover:bg-gray-50"
-																	}
-                                                                    ${
-																		status ===
-																			"Active" &&
-																		u.status !==
-																			"Active"
-																			? "hover:bg-[#C4C9A2]/30"
-																			: ""
 																	}
                                                                 `}
 																>
-																	{status ===
-																	"Suspended"
-																		? "Suspend"
-																		: status}
+																	{status}
 																</button>
 															))}
 														</div>
