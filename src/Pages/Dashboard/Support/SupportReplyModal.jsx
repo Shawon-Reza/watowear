@@ -48,6 +48,17 @@ export default function SupportReplyModal({
 					/>
 				</div>
 
+				<div className="mb-3">
+					<label className="block text-sm text-[#374151]">
+						Message
+					</label>
+					<textarea
+						className="w-full border rounded px-3 py-2 mt-1 bg-white text-black h-20 resize-none outline-none"
+						value={supportItem?.message || ""}
+						readOnly
+					/>
+				</div>
+
 				<div className="mb-4">
 					<label className="block text-sm text-gray-600">
 						Your Reply
