@@ -27,7 +27,7 @@ export default function Support() {
 
 	// fetch data whenever filters change
 	useEffect(() => {
-		fetchTickets(page, tab === "All" ? "" : tab);
+		fetchTickets(page, tab === "Archived" ? "read" : "");
 	}, [tab, page, fetchTickets]);
 
 	// close action dropdown when clicking outside
