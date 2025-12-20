@@ -8,6 +8,7 @@ import {
 	Image as ImageIcon,
 	Pin,
 	Trash2,
+	Edit,
 } from "lucide-react";
 import { PiNotepad } from "react-icons/pi";
 import { useEffect, useState } from "react";
@@ -15,9 +16,16 @@ import useEditorialStore from "../../../store/useEditorialStore";
 import axiosClient from "../../../api/axiosClient";
 
 const Editorial = () => {
-	const { editorials, loading, error, fetchEditorials, createEditorial } =
-		useEditorialStore();
+	const {
+		editorials,
+		loading,
+		error,
+		fetchEditorials,
+		createEditorial,
+		updateEditorial,
+	} = useEditorialStore();
 	const [showForm, setShowForm] = useState(false);
+	const [editingId, setEditingId] = useState(null);
 
 	// Form State
 	const [mainData, setMainData] = useState({
@@ -134,6 +142,40 @@ const Editorial = () => {
 		setSubSections(subSections.filter((_, i) => i !== index));
 	};
 
+	const handleEdit = (editorial) => {
+		setEditingId(editorial.id);
+		setMainData({
+			title: editorial.title || "",
+			subline: editorial.subline || "",
+			category: editorial.category || "",
+			description: editorial.description || "",
+			status: editorial.status || "published",
+			tags: editorial.tags || [],
+			image: null,
+			imagePreview: editorial.image
+				? editorial.image.startsWith("http")
+					? editorial.image
+					: axiosClient.defaults.baseURL + editorial.image
+				: null,
+		});
+		setSubSections(
+			editorial.sub_sections?.map((sub) => ({
+				id: sub.id,
+				title: sub.title || "",
+				description: sub.description || "",
+				image: null,
+				imagePreview: sub.image
+					? sub.image.startsWith("http")
+						? sub.image
+						: axiosClient.defaults.baseURL + sub.image
+					: null,
+			})) || [
+				{ title: "", description: "", image: null, imagePreview: null },
+			]
+		);
+		setShowForm(true);
+	};
+
 	const handlePublish = async () => {
 		const fd = new FormData();
 		fd.append("title", mainData.title);
@@ -149,12 +191,20 @@ const Editorial = () => {
 			fd.append(`sub_sections[${index}][description]`, sub.description);
 			if (sub.image)
 				fd.append(`sub_sections[${index}][image]`, sub.image);
+			if (sub.id) fd.append(`sub_sections[${index}][id]`, sub.id);
 			fd.append(`sub_sections[${index}][order]`, index);
 		});
 
-		const res = await createEditorial(fd);
+		let res;
+		if (editingId) {
+			res = await updateEditorial(editingId, fd);
+		} else {
+			res = await createEditorial(fd);
+		}
+
 		if (res.success) {
 			setShowForm(false);
+			setEditingId(null);
 			// Reset form
 			setMainData({
 				title: "",
@@ -180,7 +230,7 @@ const Editorial = () => {
 				{/* Header */}
 				<div className="flex items-center justify-between">
 					<h1 className="text-2xl font-bold text-[#1B1B1B]">
-						Add New Editorial
+						{editingId ? "Edit Editorial" : "Add New Editorial"}
 					</h1>
 					<button
 						onClick={handlePublish}
@@ -188,7 +238,13 @@ const Editorial = () => {
 						className="bg-[#6A6D57] hover:bg-[#585a48] text-white px-6 py-2.5 rounded-lg font-bold transition-colors shadow-sm flex items-center gap-2 disabled:opacity-50"
 					>
 						<ImageIcon size={18} />
-						{loading ? "Publishing..." : "Publish"}
+						{loading
+							? editingId
+								? "Updating..."
+								: "Publishing..."
+							: editingId
+							? "Update"
+							: "Publish"}
 					</button>
 				</div>
 
@@ -470,7 +526,10 @@ const Editorial = () => {
 
 				{/* Back Button */}
 				<button
-					onClick={() => setShowForm(false)}
+					onClick={() => {
+						setShowForm(false);
+						setEditingId(null);
+					}}
 					className="text-gray-600 hover:text-gray-800 font-medium"
 				>
 					← Back to Editorial List
@@ -559,9 +618,19 @@ const Editorial = () => {
 									<h3 className="text-lg font-bold text-[#1B1B1B]">
 										{editorial.title}
 									</h3>
-									<span className="px-2 py-0.5 bg-[#6A6D57]/10 text-[#6A6D57] rounded text-[10px] font-bold uppercase tracking-wider">
-										{editorial.category}
-									</span>
+									<div className="flex items-center gap-2">
+										<button
+											onClick={() =>
+												handleEdit(editorial)
+											}
+											className="p-1.5 text-gray-400 hover:text-[#6A6D57] transition-colors"
+										>
+											<Edit size={16} />
+										</button>
+										<span className="px-2 py-0.5 bg-[#6A6D57]/10 text-[#6A6D57] rounded text-[10px] font-bold uppercase tracking-wider">
+											{editorial.category}
+										</span>
+									</div>
 								</div>
 								<p className="text-sm text-gray-600 line-clamp-3">
 									{editorial.description}

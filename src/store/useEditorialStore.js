@@ -32,12 +32,7 @@ const useEditorialStore = create((set, get) => ({
 		try {
 			const response = await axiosClient.post(
 				endpoints.EDITORIAL,
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-					},
-				}
+				formData
 			);
 			set((state) => ({
 				editorials: [response.data, ...state.editorials],
@@ -46,8 +41,46 @@ const useEditorialStore = create((set, get) => ({
 			return { success: true, data: response.data };
 		} catch (error) {
 			console.error("Error creating editorial:", error);
-			const errorMsg =
-				error.response?.data?.message || "Failed to create editorial";
+			let errorMsg = "Failed to create editorial";
+			if (error.response?.data) {
+				const data = error.response.data;
+				errorMsg =
+					data.message ||
+					data.detail ||
+					(typeof data === "object" ? JSON.stringify(data) : data);
+			}
+			set({
+				error: errorMsg,
+				loading: false,
+			});
+			return { success: false, error: errorMsg };
+		}
+	},
+
+	updateEditorial: async (id, formData) => {
+		set({ loading: true, error: null });
+		try {
+			const response = await axiosClient.patch(
+				`${endpoints.EDITORIAL}${id}/`,
+				formData
+			);
+			set((state) => ({
+				editorials: state.editorials.map((e) =>
+					e.id === id ? response.data : e
+				),
+				loading: false,
+			}));
+			return { success: true, data: response.data };
+		} catch (error) {
+			console.error("Error updating editorial:", error);
+			let errorMsg = "Failed to update editorial";
+			if (error.response?.data) {
+				const data = error.response.data;
+				errorMsg =
+					data.message ||
+					data.detail ||
+					(typeof data === "object" ? JSON.stringify(data) : data);
+			}
 			set({
 				error: errorMsg,
 				loading: false,
