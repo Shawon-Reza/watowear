@@ -1,180 +1,40 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-
-// Example shape expected from backend: { total: number, items: Array<ClosetItem> }
-// ClosetItem: { id, title, category, tags: [], uploadedBy, status, dateAdded, thumbnail }
-
-const SAMPLE_DATA = [
-	{
-		id: 1,
-		title: "Blue Denim Jacket",
-		category: "Outerwear",
-		tags: ["Casual", "Denim", "Spring"],
-		uploadedBy: "Emma Johnson",
-		status: "Uploaded",
-		dateAdded: "2023-10-15",
-		thumbnail: "",
-	},
-	{
-		id: 2,
-		title: "Black Leather Boots",
-		category: "Footwear",
-		tags: ["Winter", "Leather", "Formal"],
-		uploadedBy: "Michael Chen",
-		status: "Uploaded",
-		dateAdded: "2023-10-12",
-		thumbnail: "",
-	},
-	{
-		id: 3,
-		title: "White Cotton T-Shirt",
-		category: "Tops",
-		tags: ["Basic", "Summer", "Casual"],
-		uploadedBy: "Sophia Rodriguez",
-		status: "Uploaded",
-		dateAdded: "2023-10-10",
-		thumbnail: "",
-	},
-	{
-		id: 4,
-		title: "Gray Wool Sweater",
-		category: "Knitwear",
-		tags: ["Winter", "Warm", "Comfort"],
-		uploadedBy: "Daniel Carter",
-		status: "Uploaded",
-		dateAdded: "2023-09-29",
-		thumbnail: "",
-	},
-	{
-		id: 5,
-		title: "Floral Maxi Dress",
-		category: "Dresses",
-		tags: ["Summer", "Floral", "Elegant"],
-		uploadedBy: "Ava Patel",
-		status: "Uploaded",
-		dateAdded: "2023-10-08",
-		thumbnail: "",
-	},
-	{
-		id: 6,
-		title: "Navy Chino Pants",
-		category: "Bottoms",
-		tags: ["Casual", "Smart", "Cotton"],
-		uploadedBy: "Ethan Williams",
-		status: "Uploaded",
-		dateAdded: "2023-10-05",
-		thumbnail: "",
-	},
-];
+import useClosetStore from "../../../store/useClosetStore";
 
 const DEFAULT_PAGE_SIZE = 10;
 
 const ClosetManagementTable = () => {
-	const [items, setItems] = useState([]);
-	const [total, setTotal] = useState(0);
+	const {
+		items,
+		count: total,
+		loading,
+		error,
+		fetchClosetItems,
+	} = useClosetStore();
 	const [page, setPage] = useState(1);
-	const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(null);
+	const [pageSize] = useState(DEFAULT_PAGE_SIZE);
 
-	// Filters passed to backend - extend as needed
+	// Filters
 	const [filters, setFilters] = useState({
-		status: "all", // all, Uploaded, Archived
+		status: "all",
 		category: "all",
 		search: "",
 	});
 
-	// Build query params for API request
-	const buildQuery = (params) =>
-		Object.entries(params)
-			.filter(
-				([, v]) =>
-					v !== undefined && v !== null && v !== "" && v !== "all"
-			)
-			.map(
-				([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`
-			)
-			.join("&");
-
-	// Fetch function - expects backend endpoint that accepts page, pageSize and filter params
-	const fetchClosetItems = useCallback(
-		async ({
-			pageNumber = page,
-			size = pageSize,
-			filters: f = filters,
-		} = {}) => {
-			setLoading(true);
-			setError(null);
-
-			const params = {
-				page: pageNumber,
-				pageSize: size,
-				status: f.status,
-				category: f.category,
-				search: f.search,
-			};
-
-			// Console the outgoing query so you can verify values when integrating
-			console.log(
-				"[Closet] fetching page",
-				pageNumber,
-				"pageSize",
-				size,
-				"filters",
-				f
-			);
-
-			const q = buildQuery(params);
-			const url = `/api/closet${q ? `?${q}` : ""}`; // change to your real endpoint
-
-			try {
-				const controller = new AbortController();
-				const signal = controller.signal;
-
-				// NOTE: this fetch expects backend JSON shaped as { total, items }
-				const res = await fetch(url, { method: "GET", signal });
-
-				if (!res.ok) {
-					// If backend is not available yet, fallback to SAMPLE_DATA and log the error
-					throw new Error(`API responded with status ${res.status}`);
-				}
-
-				const data = await res.json();
-
-				// Console the response for debugging/integration
-				console.log("[Closet] API response", data);
-
-				setItems(Array.isArray(data.items) ? data.items : []);
-				setTotal(typeof data.total === "number" ? data.total : 0);
-			} catch (err) {
-				console.warn(
-					"[Closet] fetch error, using SAMPLE_DATA fallback:",
-					err.message
-				);
-				// Fallback: simulate pagination on SAMPLE_DATA so UI still works during integration
-				const all = SAMPLE_DATA;
-				const start = (pageNumber - 1) * size;
-				const paged = all.slice(start, start + size);
-				setItems(paged);
-				setTotal(all.length);
-				setError(err.message);
-			} finally {
-				setLoading(false);
-			}
-		},
-		[page, pageSize, filters]
-	);
-
-	// Initial + dependency-driven fetch
+	// Fetch items when page or filters change
 	useEffect(() => {
-		fetchClosetItems({ pageNumber: page, size: pageSize, filters });
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [page, pageSize, filters]);
+		fetchClosetItems(
+			page,
+			filters.search,
+			filters.status,
+			filters.category
+		);
+	}, [page, filters, fetchClosetItems]);
 
 	// Handler helpers
 	const handleFilterChange = (key, value) => {
-		console.log("[Closet] filter change", key, value);
 		setFilters((prev) => ({ ...prev, [key]: value }));
-		setPage(1); // reset to first page when filters change
+		setPage(1);
 	};
 
 	const handlePageChange = (newPage) => {
@@ -182,15 +42,6 @@ const ClosetManagementTable = () => {
 		const totalPages = Math.max(1, Math.ceil(total / pageSize));
 		if (newPage > totalPages) return;
 		setPage(newPage);
-	};
-
-	const handleArchive = async (id) => {
-		console.log("[Closet] archive item", id);
-		// Call backend archive endpoint here, then refetch the current page
-		// Example:
-		// await fetch(`/api/closet/${id}/archive`, { method: 'POST' })
-		// For now simulate immediate removal by refetching
-		fetchClosetItems({ pageNumber: page, size: pageSize, filters });
 	};
 
 	const totalPages = Math.max(1, Math.ceil(total / pageSize));
@@ -210,16 +61,13 @@ const ClosetManagementTable = () => {
 		}, []);
 
 		const handleView = () => {
-			console.log("[Closet] action view", item);
 			setOpen(false);
 		};
 		const handleEdit = () => {
-			console.log("[Closet] action edit", item);
 			setOpen(false);
 		};
 		const handleArchiveAction = () => {
-			console.log("[Closet] action archive", item);
-			handleArchive(item.id);
+			// handleArchive(item.id);
 			setOpen(false);
 		};
 
@@ -303,36 +151,52 @@ const ClosetManagementTable = () => {
 			{/* Mobile cards */}
 			<div className="md:hidden space-y-3">
 				{loading ? (
-					<div className="text-sm text-gray-500">Loading...</div>
+					<div className="text-sm text-gray-500 text-center py-4">
+						Loading...
+					</div>
+				) : error ? (
+					<div className="text-sm text-red-500 text-center py-4">
+						{error}
+					</div>
 				) : items.length === 0 ? (
-					<div className="text-sm text-gray-600">No items found</div>
+					<div className="text-sm text-gray-600 text-center py-4">
+						No items found
+					</div>
 				) : (
 					items.map((it) => (
 						<div
 							key={it.id}
 							className="p-3 bg-gray-50 rounded-md flex items-start justify-between"
 						>
-							<div>
-								<div className="text-sm font-semibold text-gray-800">
-									{it.title}
-								</div>
-								<div className="text-xs text-gray-500">
-									{it.category} • {it.uploadedBy}
-								</div>
-								<div className="mt-1 text-xs">
-									{it.tags &&
-										it.tags.map((t, i) => (
-											<span
-												key={i}
-												className="inline-block bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full mr-1 text-xs"
-											>
-												{t}
-											</span>
-										))}
+							<div className="flex gap-3">
+								<img
+									src={it.image_url}
+									alt={it.subcategory}
+									className="h-12 w-12 object-cover rounded bg-gray-100 flex-shrink-0"
+								/>
+								<div>
+									<div className="text-sm font-semibold text-gray-800">
+										{it.subcategory}
+									</div>
+									<div className="text-xs text-gray-500">
+										{it.category} •{" "}
+										{it.uploaded_by || "System"}
+									</div>
+									<div className="mt-1 flex flex-wrap gap-1">
+										{it.tags &&
+											it.tags.map((t, i) => (
+												<span
+													key={i}
+													className="inline-block bg-white text-gray-600 px-2 py-0.5 rounded-full border border-gray-100 text-[10px]"
+												>
+													{t}
+												</span>
+											))}
+									</div>
 								</div>
 							</div>
 							<div className="text-right">
-								<div className="text-xs text-gray-500">
+								<div className="text-[10px] text-gray-500 uppercase tracking-tight">
 									{it.status}
 								</div>
 								<div className="mt-2">
@@ -379,6 +243,15 @@ const ClosetManagementTable = () => {
 										Loading...
 									</td>
 								</tr>
+							) : error ? (
+								<tr>
+									<td
+										colSpan={7}
+										className="px-4 py-6 text-center text-red-500"
+									>
+										{error}
+									</td>
+								</tr>
 							) : items.length === 0 ? (
 								<tr>
 									<td
@@ -396,9 +269,13 @@ const ClosetManagementTable = () => {
 									>
 										<td className="px-4 py-4">
 											<div className="flex items-center gap-3">
-												<div className="h-10 w-10 bg-gray-100 rounded-md flex-shrink-0" />
+												<img
+													src={it.image_url}
+													alt={it.subcategory}
+													className="h-10 w-10 object-cover rounded bg-gray-100 flex-shrink-0"
+												/>
 												<div className="font-medium text-gray-800 text-xs">
-													{it.title}
+													{it.subcategory}
 												</div>
 											</div>
 										</td>
@@ -419,12 +296,13 @@ const ClosetManagementTable = () => {
 											</div>
 										</td>
 										<td className="px-4 py-4 text-xs text-gray-600">
-											{it.uploadedBy}
+											{it.uploaded_by || "System"}
 										</td>
 										<td className="px-4 py-4">
 											<span
 												className={`px-3 py-1 rounded-full text-[10px] font-medium border ${
-													it.status === "Uploaded"
+													it.status.toLowerCase() ===
+													"active"
 														? "bg-green-50 text-green-600 border-green-100"
 														: "bg-gray-100 text-gray-600 border-gray-200"
 												}`}
@@ -433,7 +311,11 @@ const ClosetManagementTable = () => {
 											</span>
 										</td>
 										<td className="px-4 py-4 text-xs text-gray-500">
-											{it.dateAdded}
+											{it.created_at
+												? new Date(
+														it.created_at
+												  ).toLocaleDateString()
+												: "N/A"}
 										</td>
 										<td className="px-4 py-4 text-right">
 											<div className="flex items-center justify-end gap-2">
@@ -452,7 +334,7 @@ const ClosetManagementTable = () => {
 			<div className="mt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500">
 				<div>
 					Showing {items.length > 0 ? (page - 1) * pageSize + 1 : 0}{" "}
-					to {Math.min(page * pageSize, total)} of {total} result
+					to {Math.min(page * pageSize, total)} of {total} results
 				</div>
 				<div className="flex items-center gap-1 mt-4 sm:mt-0">
 					<button
@@ -481,7 +363,7 @@ const ClosetManagementTable = () => {
 									onClick={() => handlePageChange(p)}
 									className={`w-8 h-8 flex items-center justify-center border rounded ${
 										p === page
-											? "bg-[#D4D89A] text-black border-[#D4D89A]" // Updated active color match roughly
+											? "bg-[#D4D89A] text-black border-[#D4D89A]"
 											: "hover:bg-gray-50"
 									}`}
 								>
