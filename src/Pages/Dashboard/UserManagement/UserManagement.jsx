@@ -61,12 +61,6 @@ export default function UserManagement() {
 		fetchUsers(page, searchTerm);
 	}, [page, searchTerm, fetchUsers]);
 
-	const engagementColor = (v) => {
-		if (v < 30) return "bg-red-500";
-		if (v < 80) return "bg-yellow-500";
-		return "bg-green-500";
-	};
-
 	// Filtering by status locally since API endpoint for status filtering wasn't provided yet
 	// Only filtering 'visible' list for now which might be just one page of data.
 	// Ideally this should be a backend filter.
@@ -176,23 +170,6 @@ export default function UserManagement() {
 														{u.closet_items_count}{" "}
 														items
 													</div>
-													<div className="flex items-center gap-3">
-														<div
-															className={`w-28 h-2.5 rounded-full bg-gray-200 overflow-hidden`}
-														>
-															<div
-																className={`${engagementColor(
-																	u.engagement
-																)} h-full rounded-full`}
-																style={{
-																	width: `${u.engagement}%`,
-																}}
-															/>
-														</div>
-														<div className="text-sm text-gray-900">
-															{u.engagement}%
-														</div>
-													</div>
 												</div>
 
 												<div className="mt-3 flex items-center justify-between">
@@ -243,9 +220,7 @@ export default function UserManagement() {
 										<th className="px-8 py-6 text-left text-sm font-bold text-[#6A6D57]">
 											Closet Items
 										</th>
-										<th className="px-8 py-6 text-left text-sm font-bold text-[#6A6D57]">
-											Engagement
-										</th>
+
 										<th className="px-8 py-6 text-left text-sm font-bold text-[#6A6D57]">
 											Last Login
 										</th>
@@ -302,22 +277,6 @@ export default function UserManagement() {
 
 											<td className="px-8 py-6 text-gray-900">
 												{u.closet_items_count}
-											</td>
-
-											<td className="px-8 py-6">
-												<div className="w-44 h-[10px] rounded-full bg-gray-200 overflow-hidden inline-block align-middle">
-													<div
-														className={`${engagementColor(
-															u.engagement
-														)} h-full rounded-full`}
-														style={{
-															width: `${u.engagement}%`,
-														}}
-													/>
-												</div>
-												<span className="ml-2 text-sm font-medium text-gray-900">
-													{u.engagement}%
-												</span>
 											</td>
 
 											<td className="px-8 py-6 text-gray-900">
