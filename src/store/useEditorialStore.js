@@ -5,6 +5,11 @@ import endpoints from "../api/endpoints";
 const useEditorialStore = create((set, get) => ({
 	editorials: [],
 	carouselImages: [],
+	stats: {
+		total_editorial: 0,
+		recent_editorial: 0,
+		old_editorial: 0,
+	},
 	loading: false,
 	error: null,
 
@@ -17,12 +22,30 @@ const useEditorialStore = create((set, get) => ({
 				? response.data
 				: response.data?.results || [];
 			set({ editorials: data, loading: false });
+			// Fetch stats whenever editorials are fetched to keep them in sync
+			get().fetchEditorialStats();
 		} catch (error) {
 			console.error("Error fetching editorials:", error);
 			set({
 				error:
 					error.response?.data?.message ||
 					"Failed to fetch editorials",
+				loading: false,
+			});
+		}
+	},
+
+	fetchEditorialStats: async () => {
+		set({ loading: true, error: null });
+		try {
+			const response = await axiosClient.get(endpoints.EDITORIAL_STATS);
+			set({ stats: response.data, loading: false });
+		} catch (error) {
+			console.error("Error fetching editorial stats:", error);
+			set({
+				error:
+					error.response?.data?.message ||
+					"Failed to fetch editorial stats",
 				loading: false,
 			});
 		}
@@ -55,6 +78,8 @@ const useEditorialStore = create((set, get) => ({
 				editorials: [response.data, ...state.editorials],
 				loading: false,
 			}));
+			// Refresh stats after creation
+			get().fetchEditorialStats();
 			return { success: true, data: response.data };
 		} catch (error) {
 			console.error("Error creating editorial:", error);
@@ -87,6 +112,8 @@ const useEditorialStore = create((set, get) => ({
 				),
 				loading: false,
 			}));
+			// Refresh stats after update
+			get().fetchEditorialStats();
 			return { success: true, data: response.data };
 		} catch (error) {
 			console.error("Error updating editorial:", error);
@@ -114,6 +141,8 @@ const useEditorialStore = create((set, get) => ({
 				editorials: state.editorials.filter((e) => e.id !== id),
 				loading: false,
 			}));
+			// Refresh stats after deletion
+			get().fetchEditorialStats();
 			return { success: true };
 		} catch (error) {
 			console.error("Error deleting editorial:", error);

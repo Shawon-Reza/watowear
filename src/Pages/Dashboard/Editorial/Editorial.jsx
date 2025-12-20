@@ -21,10 +21,12 @@ const Editorial = () => {
 	const {
 		editorials,
 		carouselImages,
+		stats: blogStats,
 		loading,
 		error,
 		fetchEditorials,
 		fetchCarouselImages,
+		fetchEditorialStats,
 		createEditorial,
 		updateEditorial,
 		deleteEditorial,
@@ -94,41 +96,26 @@ const Editorial = () => {
 	useEffect(() => {
 		fetchEditorials();
 		fetchCarouselImages();
-	}, [fetchEditorials, fetchCarouselImages]);
+		fetchEditorialStats();
+	}, [fetchEditorials, fetchCarouselImages, fetchEditorialStats]);
 
 	// Derive stats
 	const stats = [
 		{
 			title: "Total Editorial",
-			value: (editorials?.length || 0).toString(),
+			value: (blogStats?.total_editorial || 0).toString(),
 			icon: <PiNotepad size={20} className="text-white" />,
 			bg: "bg-[#4B84F1]",
 		},
 		{
 			title: "Recent Editorial",
-			value: (editorials || [])
-				.filter((e) => {
-					if (!e.published_at) return false;
-					const d = new Date(e.published_at);
-					const now = new Date();
-					const diff = (now - d) / (1000 * 60 * 60 * 24);
-					return diff < 7;
-				})
-				.length.toString(),
+			value: (blogStats?.recent_editorial || 0).toString(),
 			icon: <Check size={20} className="text-white" />,
 			bg: "bg-[#656A55]",
 		},
 		{
 			title: "Old Editorial",
-			value: (editorials || [])
-				.filter((e) => {
-					if (!e.published_at) return false;
-					const d = new Date(e.published_at);
-					const now = new Date();
-					const diff = (now - d) / (1000 * 60 * 60 * 24);
-					return diff >= 15; // Adjusted to match design context (Recent vs Old)
-				})
-				.length.toString(),
+			value: (blogStats?.old_editorial || 0).toString(),
 			icon: <PiClock size={20} className="text-white" />,
 			bg: "bg-[#FDB528]",
 		},
