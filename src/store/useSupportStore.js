@@ -46,10 +46,8 @@ const useSupportStore = create((set, get) => ({
 	updateTicketStatus: async (id, status) => {
 		set({ loading: true, error: null });
 		try {
-			// Assuming there's a PATCH endpoint for status update.
-			// Adjust if the backend expects something else.
-			const response = await axiosClient.patch(
-				`${endpoints.SUPPORT_TICKETS}${id}/`,
+			const response = await axiosClient.post(
+				`${endpoints.SUPPORT_TICKETS}${id}/status/`,
 				{
 					status,
 				}

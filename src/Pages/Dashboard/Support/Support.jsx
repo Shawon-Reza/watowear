@@ -315,7 +315,10 @@ export default function Support() {
 													</button>
 													<button
 														onClick={() => {
-															// Future implementation for archiving if needed
+															updateTicketStatus(
+																s.id,
+																"read"
+															);
 															setActionOpenId(
 																null
 															);
