@@ -88,6 +88,33 @@ const useEditorialStore = create((set, get) => ({
 			return { success: false, error: errorMsg };
 		}
 	},
+
+	deleteEditorial: async (id) => {
+		set({ loading: true, error: null });
+		try {
+			await axiosClient.delete(`${endpoints.EDITORIAL}${id}/`);
+			set((state) => ({
+				editorials: state.editorials.filter((e) => e.id !== id),
+				loading: false,
+			}));
+			return { success: true };
+		} catch (error) {
+			console.error("Error deleting editorial:", error);
+			let errorMsg = "Failed to delete editorial";
+			if (error.response?.data) {
+				const data = error.response.data;
+				errorMsg =
+					data.message ||
+					data.detail ||
+					(typeof data === "object" ? JSON.stringify(data) : data);
+			}
+			set({
+				error: errorMsg,
+				loading: false,
+			});
+			return { success: false, error: errorMsg };
+		}
+	},
 }));
 
 export default useEditorialStore;

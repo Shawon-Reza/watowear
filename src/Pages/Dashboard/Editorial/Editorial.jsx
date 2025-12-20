@@ -25,7 +25,17 @@ const Editorial = () => {
 		fetchEditorials,
 		createEditorial,
 		updateEditorial,
+		deleteEditorial,
 	} = useEditorialStore();
+
+	const handleDelete = async (id) => {
+		if (window.confirm("Are you sure you want to delete this blog?")) {
+			const result = await deleteEditorial(id);
+			if (!result.success) {
+				alert(result.error);
+			}
+		}
+	};
 	const [showForm, setShowForm] = useState(false);
 	const [editingId, setEditingId] = useState(null);
 
@@ -859,12 +869,24 @@ const Editorial = () => {
 									<h3 className="text-xl font-bold text-[#1B1B1B]">
 										{editorial.title}
 									</h3>
-									<button
-										onClick={() => handleEdit(editorial)}
-										className="p-1.5 text-gray-400 hover:text-[#6A6D57] transition-colors"
-									>
-										<Edit size={18} />
-									</button>
+									<div className="flex items-center gap-2">
+										<button
+											onClick={() =>
+												handleEdit(editorial)
+											}
+											className="p-1.5 text-gray-400 hover:text-[#6A6D57] transition-colors"
+										>
+											<Edit size={18} />
+										</button>
+										<button
+											onClick={() =>
+												handleDelete(editorial.id)
+											}
+											className="p-1.5 text-gray-400 hover:text-red-500 transition-colors"
+										>
+											<Trash2 size={18} />
+										</button>
+									</div>
 								</div>
 								<p className="text-sm text-gray-500 leading-relaxed line-clamp-4">
 									{editorial.description}
