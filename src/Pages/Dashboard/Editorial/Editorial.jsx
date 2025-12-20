@@ -20,13 +20,44 @@ import axiosClient from "../../../api/axiosClient";
 const Editorial = () => {
 	const {
 		editorials,
+		carouselImages,
 		loading,
 		error,
 		fetchEditorials,
+		fetchCarouselImages,
 		createEditorial,
 		updateEditorial,
 		deleteEditorial,
+		addCarouselImage,
+		deleteCarouselImage,
 	} = useEditorialStore();
+
+	const handleCarouselDelete = async (id) => {
+		if (
+			window.confirm(
+				"Are you sure you want to delete this image from carousel?"
+			)
+		) {
+			const result = await deleteCarouselImage(id);
+			if (result.success) {
+				alert("Carousel image deleted successfully!");
+			} else {
+				alert(result.error);
+			}
+		}
+	};
+
+	const handleCarouselUpload = async (e) => {
+		const file = e.target.files[0];
+		if (file) {
+			const result = await addCarouselImage(file);
+			if (result.success) {
+				alert("Carousel image added successfully!");
+			} else {
+				alert(result.error);
+			}
+		}
+	};
 
 	const handleDelete = async (id) => {
 		if (window.confirm("Are you sure you want to delete this blog?")) {
@@ -62,7 +93,8 @@ const Editorial = () => {
 
 	useEffect(() => {
 		fetchEditorials();
-	}, [fetchEditorials]);
+		fetchCarouselImages();
+	}, [fetchEditorials, fetchCarouselImages]);
 
 	// Derive stats
 	const stats = [
@@ -922,47 +954,64 @@ const Editorial = () => {
 				</h2>
 
 				<div className="flex gap-6 overflow-x-auto pb-6 scrollbar-hide">
-					{Array.isArray(editorials) &&
-						editorials
-							.filter((e, idx) => e.is_carousel || idx < 4)
-							.map((editorial, index) => (
-								<div
-									key={index}
-									className="relative flex-shrink-0 w-64 h-64 rounded-[2rem] overflow-hidden group shadow-lg"
+					{Array.isArray(carouselImages) &&
+						carouselImages.map((carousel, index) => (
+							<div
+								key={carousel.id || index}
+								className="relative flex-shrink-0 w-64 h-64 rounded-[2rem] overflow-hidden group shadow-lg"
+							>
+								<img
+									src={
+										carousel.image
+											? carousel.image.startsWith("http")
+												? carousel.image
+												: axiosClient.defaults.baseURL +
+												  carousel.image
+											: "https://via.placeholder.com/300"
+									}
+									alt={`Carousel ${index + 1}`}
+									className="w-full h-full object-cover"
+								/>
+								<button
+									onClick={() =>
+										handleCarouselDelete(carousel.id)
+									}
+									className="absolute top-3 right-3 p-1 bg-red-500 text-white rounded-full shadow-md z-10 transition-transform active:scale-95 group-hover:scale-110"
 								>
-									<img
-										src={
-											editorial.image
-												? editorial.image.startsWith(
-														"http"
-												  )
-													? editorial.image
-													: axiosClient.defaults
-															.baseURL +
-													  editorial.image
-												: "https://via.placeholder.com/300"
-										}
-										alt={`Carousel ${index + 1}`}
-										className="w-full h-full object-cover"
-									/>
-									<button className="absolute top-3 right-3 p-1 bg-red-500 text-white rounded-full shadow-md z-10 transition-transform active:scale-95 group-hover:scale-110">
-										<X size={16} strokeWidth={3} />
-									</button>
-								</div>
-							))}
+									<X size={16} strokeWidth={3} />
+								</button>
+							</div>
+						))}
 
 					{/* Add Image Button */}
-					<div className="flex-shrink-0 w-64 h-64 border-2 border-dashed border-gray-200 rounded-[2rem] flex flex-col items-center justify-center gap-3 hover:border-[#6A6D57] transition-all cursor-pointer bg-white group shadow-sm">
-						<div className="p-3 rounded-lg group-hover:bg-[#6A6D57]/5 transition-colors">
-							<ImageIcon
-								size={28}
-								className="text-gray-400 group-hover:text-[#6A6D57]"
-							/>
-						</div>
-						<span className="text-sm text-gray-500 font-bold group-hover:text-[#6A6D57]">
-							+ Add Image
-						</span>
-					</div>
+					{Array.isArray(carouselImages) &&
+						carouselImages.length < 5 && (
+							<div
+								onClick={() =>
+									document
+										.getElementById("carousel-upload")
+										.click()
+								}
+								className="flex-shrink-0 w-64 h-64 border-2 border-dashed border-gray-200 rounded-[2rem] flex flex-col items-center justify-center gap-3 hover:border-[#6A6D57] transition-all cursor-pointer bg-white group shadow-sm"
+							>
+								<input
+									id="carousel-upload"
+									type="file"
+									accept="image/*"
+									className="hidden"
+									onChange={handleCarouselUpload}
+								/>
+								<div className="p-3 rounded-lg group-hover:bg-[#6A6D57]/5 transition-colors">
+									<ImageIcon
+										size={28}
+										className="text-gray-400 group-hover:text-[#6A6D57]"
+									/>
+								</div>
+								<span className="text-sm text-gray-500 font-bold group-hover:text-[#6A6D57]">
+									+ Add Image
+								</span>
+							</div>
+						)}
 				</div>
 			</div>
 		</div>

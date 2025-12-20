@@ -4,6 +4,7 @@ import endpoints from "../api/endpoints";
 
 const useEditorialStore = create((set, get) => ({
 	editorials: [],
+	carouselImages: [],
 	loading: false,
 	error: null,
 
@@ -22,6 +23,22 @@ const useEditorialStore = create((set, get) => ({
 				error:
 					error.response?.data?.message ||
 					"Failed to fetch editorials",
+				loading: false,
+			});
+		}
+	},
+
+	fetchCarouselImages: async () => {
+		set({ loading: true, error: null });
+		try {
+			const response = await axiosClient.get(endpoints.CAROUSEL);
+			set({ carouselImages: response.data, loading: false });
+		} catch (error) {
+			console.error("Error fetching carousel images:", error);
+			set({
+				error:
+					error.response?.data?.message ||
+					"Failed to fetch carousel images",
 				loading: false,
 			});
 		}
@@ -101,6 +118,64 @@ const useEditorialStore = create((set, get) => ({
 		} catch (error) {
 			console.error("Error deleting editorial:", error);
 			let errorMsg = "Failed to delete editorial";
+			if (error.response?.data) {
+				const data = error.response.data;
+				errorMsg =
+					data.message ||
+					data.detail ||
+					(typeof data === "object" ? JSON.stringify(data) : data);
+			}
+			set({
+				error: errorMsg,
+				loading: false,
+			});
+			return { success: false, error: errorMsg };
+		}
+	},
+
+	addCarouselImage: async (imageFile) => {
+		set({ loading: true, error: null });
+		try {
+			const formData = new FormData();
+			formData.append("image", imageFile);
+			formData.append("order", 3);
+
+			await axiosClient.post(endpoints.CAROUSEL_ADD, formData);
+
+			// Refresh carousel images
+			await get().fetchCarouselImages();
+
+			return { success: true };
+		} catch (error) {
+			console.error("Error adding carousel image:", error);
+			let errorMsg = "Failed to add carousel image";
+			if (error.response?.data) {
+				const data = error.response.data;
+				errorMsg =
+					data.message ||
+					data.detail ||
+					(typeof data === "object" ? JSON.stringify(data) : data);
+			}
+			set({
+				error: errorMsg,
+				loading: false,
+			});
+			return { success: false, error: errorMsg };
+		}
+	},
+
+	deleteCarouselImage: async (id) => {
+		set({ loading: true, error: null });
+		try {
+			await axiosClient.delete(endpoints.CAROUSEL_DELETE(id));
+
+			// Refresh carousel images
+			await get().fetchCarouselImages();
+
+			return { success: true };
+		} catch (error) {
+			console.error("Error deleting carousel image:", error);
+			let errorMsg = "Failed to delete carousel image";
 			if (error.response?.data) {
 				const data = error.response.data;
 				errorMsg =
