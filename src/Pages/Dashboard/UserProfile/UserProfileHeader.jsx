@@ -1,19 +1,31 @@
-import { ArrowLeft, Calendar, MoreHorizontal } from "lucide-react";
+import { Calendar, MoreHorizontal } from "lucide-react";
+import useUserStore from "../../../store/useUserStore";
 
-const SAMPLE_USER = {
+const DEFAULT_USER = {
 	name: "Olivia Martinez",
 	email: "olivia.martinez@example.com",
 	joined: "Apr 17, 2022",
 	plan: "Plus Plan",
 	avatar: "https://i.pravatar.cc/96?img=47",
-	closetItems: 128,
-	purchasedItems: "N/A",
-	subscription: "Monthly",
-	accountStatus: "Active",
 };
 
 export default function UserProfileHeader() {
-	const u = SAMPLE_USER;
+	const { currentUser } = useUserStore();
+
+	const name = currentUser
+		? `${currentUser.name} ${currentUser.surname}`
+		: DEFAULT_USER.name;
+	const email = currentUser?.email || DEFAULT_USER.email;
+	const joined = currentUser?.date_joined
+		? new Date(currentUser.date_joined).toLocaleDateString("en-US", {
+				month: "short",
+				day: "numeric",
+				year: "numeric",
+		  })
+		: DEFAULT_USER.joined;
+	const avatar =
+		currentUser?.profile?.profile_image ||
+		"https://i.pravatar.cc/96?img=47";
 
 	return (
 		<div className="bg-[#6A6D57] rounded-xl p-8 text-white relative overflow-hidden">
@@ -26,13 +38,13 @@ export default function UserProfileHeader() {
 			<div className="flex flex-col items-center justify-center text-center">
 				<div className="relative mb-4">
 					<img
-						src={u.avatar}
+						src={avatar}
 						alt="avatar"
 						className="w-24 h-24 rounded-full ring-4 ring-white/20 shadow-lg object-cover"
 					/>
 				</div>
 
-				<h2 className="text-2xl font-semibold mb-1">{u.name}</h2>
+				<h2 className="text-2xl font-semibold mb-1">{name}</h2>
 				<div className="flex flex-col items-center gap-1 text-white/80 text-sm mb-6">
 					<div className="flex items-center gap-2">
 						<svg
@@ -47,11 +59,11 @@ export default function UserProfileHeader() {
 							<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
 							<polyline points="22,6 12,13 2,6" />
 						</svg>
-						<span>{u.email}</span>
+						<span>{email}</span>
 					</div>
 					<div className="flex items-center gap-2">
 						<Calendar size={14} />
-						<span>Joined {u.joined}</span>
+						<span>Joined {joined}</span>
 					</div>
 				</div>
 

@@ -1,14 +1,34 @@
 import { ArrowLeft, Box, CreditCard, Shirt, User } from "lucide-react";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import useUserStore from "../../../store/useUserStore";
 import UserProfileHeader from "./UserProfileHeader";
 import UserProfilePaymentHistory from "./UserProfilePaymentHistory";
 import UserProfileRecentActivity from "./UserProfileRecentActivity";
 
 const UserProfile = () => {
-	// Mock stats data
+	const navigate = useNavigate();
+	const { id } = useParams();
+	const {
+		currentUser,
+		currentUserStats,
+		fetchUserDetails,
+		fetchUserStats,
+		loading,
+	} = useUserStore();
+
+	useEffect(() => {
+		if (id) {
+			fetchUserDetails(id);
+			fetchUserStats(id);
+		}
+	}, [id, fetchUserDetails, fetchUserStats]);
+
+	// Map stats from API
 	const stats = [
 		{
 			label: "Closet Items",
-			value: "128",
+			value: currentUserStats?.user_closet_items || "0 items",
 			icon: <Shirt size={20} className="text-[#6A6D57]" />,
 		},
 		{
@@ -23,7 +43,10 @@ const UserProfile = () => {
 		},
 		{
 			label: "Account Status",
-			value: "Active",
+			value:
+				currentUserStats?.user_status ||
+				currentUser?.status ||
+				"Active",
 			icon: <User size={20} className="text-[#6A6D57]" />,
 		},
 	];
@@ -32,7 +55,10 @@ const UserProfile = () => {
 		<div className="space-y-8">
 			{/* Top Bar */}
 			<div>
-				<button className="inline-flex items-center gap-2 bg-[#6A6D57] text-white px-4 py-2 rounded-lg shadow-sm hover:bg-[#5a5d4a] transition-colors text-sm font-medium">
+				<button
+					onClick={() => navigate(-1)}
+					className="inline-flex items-center gap-2 bg-[#6A6D57] text-white px-4 py-2 rounded-lg shadow-sm hover:bg-[#5a5d4a] transition-colors text-sm font-medium"
+				>
 					<ArrowLeft size={16} />
 					<span>Back</span>
 				</button>

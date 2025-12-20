@@ -9,6 +9,8 @@ const useUserStore = create((set) => ({
 	previous: null,
 	loading: false,
 	error: null,
+	currentUser: null,
+	currentUserStats: null,
 
 	fetchUsers: async (page = 1, search = "") => {
 		set({ loading: true, error: null });
@@ -49,6 +51,11 @@ const useUserStore = create((set) => ({
 				users: state.users.map((user) =>
 					user.id == id ? updatedUser : user
 				),
+				// Also update currentUser if it's the same user
+				currentUser:
+					state.currentUser?.id == id
+						? updatedUser
+						: state.currentUser,
 			}));
 			return true;
 		} catch (error) {
@@ -59,6 +66,37 @@ const useUserStore = create((set) => ({
 					"Failed to update user status",
 			});
 			return false;
+		}
+	},
+
+	fetchUserDetails: async (id) => {
+		set({ loading: true, error: null, currentUser: null });
+		try {
+			const response = await axiosClient.get(`${endpoints.USERS}${id}/`);
+			set({ currentUser: response.data, loading: false });
+		} catch (error) {
+			console.error("Error fetching user details:", error);
+			set({
+				error:
+					error.response?.data?.message ||
+					"Failed to fetch user details",
+				loading: false,
+			});
+		}
+	},
+
+	fetchUserStats: async (id) => {
+		set({ error: null, currentUserStats: null });
+		try {
+			const response = await axiosClient.get(endpoints.USER_STATS(id));
+			set({ currentUserStats: response.data });
+		} catch (error) {
+			console.error("Error fetching user stats:", error);
+			set({
+				error:
+					error.response?.data?.message ||
+					"Failed to fetch user stats",
+			});
 		}
 	},
 }));
