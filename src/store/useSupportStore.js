@@ -48,14 +48,17 @@ const useSupportStore = create((set, get) => ({
 		try {
 			// Assuming there's a PATCH endpoint for status update.
 			// Adjust if the backend expects something else.
-			await axiosClient.patch(`${endpoints.SUPPORT_TICKETS}${id}/`, {
-				status,
-			});
+			const response = await axiosClient.patch(
+				`${endpoints.SUPPORT_TICKETS}${id}/`,
+				{
+					status,
+				}
+			);
 
-			// Update local state
+			// Update local state with response data
 			set((state) => ({
 				tickets: state.tickets.map((t) =>
-					t.id === id ? { ...t, status } : t
+					t.id === id ? response.data : t
 				),
 				loading: false,
 			}));
@@ -73,13 +76,20 @@ const useSupportStore = create((set, get) => ({
 	sendTicketReply: async (id, reply) => {
 		set({ loading: true, error: null });
 		try {
-			// Assuming a reply endpoint exists. If not, this might be a POST.
-			await axiosClient.post(`${endpoints.SUPPORT_TICKETS}${id}/reply/`, {
-				message: reply,
-			});
+			const response = await axiosClient.post(
+				`${endpoints.SUPPORT_TICKETS}${id}/reply/`,
+				{
+					message: reply,
+				}
+			);
 
-			// Refresh list or update local ticket
-			await get().fetchTickets();
+			// Update local ticket with response data (contains updated status and replies)
+			set((state) => ({
+				tickets: state.tickets.map((t) =>
+					t.id === id ? response.data : t
+				),
+				loading: false,
+			}));
 
 			return { success: true };
 		} catch (error) {

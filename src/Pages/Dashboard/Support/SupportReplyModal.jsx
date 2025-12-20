@@ -59,6 +59,33 @@ export default function SupportReplyModal({
 					/>
 				</div>
 
+				{supportItem?.replies && supportItem.replies.length > 0 && (
+					<div className="mb-4">
+						<label className="block text-sm text-gray-600 mb-2">
+							Previous Replies
+						</label>
+						<div className="max-h-40 overflow-y-auto space-y-3 p-2 bg-gray-50 rounded border">
+							{supportItem.replies.map((r) => (
+								<div key={r.id} className="text-xs">
+									<div className="flex justify-between text-gray-400 mb-1">
+										<span className="font-semibold text-gray-600">
+											{r.replier_email}
+										</span>
+										<span>
+											{new Date(
+												r.created_at
+											).toLocaleString()}
+										</span>
+									</div>
+									<p className="bg-white p-2 rounded border border-gray-100 text-gray-700 shadow-sm">
+										{r.message}
+									</p>
+								</div>
+							))}
+						</div>
+					</div>
+				)}
+
 				<div className="mb-4">
 					<label className="block text-sm text-gray-600">
 						Your Reply
