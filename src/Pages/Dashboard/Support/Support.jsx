@@ -2,126 +2,24 @@ import { useEffect, useMemo, useState } from "react";
 import { FaCheck, FaChevronDown, FaUserGroup } from "react-icons/fa6";
 import { HiDotsVertical } from "react-icons/hi";
 import { MdOutlineEmail, MdOutlineWatchLater } from "react-icons/md";
+import axiosClient from "../../../api/axiosClient";
+import useSupportStore from "../../../store/useSupportStore";
 import SupportReplyModal from "./SupportReplyModal";
 
-// Simulated backend data (initial fake data). Replace fetchSupportData to call real API.
-const FAKE_SUPPORT = [
-	{
-		id: "s1",
-		email: "john.doe@example.com",
-		subject: "Photo upload failed",
-		message: "Give a solution..",
-		photos: [],
-		date: "2023-06-12",
-		status: "Read",
-	},
-	{
-		id: "s2",
-		email: "jane.smith@example.com",
-		subject: "Photo upload failed",
-		message: "Give a solution..",
-		photos: [],
-		date: "2023-07-18",
-		status: "Unread",
-	},
-	{
-		id: "s3",
-		email: "mike.johnson@example.com",
-		subject: "Photo upload failed",
-		message: "Give a solution..",
-		photos: [],
-		date: "2023-05-30",
-		status: "Unread",
-	},
-	{
-		id: "s4",
-		email: "alex.brown@example.com",
-		subject: "Photo upload failed",
-		message: "Give a solution..",
-		photos: [],
-		date: "2023-07-05",
-		status: "Read",
-	},
-	{
-		id: "s5",
-		email: "emily.davis@example.com",
-		subject: "Photo upload failed",
-		message: "Give a solution..",
-		photos: [],
-		date: "2023-08-14",
-		status: "Read",
-	},
-	{
-		id: "s6",
-		email: "olivia.miller@example.com",
-		subject: "Photo upload failed",
-		message: "Give a solution..",
-		photos: [],
-		date: "2023-07-29",
-		status: "Read",
-	},
-	{
-		id: "s7",
-		email: "william.taylor@example.com",
-		subject: "Photo upload failed",
-		message: "Give a solution..",
-		photos: [],
-		date: "2023-05-15",
-		status: "Read",
-	},
-	{
-		id: "s8",
-		email: "sophia.anderson@example.com",
-		subject: "Photo upload failed",
-		message: "Give a solution..",
-		photos: [],
-		date: "2023-08-07",
-		status: "Unread",
-	},
-];
-
-// Simulated fetch - in real app replace this with fetch('/api/support?...')
-function fetchSupportData({
-	tab = "All",
-	page = 1,
-	pageSize = 8,
-	archived = false,
-} = {}) {
-	return new Promise((resolve) => {
-		setTimeout(() => {
-			let list = FAKE_SUPPORT.slice();
-			// archived flag example: treat none as archived in fake data
-			if (archived) list = [];
-
-			if (tab && tab !== "All") {
-				if (tab === "Archived") {
-					list = list.filter((s) => s.archived);
-				} else {
-					list = list.filter(
-						(s) =>
-							(s.status || "").toLowerCase() === tab.toLowerCase()
-					);
-				}
-			}
-
-			// No search or sort in simplified fetch for this view
-
-			const total = list.length;
-			const start = (page - 1) * pageSize;
-			const pageItems = list.slice(start, start + pageSize);
-
-			resolve({ total, items: pageItems });
-		}, 250);
-	});
-}
-
 export default function Support() {
+	const {
+		tickets,
+		count,
+		loading,
+		error,
+		fetchTickets,
+		updateTicketStatus,
+		sendTicketReply,
+	} = useSupportStore();
+
 	const [tab, setTab] = useState("All");
 	const [page, setPage] = useState(1);
 	const [pageSize] = useState(8);
-	const [items, setItems] = useState([]);
-	const [total, setTotal] = useState(0);
-	const [loading, setLoading] = useState(false);
 	const [archived, setArchived] = useState(false);
 	const [actionOpenId, setActionOpenId] = useState(null);
 	const [replyModalOpen, setReplyModalOpen] = useState(false);
@@ -129,26 +27,8 @@ export default function Support() {
 
 	// fetch data whenever filters change
 	useEffect(() => {
-		let mounted = true;
-		setLoading(true);
-		fetchSupportData({ tab, page, pageSize, archived }).then((res) => {
-			if (!mounted) return;
-			setItems(res.items);
-			setTotal(res.total);
-			setLoading(false);
-			console.log("Fetched support data:", {
-				tab,
-				page,
-				pageSize,
-				archived,
-				total: res.total,
-				items: res.items,
-			});
-		});
-		return () => {
-			mounted = false;
-		};
-	}, [tab, page, pageSize, archived]);
+		fetchTickets(page, tab === "All" ? "" : tab);
+	}, [tab, page, fetchTickets]);
 
 	// close action dropdown when clicking outside
 	useEffect(() => {
@@ -165,62 +45,34 @@ export default function Support() {
 		return () => document.removeEventListener("click", handleDocClick);
 	}, []);
 
-	const pageCount = Math.max(1, Math.ceil(total / pageSize));
+	const pageCount = Math.max(1, Math.ceil(count / pageSize));
 
-	const totalSubmitted = useMemo(() => FAKE_SUPPORT.length, []);
-	const recentSubmitted = useMemo(
-		() =>
-			FAKE_SUPPORT.filter((s) => {
-				// example: recent means last 30 days
-				const d = new Date(s.date);
-				return Date.now() - d.getTime() < 30 * 24 * 60 * 60 * 1000;
-			}).length,
-		[]
-	);
-	const readCount = useMemo(
-		() => FAKE_SUPPORT.filter((s) => s.status === "Read").length,
-		[]
-	);
-	const unreadCount = useMemo(
-		() => FAKE_SUPPORT.filter((s) => s.status === "Unread").length,
-		[]
-	);
+	const totalSubmitted = count;
+	const recentSubmitted = tickets.filter((s) => {
+		const d = new Date(s.created_at);
+		return Date.now() - d.getTime() < 30 * 24 * 60 * 60 * 1000;
+	}).length;
 
-	function handleToggleStatus(id) {
-		// locally toggle (for demo). In real app call API then refetch.
-		const idx = FAKE_SUPPORT.findIndex((s) => s.id === id);
-		if (idx >= 0) {
-			FAKE_SUPPORT[idx].status =
-				FAKE_SUPPORT[idx].status === "Read" ? "Unread" : "Read";
-			// refresh view
-			setPage(1);
-			console.log(
-				"Toggled status for",
-				id,
-				"now",
-				FAKE_SUPPORT[idx].status
-			);
-			// force refetch by updating state
-			setItems([]);
-			setTimeout(() => setPage(1), 10);
-		}
+	const readCount = tickets.filter((s) => s.status === "read").length;
+	const unreadCount = tickets.filter((s) => s.status === "unread").length;
+	const repliedCount = tickets.filter((s) => s.status === "replied").length;
+
+	async function handleToggleStatus(id, currentStatus) {
+		const newStatus = currentStatus === "unread" ? "read" : "unread";
+		await updateTicketStatus(id, newStatus);
 	}
 
 	function handleFetchMore() {
 		if (page < pageCount) setPage((p) => p + 1);
 	}
 
-	function handleSendReply({ id, reply }) {
-		console.log("Reply sent for", id, reply);
-		// demo: attach reply to FAKE_SUPPORT item
-		const idx = FAKE_SUPPORT.findIndex((s) => s.id === id);
-		if (idx >= 0) {
-			FAKE_SUPPORT[idx].reply = reply;
-			// you might want to mark as replied/read
-			FAKE_SUPPORT[idx].status = "Read";
-			// refresh current page
-			setItems([]);
-			setTimeout(() => setPage(1), 10);
+	async function handleSendReply({ id, reply }) {
+		const result = await sendTicketReply(id, reply);
+		if (result.success) {
+			alert("Reply sent successfully!");
+			setReplyModalOpen(false);
+		} else {
+			alert(result.error);
 		}
 	}
 
@@ -355,7 +207,7 @@ export default function Support() {
 										Loading...
 									</td>
 								</tr>
-							) : items.length === 0 ? (
+							) : tickets.length === 0 ? (
 								<tr>
 									<td
 										colSpan={7}
@@ -365,10 +217,10 @@ export default function Support() {
 									</td>
 								</tr>
 							) : (
-								items.map((s) => (
+								tickets.map((s) => (
 									<tr key={s.id} className="border-t">
 										<td className="py-4 px-4 align-middle text-[#111827]">
-											{s.email}
+											{s.user_email}
 										</td>
 										<td className="py-4 px-4 text-[#6B7280]">
 											{s.subject}
@@ -377,27 +229,49 @@ export default function Support() {
 											{s.message}
 										</td>
 										<td className="py-4 px-4">
-											{/* {s.photos && s.photos.length > 0 ? ( */}
-											<button className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-												View photo
-											</button>
-											{/* ) : (
+											{s.photo ? (
+												<button
+													onClick={() =>
+														window.open(
+															s.photo.startsWith(
+																"http"
+															)
+																? s.photo
+																: axiosClient
+																		.defaults
+																		.baseURL +
+																		s.photo,
+															"_blank"
+														)
+													}
+													className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded"
+												>
+													View photo
+												</button>
+											) : (
 												<span className="text-xs text-gray-400">
 													—
 												</span>
-											)} */}
+											)}
 										</td>
 										<td className="py-4 px-4 text-[#6B7280]">
-											{s.date}
+											{new Date(
+												s.created_at
+											).toLocaleDateString()}
 										</td>
 										<td className="py-4 px-4">
 											<button
 												onClick={() =>
-													handleToggleStatus(s.id)
+													handleToggleStatus(
+														s.id,
+														s.status
+													)
 												}
-												className={`px-3 py-1 rounded text-sm flex flex-row items-center justify-center ${
-													s.status === "Read"
+												className={`px-3 py-1 rounded text-sm flex flex-row items-center justify-center capitalize ${
+													s.status === "read"
 														? "bg-[#22C55E] text-white"
+														: s.status === "replied"
+														? "bg-blue-500 text-white"
 														: "bg-[#FF6361] text-white"
 												}`}
 											>
@@ -441,22 +315,7 @@ export default function Support() {
 													</button>
 													<button
 														onClick={() => {
-															const idx =
-																FAKE_SUPPORT.findIndex(
-																	(x) =>
-																		x.id ===
-																		s.id
-																);
-															if (idx >= 0) {
-																FAKE_SUPPORT[
-																	idx
-																].archived = true;
-																setPage(1);
-																console.log(
-																	"Archived",
-																	s.id
-																);
-															}
+															// Future implementation for archiving if needed
 															setActionOpenId(
 																null
 															);
@@ -478,9 +337,9 @@ export default function Support() {
 				{/* Footer / pagination */}
 				<div className="px-4 py-3 flex items-center justify-between text-sm text-gray-600">
 					<div>
-						Showing {items.length ? (page - 1) * pageSize + 1 : 0}{" "}
-						to {Math.min(total, page * pageSize)} of {total} result
-						{total !== 1 ? "s" : ""}
+						Showing {tickets.length ? (page - 1) * pageSize + 1 : 0}{" "}
+						to {Math.min(count, page * pageSize)} of {count} result
+						{count !== 1 ? "s" : ""}
 					</div>
 
 					<div className="flex items-center gap-2">

@@ -9,6 +9,7 @@ const endpoints = {
 	CAROUSEL_ADD: "/api/v1/editorial/carousel/add/",
 	CAROUSEL_DELETE: (id) => `/api/v1/editorial/carousel/${id}/delete/`,
 	EDITORIAL_STATS: "/api/v1/editorial/admin/statistics/",
+	SUPPORT_TICKETS: "/api/v1/support/admin/tickets/",
 };
 
 export default endpoints;
