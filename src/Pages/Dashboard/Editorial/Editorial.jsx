@@ -5,12 +5,14 @@ import {
 	Clock,
 	X,
 	ChevronDown,
+	ChevronUp,
 	Image as ImageIcon,
 	Pin,
 	Trash2,
 	Edit,
+	Check,
 } from "lucide-react";
-import { PiNotepad } from "react-icons/pi";
+import { PiNotepad, PiClock } from "react-icons/pi";
 import { useEffect, useState } from "react";
 import useEditorialStore from "../../../store/useEditorialStore";
 import axiosClient from "../../../api/axiosClient";
@@ -37,6 +39,9 @@ const Editorial = () => {
 		tags: [],
 		image: null,
 		imagePreview: null,
+		schedule: false,
+		date: "",
+		time: { hour: 10, minute: 0, period: "AM" },
 	});
 
 	const [subSections, setSubSections] = useState([
@@ -54,8 +59,8 @@ const Editorial = () => {
 		{
 			title: "Total Editorial",
 			value: (editorials?.length || 0).toString(),
-			icon: <PiNotepad size={24} className="text-blue-600" />,
-			bg: "bg-blue-100",
+			icon: <PiNotepad size={20} className="text-white" />,
+			bg: "bg-[#4B84F1]",
 		},
 		{
 			title: "Recent Editorial",
@@ -68,8 +73,8 @@ const Editorial = () => {
 					return diff < 7;
 				})
 				.length.toString(),
-			icon: <PiNotepad size={24} className="text-gray-600" />,
-			bg: "bg-gray-200",
+			icon: <Check size={20} className="text-white" />,
+			bg: "bg-[#656A55]",
 		},
 		{
 			title: "Old Editorial",
@@ -79,11 +84,11 @@ const Editorial = () => {
 					const d = new Date(e.published_at);
 					const now = new Date();
 					const diff = (now - d) / (1000 * 60 * 60 * 24);
-					return diff >= 30;
+					return diff >= 15; // Adjusted to match design context (Recent vs Old)
 				})
 				.length.toString(),
-			icon: <PiNotepad size={24} className="text-yellow-600" />,
-			bg: "bg-yellow-100",
+			icon: <PiClock size={20} className="text-white" />,
+			bg: "bg-[#FDB528]",
 		},
 	];
 
@@ -157,6 +162,9 @@ const Editorial = () => {
 					? editorial.image
 					: axiosClient.defaults.baseURL + editorial.image
 				: null,
+			schedule: editorial.schedule || false,
+			date: editorial.date || "",
+			time: editorial.time || { hour: 10, minute: 0, period: "AM" },
 		});
 		setSubSections(
 			editorial.sub_sections?.map((sub) => ({
@@ -228,31 +236,37 @@ const Editorial = () => {
 		return (
 			<div className="space-y-6">
 				{/* Header */}
-				<div className="flex items-center justify-between">
-					<h1 className="text-2xl font-bold text-[#1B1B1B]">
-						{editingId ? "Edit Editorial" : "Add New Editorial"}
-					</h1>
-					<button
-						onClick={handlePublish}
-						disabled={loading}
-						className="bg-[#6A6D57] hover:bg-[#585a48] text-white px-6 py-2.5 rounded-lg font-bold transition-colors shadow-sm flex items-center gap-2 disabled:opacity-50"
-					>
-						<ImageIcon size={18} />
-						{loading
-							? editingId
-								? "Updating..."
-								: "Publishing..."
-							: editingId
-							? "Update"
-							: "Publish"}
-					</button>
+				<div className="space-y-1">
+					<p className="text-sm text-gray-500 font-medium">
+						Hi Admin !
+					</p>
+					<p className="text-xs text-gray-400">
+						Let's make your work easy
+					</p>
+					<div className="flex items-center justify-between mt-4">
+						<h1 className="text-2xl font-bold text-[#1B1B1B]">
+							{editingId ? "Edit Editorial" : "Add New Editorial"}
+						</h1>
+						<button
+							onClick={handlePublish}
+							disabled={loading}
+							className="bg-[#6A6D57] hover:bg-[#585a48] text-white px-8 py-2.5 rounded-lg font-bold transition-colors shadow-sm flex items-center gap-2 disabled:opacity-50"
+						>
+							<ImageIcon size={18} />
+							{loading
+								? editingId
+									? "Updating..."
+									: "Publishing..."
+								: "Publish"}
+						</button>
+					</div>
 				</div>
 
-				{/* Form */}
-				<div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8 space-y-6">
+				{/* Form Container */}
+				<div className="bg-white rounded-[2rem] border border-gray-100 shadow-xl shadow-gray-200/50 p-10 space-y-8">
 					{/* Main Blog Title */}
-					<div>
-						<label className="block text-sm font-medium text-gray-700 mb-2">
+					<div className="space-y-2">
+						<label className="block text-sm font-bold text-[#1B1B1B]">
 							Add Main Blog Title
 						</label>
 						<input
@@ -265,14 +279,14 @@ const Editorial = () => {
 								})
 							}
 							placeholder="Enter title"
-							className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#6A6D57]/20 focus:border-[#6A6D57]"
+							className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm placeholder:text-gray-300 focus:outline-none focus:border-[#6A6D57]"
 						/>
 					</div>
 
 					{/* Subtitle */}
-					<div>
-						<label className="block text-sm font-medium text-gray-700 mb-2">
-							Add subtitle (if any)
+					<div className="space-y-2">
+						<label className="block text-sm font-bold text-[#1B1B1B]">
+							Add subline ( If any )
 						</label>
 						<input
 							type="text"
@@ -284,13 +298,13 @@ const Editorial = () => {
 								})
 							}
 							placeholder="Enter title"
-							className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#6A6D57]/20 focus:border-[#6A6D57]"
+							className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm placeholder:text-gray-300 focus:outline-none focus:border-[#6A6D57]"
 						/>
 					</div>
 
 					{/* Category */}
-					<div>
-						<label className="block text-sm font-medium text-gray-700 mb-2">
+					<div className="space-y-2">
+						<label className="block text-sm font-bold text-[#1B1B1B]">
 							Add Category
 						</label>
 						<div className="relative">
@@ -302,28 +316,44 @@ const Editorial = () => {
 										category: e.target.value,
 									})
 								}
-								className="appearance-none w-full px-4 py-3 border border-gray-200 rounded-lg text-sm text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#6A6D57]/20 focus:border-[#6A6D57] bg-white"
+								className={`appearance-none w-full px-4 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#6A6D57] bg-white ${
+									mainData.category
+										? "text-[#1B1B1B]"
+										: "text-gray-300"
+								}`}
 							>
 								<option value="">Chose category</option>
+								<option value="LATEST">Latest</option>
 								<option value="STYLE_&_SELF">
 									Style & Self
 								</option>
-								<option value="FASHION">Fashion</option>
-								<option value="LIFESTYLE">Lifestyle</option>
+								<option value="MINDFUL_FASHION_&_SUSTAINABILITY">
+									Mindful Fashion & Sustainability
+								</option>
+								<option value="CLOSET_CURATION">
+									Closet Curation
+								</option>
+								<option value="INSPIRATION_&_STORIES">
+									Inspiration & Stories
+								</option>
+								<option value="HOW_TO_&_FEATURE_GUIDES">
+									How-to & Feature Guides
+								</option>
+								<option value="OTHER">Other</option>
 							</select>
 							<ChevronDown
-								className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none"
-								size={16}
+								className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+								size={18}
 							/>
 						</div>
 					</div>
 
 					{/* Tags */}
-					<div>
-						<label className="block text-sm font-medium text-gray-700 mb-2">
+					<div className="space-y-2">
+						<label className="block text-sm font-bold text-[#1B1B1B]">
 							Add Tags
 						</label>
-						<div className="flex gap-2 mb-3">
+						<div className="flex gap-2">
 							<input
 								type="text"
 								value={newTag}
@@ -332,44 +362,43 @@ const Editorial = () => {
 									e.key === "Enter" && handleAddTag()
 								}
 								placeholder="Enter tags"
-								className="flex-1 px-4 py-3 border border-gray-200 rounded-lg text-sm placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#6A6D57]/20 focus:border-[#6A6D57]"
+								className="flex-1 px-4 py-3 border border-gray-200 rounded-lg text-sm placeholder:text-gray-300 focus:outline-none focus:border-[#6A6D57]"
 							/>
 							<button
 								onClick={handleAddTag}
-								className="px-6 py-3 bg-[#6A6D57] hover:bg-[#585a48] text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+								className="px-6 py-3 bg-[#6A6D57] hover:bg-[#585a48] text-white rounded-lg font-bold transition-colors flex items-center gap-2"
 							>
-								<Plus size={18} />
-								Add
+								+ Add
 							</button>
 						</div>
-						<div className="flex flex-wrap gap-2">
+						<div className="flex flex-wrap gap-3 mt-2">
 							{mainData.tags.map((tag, index) => (
 								<span
 									key={index}
-									className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 text-gray-700 rounded text-sm"
+									className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#F5F5F5] text-gray-400 rounded-full text-xs font-medium border border-gray-100"
 								>
 									{tag}
 									<button
 										onClick={() => handleRemoveTag(tag)}
-										className="text-red-500 hover:text-red-700"
+										className="text-red-400 hover:text-red-600"
 									>
-										<X size={14} />
+										<X size={12} strokeWidth={3} />
 									</button>
 								</span>
 							))}
 						</div>
 					</div>
 
-					{/* Add Image */}
-					<div>
-						<label className="block text-sm font-medium text-gray-700 mb-2">
+					{/* Add Image area */}
+					<div className="space-y-2">
+						<label className="block text-sm font-bold text-[#1B1B1B]">
 							Add Image
 						</label>
 						<div
 							onClick={() =>
 								document.getElementById("main-image").click()
 							}
-							className="border-2 border-dashed border-gray-200 rounded-lg p-12 text-center hover:border-[#6A6D57] transition-colors cursor-pointer relative"
+							className="border border-gray-100 rounded-[1.5rem] p-12 text-center hover:border-[#6A6D57] transition-all cursor-pointer relative bg-white shadow-sm"
 						>
 							<input
 								id="main-image"
@@ -379,34 +408,36 @@ const Editorial = () => {
 								className="hidden"
 							/>
 							{mainData.imagePreview ? (
-								<div className="absolute inset-0 p-2">
+								<div className="absolute inset-0 p-4">
 									<img
 										src={mainData.imagePreview}
 										alt="preview"
-										className="w-full h-full object-contain rounded-lg"
+										className="w-full h-full object-contain rounded-xl"
 									/>
 								</div>
 							) : (
-								<div className="flex flex-col items-center justify-center gap-3">
-									<ImageIcon
-										size={40}
-										className="text-gray-400"
-									/>
-									<span className="text-gray-500 font-medium">
-										Browse Images
-									</span>
+								<div className="flex flex-col items-center justify-center">
+									<div className="w-full py-10 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center gap-3">
+										<ImageIcon
+											size={32}
+											className="text-gray-400"
+										/>
+										<span className="text-sm text-gray-500 font-bold">
+											Browse Images
+										</span>
+									</div>
 								</div>
 							)}
 						</div>
 					</div>
 
 					{/* Blog Description */}
-					<div>
-						<label className="block text-sm font-medium text-gray-700 mb-2">
+					<div className="space-y-2">
+						<label className="block text-sm font-bold text-[#1B1B1B]">
 							Blog Description
 						</label>
 						<textarea
-							rows={6}
+							rows={8}
 							value={mainData.description}
 							onChange={(e) =>
 								setMainData({
@@ -415,29 +446,221 @@ const Editorial = () => {
 								})
 							}
 							placeholder="Enter description"
-							className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#6A6D57]/20 focus:border-[#6A6D57] resize-none"
+							className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm placeholder:text-gray-300 focus:outline-none focus:border-[#6A6D57] resize-none"
 						/>
 					</div>
 
+					{/* Schedule Post Section */}
+					<div className="space-y-6 pt-4">
+						<div className="flex items-center gap-3">
+							<input
+								type="checkbox"
+								id="schedule"
+								checked={mainData.schedule}
+								onChange={(e) =>
+									setMainData({
+										...mainData,
+										schedule: e.target.checked,
+									})
+								}
+								className="w-4 h-4 rounded border-gray-300 text-[#6A6D57] focus:ring-[#6A6D57]"
+							/>
+							<label
+								htmlFor="schedule"
+								className="text-sm font-bold text-[#1B1B1B]"
+							>
+								Schedule Post
+							</label>
+						</div>
+
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+							<div className="space-y-2">
+								<label className="block text-sm text-[#1B1B1B] font-medium">
+									Date
+								</label>
+								<div className="relative">
+									<input
+										type="text"
+										value={mainData.date}
+										onChange={(e) =>
+											setMainData({
+												...mainData,
+												date: e.target.value,
+											})
+										}
+										placeholder="select date"
+										className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm placeholder:text-gray-300 focus:outline-none focus:border-[#6A6D57]"
+									/>
+									<Calendar
+										className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300"
+										size={18}
+									/>
+								</div>
+							</div>
+
+							<div className="space-y-2">
+								<label className="block text-sm text-[#1B1B1B] font-medium">
+									Time
+								</label>
+								<div className="flex items-center gap-4">
+									<div className="flex items-center gap-2">
+										<div className="flex flex-col items-center">
+											<button
+												onClick={() =>
+													setMainData({
+														...mainData,
+														time: {
+															...mainData.time,
+															hour:
+																(mainData.time
+																	.hour %
+																	12) +
+																1,
+														},
+													})
+												}
+												className="text-gray-300 hover:text-gray-500"
+											>
+												<ChevronUp size={16} />
+											</button>
+											<span className="text-xl font-medium text-[#6A6D57] tabular-nums">
+												{mainData.time.hour
+													.toString()
+													.padStart(2, "0")}
+											</span>
+											<button
+												onClick={() =>
+													setMainData({
+														...mainData,
+														time: {
+															...mainData.time,
+															hour:
+																mainData.time
+																	.hour > 1
+																	? mainData
+																			.time
+																			.hour -
+																	  1
+																	: 12,
+														},
+													})
+												}
+												className="text-gray-300 hover:text-gray-500"
+											>
+												<ChevronDown size={16} />
+											</button>
+										</div>
+										<span className="text-xl font-medium text-gray-300">
+											:
+										</span>
+										<div className="flex flex-col items-center">
+											<button
+												onClick={() =>
+													setMainData({
+														...mainData,
+														time: {
+															...mainData.time,
+															minute:
+																(mainData.time
+																	.minute +
+																	5) %
+																60,
+														},
+													})
+												}
+												className="text-gray-300 hover:text-gray-500"
+											>
+												<ChevronUp size={16} />
+											</button>
+											<span className="text-xl font-medium text-gray-300 tabular-nums">
+												{mainData.time.minute
+													.toString()
+													.padStart(2, "0")}
+											</span>
+											<button
+												onClick={() =>
+													setMainData({
+														...mainData,
+														time: {
+															...mainData.time,
+															minute:
+																mainData.time
+																	.minute >= 5
+																	? mainData
+																			.time
+																			.minute -
+																	  5
+																	: 55,
+														},
+													})
+												}
+												className="text-gray-300 hover:text-gray-500"
+											>
+												<ChevronDown size={16} />
+											</button>
+										</div>
+									</div>
+
+									<div className="flex items-center border border-gray-100 rounded-lg overflow-hidden h-10 ml-2">
+										<button
+											onClick={() =>
+												setMainData({
+													...mainData,
+													time: {
+														...mainData.time,
+														period: "AM",
+													},
+												})
+											}
+											className={`px-3 h-full text-xs font-bold transition-colors ${
+												mainData.time.period === "AM"
+													? "bg-[#6A6D57] text-white"
+													: "bg-white text-gray-400"
+											}`}
+										>
+											AM
+										</button>
+										<button
+											onClick={() =>
+												setMainData({
+													...mainData,
+													time: {
+														...mainData.time,
+														period: "PM",
+													},
+												})
+											}
+											className={`px-3 h-full text-xs font-bold transition-colors ${
+												mainData.time.period === "PM"
+													? "bg-[#6A6D57] text-white"
+													: "bg-white text-gray-400"
+											}`}
+										>
+											PM
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
 					{/* Sub Sections */}
-					<div className="space-y-4">
-						<h3 className="text-lg font-bold text-gray-800">
-							Sub Sections
-						</h3>
+					<div className="space-y-6">
 						{subSections.map((sub, index) => (
 							<div
 								key={index}
-								className="p-4 border border-gray-200 rounded-xl space-y-4 relative bg-gray-50/30"
+								className="bg-[#F9F9F9] rounded-[1.5rem] border border-gray-100 p-8 space-y-6 relative shadow-sm"
 							>
 								<button
 									onClick={() => removeSubSection(index)}
-									className="absolute top-4 right-4 text-red-400 hover:text-red-600"
+									className="absolute top-4 right-4 text-red-300 hover:text-red-500 p-2 transition-colors"
 								>
-									<Trash2 size={18} />
+									<Trash2 size={20} />
 								</button>
-								<div>
-									<label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
-										Title
+
+								<div className="space-y-2">
+									<label className="block text-sm font-bold text-[#1B1B1B]">
+										Sub Section Title
 									</label>
 									<input
 										type="text"
@@ -449,31 +672,14 @@ const Editorial = () => {
 												e.target.value
 											)
 										}
-										placeholder="Step title"
-										className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#6A6D57]"
+										placeholder="Enter title"
+										className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm placeholder:text-gray-300 focus:outline-none focus:border-[#6A6D57] bg-white"
 									/>
 								</div>
-								<div>
-									<label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
-										Description
-									</label>
-									<textarea
-										value={sub.description}
-										onChange={(e) =>
-											handleSubSectionChange(
-												index,
-												"description",
-												e.target.value
-											)
-										}
-										placeholder="Detailed description..."
-										className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#6A6D57] resize-none"
-										rows={3}
-									/>
-								</div>
-								<div>
-									<label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
-										Image
+
+								<div className="space-y-2">
+									<label className="block text-sm font-bold text-[#1B1B1B]">
+										Sub Section Image
 									</label>
 									<div
 										onClick={() =>
@@ -483,7 +689,7 @@ const Editorial = () => {
 												)
 												.click()
 										}
-										className="border border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer bg-white"
+										className="border border-dashed border-gray-200 rounded-xl p-8 text-center hover:border-[#6A6D57] transition-all cursor-pointer bg-white"
 									>
 										<input
 											id={`sub-image-${index}`}
@@ -498,157 +704,185 @@ const Editorial = () => {
 											}
 										/>
 										{sub.imagePreview ? (
-											<img
-												src={sub.imagePreview}
-												alt="sub-preview"
-												className="h-20 mx-auto object-contain rounded"
-											/>
+											<div className="relative h-40">
+												<img
+													src={sub.imagePreview}
+													alt="sub-preview"
+													className="h-full mx-auto object-contain rounded-lg"
+												/>
+											</div>
 										) : (
-											<span className="text-xs text-gray-400">
-												Click to upload image
-											</span>
+											<div className="flex flex-col items-center gap-2 py-4">
+												<ImageIcon
+													size={28}
+													className="text-gray-400"
+												/>
+												<span className="text-xs text-gray-400 font-bold">
+													Browse Images
+												</span>
+											</div>
 										)}
 									</div>
+								</div>
+
+								<div className="space-y-2">
+									<label className="block text-sm font-bold text-[#1B1B1B]">
+										Sub Section Description
+									</label>
+									<textarea
+										rows={4}
+										value={sub.description}
+										onChange={(e) =>
+											handleSubSectionChange(
+												index,
+												"description",
+												e.target.value
+											)
+										}
+										placeholder="Enter description"
+										className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm placeholder:text-gray-300 focus:outline-none focus:border-[#6A6D57] bg-white resize-none"
+									/>
 								</div>
 							</div>
 						))}
 					</div>
 
-					{/* Add Sub Section */}
+					{/* Add Sub Section Button */}
 					<button
 						onClick={addSubSection}
-						className="w-full py-4 border-2 border-dashed border-gray-200 rounded-lg text-gray-500 font-medium hover:border-[#6A6D57] hover:text-[#6A6D57] transition-colors flex items-center justify-center gap-2"
+						className="w-full py-4 border-2 border-[#6A6D57] rounded-xl text-[#6A6D57] font-bold hover:bg-[#6A6D57]/5 transition-all flex items-center justify-center gap-2 mt-4"
 					>
-						<Plus size={18} />
-						Add Sub Section
+						+ Add Sub Section
 					</button>
 				</div>
 
-				{/* Back Button */}
-				<button
-					onClick={() => {
-						setShowForm(false);
-						setEditingId(null);
-					}}
-					className="text-gray-600 hover:text-gray-800 font-medium"
-				>
-					← Back to Editorial List
-				</button>
+				{/* Back Link */}
+				<div className="flex justify-start">
+					<button
+						onClick={() => {
+							setShowForm(false);
+							setEditingId(null);
+						}}
+						className="text-gray-400 hover:text-gray-600 font-medium transition-colors"
+					>
+						← Back to Editorial List
+					</button>
+				</div>
 			</div>
 		);
 	}
 
 	return (
-		<div className="space-y-8">
+		<div className="space-y-6">
 			{/* Header */}
-			<div className="flex items-center justify-between">
-				<h1 className="text-2xl font-bold text-[#1B1B1B]">
+			<div className="space-y-1">
+				<p className="text-sm text-gray-500 font-medium">Hi Admin !</p>
+				<p className="text-xs text-gray-400">
+					Let's make your work easy
+				</p>
+				<h1 className="text-2xl font-bold text-[#1B1B1B] mt-4">
 					Editorial Management
 				</h1>
+			</div>
+
+			{/* Stats Cards & Add Button */}
+			<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+				{stats.map((stat, index) => (
+					<div
+						key={index}
+						className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4"
+					>
+						<div
+							className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${stat.bg}`}
+						>
+							{stat.icon}
+						</div>
+						<div>
+							<p className="text-[11px] font-medium text-gray-400">
+								{stat.title}
+							</p>
+							<h3 className="text-lg font-bold text-[#1B1B1B]">
+								{stat.value}
+							</h3>
+						</div>
+					</div>
+				))}
 				<button
 					onClick={() => setShowForm(true)}
-					className="bg-[#6A6D57] hover:bg-[#585a48] text-white px-6 py-2.5 rounded-lg font-bold transition-colors shadow-sm flex items-center gap-2"
+					className="bg-[#6A6D57] hover:bg-[#585a48] text-white rounded-xl font-bold transition-colors shadow-sm flex items-center justify-center gap-2 h-full py-4 md:py-0"
 				>
 					<Plus size={18} />
 					Add New Editorial
 				</button>
 			</div>
 
-			{/* Stats Cards */}
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-				{stats.map((stat, index) => (
-					<div
-						key={index}
-						className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm"
-					>
-						<div className="flex items-center justify-between">
-							<div>
-								<p className="text-sm font-medium text-gray-500 mb-1">
-									{stat.title}
-								</p>
-								<h3 className="text-3xl font-bold text-[#1B1B1B]">
-									{stat.value}
-								</h3>
-							</div>
-							<div
-								className={`p-3 rounded-xl ${stat.bg} bg-opacity-50`}
-							>
-								{stat.icon}
-							</div>
-						</div>
-					</div>
-				))}
-			</div>
-
 			{/* Editorial Cards Grid */}
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+			<div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
 				{Array.isArray(editorials) &&
 					editorials.map((editorial) => (
 						<div
 							key={editorial.id}
-							className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+							className="bg-white rounded-[2rem] border border-gray-100 shadow-xl shadow-gray-200/50 overflow-hidden relative"
 						>
-							{/* Image */}
-							<div className="relative h-48 bg-gray-100">
-								<img
-									src={
-										editorial.image
-											? editorial.image.startsWith("http")
-												? editorial.image
-												: axiosClient.defaults.baseURL +
-												  editorial.image
-											: "https://via.placeholder.com/400x300?text=No+Image"
-									}
-									alt={editorial.title}
-									className="w-full h-full object-cover"
+							<button className="absolute top-4 right-4 z-10 p-2 text-gray-400 hover:text-gray-600 transition-colors">
+								<Pin
+									size={24}
+									className="rotate-45"
+									strokeWidth={1}
 								/>
-								{editorial.isPinned && (
-									<button className="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md hover:bg-gray-50">
-										<Pin
-											size={18}
-											className="text-gray-700"
-										/>
-									</button>
-								)}
+							</button>
+
+							{/* Image */}
+							<div className="px-6 pt-6">
+								<div className="h-64 rounded-[1.5rem] overflow-hidden bg-gray-50">
+									<img
+										src={
+											editorial.image
+												? editorial.image.startsWith(
+														"http"
+												  )
+													? editorial.image
+													: axiosClient.defaults
+															.baseURL +
+													  editorial.image
+												: "https://via.placeholder.com/400x300?text=No+Image"
+										}
+										alt={editorial.title}
+										className="w-full h-full object-cover"
+									/>
+								</div>
 							</div>
 
 							{/* Content */}
-							<div className="p-5 space-y-3">
+							<div className="p-8 space-y-4">
 								<div className="flex items-center justify-between">
-									<h3 className="text-lg font-bold text-[#1B1B1B]">
+									<h3 className="text-xl font-bold text-[#1B1B1B]">
 										{editorial.title}
 									</h3>
-									<div className="flex items-center gap-2">
-										<button
-											onClick={() =>
-												handleEdit(editorial)
-											}
-											className="p-1.5 text-gray-400 hover:text-[#6A6D57] transition-colors"
-										>
-											<Edit size={16} />
-										</button>
-										<span className="px-2 py-0.5 bg-[#6A6D57]/10 text-[#6A6D57] rounded text-[10px] font-bold uppercase tracking-wider">
-											{editorial.category}
-										</span>
-									</div>
+									<button
+										onClick={() => handleEdit(editorial)}
+										className="p-1.5 text-gray-400 hover:text-[#6A6D57] transition-colors"
+									>
+										<Edit size={18} />
+									</button>
 								</div>
-								<p className="text-sm text-gray-600 line-clamp-3">
+								<p className="text-sm text-gray-500 leading-relaxed line-clamp-4">
 									{editorial.description}
 								</p>
-								<div className="flex items-center justify-between pt-2 border-t border-gray-100">
-									<span className="text-xs text-gray-400">
+								<div className="flex items-center justify-between pt-4">
+									<span className="text-sm font-medium text-gray-400">
 										Published
 									</span>
 									<span className="text-sm font-medium text-gray-700">
 										{editorial.published_at
 											? new Date(
 													editorial.published_at
-											  ).toLocaleDateString("en-US", {
+											  ).toLocaleDateString("en-GB", {
 													day: "numeric",
 													month: "short",
 													year: "numeric",
 											  })
-											: "Recently"}
+											: "20 Jan 2025"}
 									</span>
 								</div>
 							</div>
@@ -657,22 +891,22 @@ const Editorial = () => {
 			</div>
 
 			{/* Carousel Management */}
-			<div>
-				<h2 className="text-xl font-bold text-[#1B1B1B] mb-4">
+			<div className="pt-6">
+				<h2 className="text-xl font-bold text-[#1B1B1B] mb-6">
 					Carousel Management{" "}
-					<span className="text-sm font-normal text-gray-500">
+					<span className="text-sm font-normal text-gray-400 ml-1">
 						(max 5 image)
 					</span>
 				</h2>
 
-				<div className="flex gap-4 overflow-x-auto pb-2">
+				<div className="flex gap-6 overflow-x-auto pb-6 scrollbar-hide">
 					{Array.isArray(editorials) &&
 						editorials
 							.filter((e, idx) => e.is_carousel || idx < 4)
 							.map((editorial, index) => (
 								<div
 									key={index}
-									className="relative flex-shrink-0 w-48 h-48 rounded-xl overflow-hidden group"
+									className="relative flex-shrink-0 w-64 h-64 rounded-[2rem] overflow-hidden group shadow-lg"
 								>
 									<img
 										src={
@@ -689,16 +923,21 @@ const Editorial = () => {
 										alt={`Carousel ${index + 1}`}
 										className="w-full h-full object-cover"
 									/>
-									<button className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600">
-										<X size={16} />
+									<button className="absolute top-3 right-3 p-1 bg-red-500 text-white rounded-full shadow-md z-10 transition-transform active:scale-95 group-hover:scale-110">
+										<X size={16} strokeWidth={3} />
 									</button>
 								</div>
 							))}
 
 					{/* Add Image Button */}
-					<div className="flex-shrink-0 w-48 h-48 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center gap-2 hover:border-[#6A6D57] transition-colors cursor-pointer">
-						<ImageIcon size={32} className="text-gray-400" />
-						<span className="text-sm text-gray-500 font-medium">
+					<div className="flex-shrink-0 w-64 h-64 border-2 border-dashed border-gray-200 rounded-[2rem] flex flex-col items-center justify-center gap-3 hover:border-[#6A6D57] transition-all cursor-pointer bg-white group shadow-sm">
+						<div className="p-3 rounded-lg group-hover:bg-[#6A6D57]/5 transition-colors">
+							<ImageIcon
+								size={28}
+								className="text-gray-400 group-hover:text-[#6A6D57]"
+							/>
+						</div>
+						<span className="text-sm text-gray-500 font-bold group-hover:text-[#6A6D57]">
 							+ Add Image
 						</span>
 					</div>
