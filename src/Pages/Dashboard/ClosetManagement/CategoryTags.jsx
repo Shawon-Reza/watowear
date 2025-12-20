@@ -1,19 +1,26 @@
 import { Tags } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useClosetStore from "../../../store/useClosetStore";
 
 const CategoryTags = () => {
-	// Defines the list of mandatory tags from the design
-	// In a real app, this state might be managed globally or fetched from backend
-	const [mandatoryTags, setMandatoryTags] = useState([
-		{ id: "season", label: "season", active: true },
-		{ id: "subcategory", label: "subcategory", active: true },
-		{ id: "exact_genre", label: "exact_genre", active: true },
-		{ id: "main_color", label: "main_color", active: true },
-		{ id: "season_2", label: "season", active: true }, // Duplicate label from image, keeping unique ID
-		{ id: "material_blend", label: "material_blend", active: true },
-		{ id: "occasion", label: "occasion", active: true },
-		{ id: "formality", label: "formality", active: true },
-	]);
+	const { categories, fetchCategories } = useClosetStore();
+	const [mandatoryTags, setMandatoryTags] = useState([]);
+
+	useEffect(() => {
+		fetchCategories();
+	}, [fetchCategories]);
+
+	useEffect(() => {
+		if (categories && categories.length > 0) {
+			setMandatoryTags(
+				categories.map((cat, index) => ({
+					id: cat.category,
+					label: cat.category,
+					active: true,
+				}))
+			);
+		}
+	}, [categories]);
 
 	const toggleTag = (id) => {
 		setMandatoryTags((prev) =>
@@ -60,6 +67,11 @@ const CategoryTags = () => {
 							</div>
 						</div>
 					))}
+					{mandatoryTags.length === 0 && (
+						<div className="text-center py-4 text-gray-400 text-sm">
+							No mandatory tags found
+						</div>
+					)}
 				</div>
 			</div>
 		</div>

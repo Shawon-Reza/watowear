@@ -4,6 +4,7 @@ import endpoints from "../api/endpoints";
 
 const useClosetStore = create((set, get) => ({
 	items: [],
+	categories: [],
 	count: 0,
 	next: null,
 	previous: null,
@@ -59,6 +60,21 @@ const useClosetStore = create((set, get) => ({
 			console.error("Error archiving item:", error);
 			set({ error: "Failed to archive item" });
 			return false;
+		}
+	},
+	fetchCategories: async () => {
+		set({ loading: true, error: null });
+		try {
+			const response = await axiosClient.get(endpoints.CLOSET_CATEGORIES);
+			set({ categories: response.data, loading: false });
+		} catch (error) {
+			console.error("Error fetching categories:", error);
+			set({
+				error:
+					error.response?.data?.message ||
+					"Failed to fetch categories",
+				loading: false,
+			});
 		}
 	},
 }));

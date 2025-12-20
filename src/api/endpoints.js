@@ -3,6 +3,7 @@ const endpoints = {
 	USERS: "/api/v1/admin/users/",
 	USER_STATS: (id) => `/api/v1/admin/users/${id}/statistics/`,
 	CLOSET_ITEMS: "/api/v1/admin/closet/items/",
+	CLOSET_CATEGORIES: "/api/v1/admin/closet/categories/",
 	EDITORIAL: "/api/v1/editorial/admin/manage/",
 	CAROUSEL: "/api/v1/editorial/carousel/",
 	CAROUSEL_ADD: "/api/v1/editorial/carousel/add/",
