@@ -11,6 +11,20 @@ axiosClient.interceptors.request.use(
 		if (token) {
 			config.headers.set("Authorization", `Bearer ${token}`);
 		}
+
+		// Add ngrok and csrf headers
+		config.headers.set("ngrok-skip-browser-warning", "true");
+		config.headers.set("x-requested-with", "XMLHttpRequest");
+
+		const csrfToken = document.cookie
+			.split("; ")
+			.find((row) => row.startsWith("csrftoken="))
+			?.split("=")[1];
+
+		if (csrfToken) {
+			config.headers.set("x-csrftoken", csrfToken);
+		}
+
 		return config;
 	},
 	(error) => {
